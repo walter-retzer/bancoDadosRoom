@@ -9,11 +9,15 @@ import com.google.gson.Gson
 @Entity(tableName = "infoDB")
 data class Dados(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Int? = 0,
     @ColumnInfo
-    val titulo: String = "texto padrão",
+    val titulo: String = " ",
     @ColumnInfo
-    val horario:String = "00h00min",
+    val descricao: String = "",
+    @ColumnInfo
+    val data: String = " ",
+    @ColumnInfo
+    val horario: String = " ",
 )
 
 

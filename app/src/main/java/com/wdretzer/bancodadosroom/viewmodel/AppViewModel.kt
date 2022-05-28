@@ -2,7 +2,6 @@ package com.wdretzer.bancodadosroom.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.wdretzer.bancodadosroom.dados.Dados
 import com.wdretzer.bancodadosroom.repository.AppRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -14,9 +13,9 @@ class AppViewModel(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
-    fun addOrRemoveFavourite(item: String, item2: String) =
-        repository.addOrRemoveFavourite(item, item2).flowOn(dispatcher).asLiveData()
+    fun addOrRemoveItens(item: String, item2: String, item3: String, item4: String) =
+        repository.addOrRemoveItens(item, item2, item3, item4).flowOn(dispatcher).asLiveData()
 
-    fun getFavourite() = repository.getFavourite().flowOn(dispatcher).asLiveData()
+    fun getListSave() = repository.getListSave().flowOn(dispatcher).asLiveData()
 
 }

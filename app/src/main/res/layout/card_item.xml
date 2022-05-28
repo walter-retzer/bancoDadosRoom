@@ -4,16 +4,16 @@
     style="Widget.Design.BottomSheet.Modal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
     android:background="@color/cinza"
     android:backgroundTint="@color/cinza"
     android:backgroundTintMode="screen"
-    android:layout_marginBottom="10dp"
     android:orientation="vertical"
     android:padding="15dp">
 
     <TextView
-        style="@style/TextAppearance.AppCompat.Headline"
         android:id="@+id/text"
+        style="@style/TextAppearance.AppCompat.Headline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -21,12 +21,29 @@
         android:textColor="@color/white" />
 
     <TextView
-        style="@style/TextAppearance.AppCompat.Headline"
         android:id="@+id/text2"
+        style="@style/TextAppearance.AppCompat.Headline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Evento Remenber!"
         android:textColor="@color/white" />
 
+    <TextView
+        android:id="@+id/text3"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Evento Remenber!"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text4"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Evento Remenber!"
+        android:textColor="@color/white" />
 </LinearLayout>

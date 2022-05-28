@@ -4,14 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="Widget.Design.BottomSheet.Modal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
+    android:layout_height="match_parent"
     android:background="@color/cinza"
     android:backgroundTint="@color/cinza"
     android:backgroundTintMode="screen"
     android:orientation="vertical"
     android:padding="15dp"
     tools:context=".MainActivity">
+
+    <ImageView
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/event" />
 
     <TextView
         android:id="@+id/text"
@@ -38,7 +44,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/titulo_input_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -57,7 +64,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/descricao_input_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -76,7 +84,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/data_input_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -85,7 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Digite a prioridade"
+        android:hint="Digite o horário"
         android:textColorHint="@color/black"
         app:boxBackgroundColor="@color/white"
         app:boxBackgroundMode="filled"
@@ -93,9 +102,10 @@
         app:hintTextColor="@color/blue">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/prioridade_input_text"
+            android:id="@+id/horario_input_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -105,7 +115,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
         android:background="@drawable/button"
-        android:text="Continue"
+        android:text="Salvar"
         android:textColor="@color/white"
         android:textColorHint="@color/white" />
 

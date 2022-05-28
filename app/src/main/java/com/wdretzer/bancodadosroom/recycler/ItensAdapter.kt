@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.wdretzer.bancodadosroom.R
-import com.wdretzer.bancodadosroom.dados.Dados
 import com.wdretzer.bancodadosroom.dados.InfoDados
 
 
@@ -35,14 +34,14 @@ class ItensAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         diffUtil.submitList(diffUtil.currentList.plus(newItens))
     }
 
-    fun updateItem(item: InfoDados) {
-//        val newList =
-//            diffUtil.currentList.map { nasa ->
-//                if (nasa.href == item.href) item
-//                else nasa
-//            }
-//        diffUtil.submitList(newList)
-    }
+    //    fun updateItem(item: InfoDados) {
+    //        val newList =
+    //            diffUtil.currentList.map { nasa ->
+    //                if (nasa.href == item.href) item
+    //                else nasa
+    //            }
+    //        diffUtil.submitList(newList)
+    //    }
 
     companion object {
         val DIFF_UTIL = object : DiffUtil.ItemCallback<InfoDados>() {
@@ -51,7 +50,7 @@ class ItensAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
 
             override fun areContentsTheSame(oldItem: InfoDados, newItem: InfoDados): Boolean {
-                return oldItem.info == newItem.info
+                return oldItem.tituloInfo == newItem.tituloInfo
             }
         }
     }
@@ -62,11 +61,15 @@ class FavouriteViewHolder(
     view: View,
 ) : RecyclerView.ViewHolder(view) {
 
-    private val textFav: TextView = view.findViewById(R.id.text)
-    private val textFav2: TextView = view.findViewById(R.id.text2)
+    private val textItem: TextView = view.findViewById(R.id.text)
+    private val textItem2: TextView = view.findViewById(R.id.text2)
+    private val textItem3: TextView = view.findViewById(R.id.text3)
+    private val textItem4: TextView = view.findViewById(R.id.text4)
 
-    fun bind(itensFav: InfoDados) {
-        textFav.text = itensFav.info
-        textFav2.text = itensFav.info2
+    fun bind(itensList: InfoDados) {
+        textItem.text = itensList.tituloInfo
+        textItem2.text = itensList.descricaoInfo
+        textItem3.text = itensList.dataInfo
+        textItem4.text = itensList.horarioInfo
     }
 }

@@ -5,7 +5,7 @@ import android.content.Context
 import com.wdretzer.bancodadosroom.bd.DataBaseFactory
 
 
-class AppUtil: Application() {
+class AppUtil : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -13,7 +13,7 @@ class AppUtil: Application() {
         appContext = applicationContext
     }
 
-    companion object{
+    companion object {
         var appContext: Context? = null
     }
 }

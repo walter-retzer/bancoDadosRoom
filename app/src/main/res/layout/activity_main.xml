@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="Widget.Design.BottomSheet.Modal"
@@ -12,29 +12,43 @@
     android:padding="15dp"
     tools:context=".MainActivity">
 
-
-    <ProgressBar
+    <FrameLayout
         android:id="@+id/loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="3dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
 
     <ImageView
+        android:id="@+id/img_top"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:layout_gravity="center"
         android:layout_marginTop="15dp"
-        android:src="@drawable/event" />
+        android:src="@drawable/event"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/text"
+        android:id="@+id/text_top"
         style="@style/TextAppearance.AppCompat.Headline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Evento Remenber!"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_top" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/titulo_input_layout"
@@ -47,7 +61,10 @@
         app:boxBackgroundColor="@color/white"
         app:boxBackgroundMode="filled"
         app:boxStrokeColor="@color/blue"
-        app:hintTextColor="@color/blue">
+        app:hintTextColor="@color/blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_top">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/titulo_input_text"
@@ -67,7 +84,10 @@
         app:boxBackgroundColor="@color/white"
         app:boxBackgroundMode="filled"
         app:boxStrokeColor="@color/blue"
-        app:hintTextColor="@color/blue">
+        app:hintTextColor="@color/blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titulo_input_layout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/descricao_input_text"
@@ -87,18 +107,21 @@
         app:boxBackgroundColor="@color/white"
         app:boxBackgroundMode="filled"
         app:boxStrokeColor="@color/blue"
-        app:hintTextColor="@color/blue">
+        app:hintTextColor="@color/blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descriao_input_layout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/data_input_text"
-            android:inputType="date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="date"
             android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/prioridade_input_layout"
+        android:id="@+id/time_input_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -108,13 +131,16 @@
         app:boxBackgroundColor="@color/white"
         app:boxBackgroundMode="filled"
         app:boxStrokeColor="@color/blue"
-        app:hintTextColor="@color/blue">
+        app:hintTextColor="@color/blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/data_input_layout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/horario_input_text"
-            android:inputType="datetime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="datetime"
             android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -127,7 +153,9 @@
         android:background="@drawable/button"
         android:text="Salvar"
         android:textColor="@color/white"
-        android:textColorHint="@color/white" />
+        android:textColorHint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time_input_layout" />
 
-</LinearLayout>
-
+</androidx.constraintlayout.widget.ConstraintLayout>

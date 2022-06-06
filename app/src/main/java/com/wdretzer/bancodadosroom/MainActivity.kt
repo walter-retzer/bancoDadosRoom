@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     private val textHorario: TextInputEditText
         get() = findViewById(R.id.horario_input_text)
 
-    private val loading: ProgressBar
+    private val loading: FrameLayout
         get() = findViewById(R.id.loading)
 
 
@@ -70,19 +70,19 @@ class MainActivity : AppCompatActivity() {
             if (it is DataResult.Error) {
                 Toast.makeText(this, "Error ao Salvar os Dados!", Toast.LENGTH_SHORT).show()
             }
-
-            if (it is DataResult.Loading) {
-                //loading.isVisible = it.isLoading
-            }
+//
+//            if (it is DataResult.Loading) {
+//                loading.isVisible = it.isLoading
+//            }
         }
     }
 
     private fun sendToListaBD() {
         loading.isVisible = true
         Handler().postDelayed({
+            loading.isVisible = false
             val intent = Intent(this, ListaBD::class.java)
             startActivity(intent)
-           loading.isVisible = false
-        }, 5000)
+        }, 3000)
     }
 }

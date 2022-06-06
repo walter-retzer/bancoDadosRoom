@@ -3,11 +3,14 @@ package com.wdretzer.bancodadosroom.bd
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.wdretzer.bancodadosroom.MainActivity
 import com.wdretzer.bancodadosroom.R
 import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.extension.DataResult
@@ -27,10 +30,11 @@ class ListaBD : AppCompatActivity() {
         setContentView(R.layout.activity_lista_bd)
 
         getSupportActionBar()?.hide()
+
         showFavourite()
 
         btn.setOnClickListener {
-           // showFavourite()
+            sendToMainActivity()
         }
     }
 
@@ -81,6 +85,11 @@ class ListaBD : AppCompatActivity() {
                 showFavourite()
             }
         }
+    }
+
+    private fun sendToMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 
 }

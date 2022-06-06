@@ -1,146 +1,111 @@
-
 package com.wdretzer.bancodadosroom.telas
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.os.Handler
+import android.widget.*
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.wdretzer.bancodadosroom.R
+import com.wdretzer.bancodadosroom.bd.ListaBD
 import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.extension.DataResult
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel
-import java.text.SimpleDateFormat
 import java.util.*
 
-class TelaUpdateDados : AppCompatActivity() {
+class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
+    TimePickerDialog.OnTimeSetListener {
 
     private val viewModelApp: AppViewModel by viewModels()
 
-    private val btnCadastrar: Button
+    private val btnSave: Button
         get() = findViewById(R.id.btn_continue)
 
-    private val textTitulo: TextInputEditText
+    private val textTitleEdit: TextInputEditText
         get() = findViewById(R.id.titulo_input_text)
 
-    private val textDescricao: TextInputEditText
+    private val textDescriptionEdit: TextInputEditText
         get() = findViewById(R.id.descricao_input_text)
 
-    private val dataLayout: TextInputLayout
-        get() = findViewById(R.id.data_input_layout)
-
-    private val textData: TextInputEditText
+    private val textDateEdit: TextInputEditText
         get() = findViewById(R.id.data_input_text)
 
-    private val textHorario: TextInputEditText
+    private val textTimeEdit: TextInputEditText
         get() = findViewById(R.id.horario_input_text)
 
-    private val horaLayout: TextInputLayout
-        get() = findViewById(R.id.horario_input_layout)
+    var day = 0
+    var month = 0
+    var year = 0
+    var seconds = 0
+    var minutes = 0
+    var hour = 0
+
+    var savedDay = 0
+    var savedMonth = 0
+    var savedYear = 0
+    var savedMinutes = 0
+    var savedHour = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_update_dados)
 
+        getSupportActionBar()?.hide()
+
         val bundle: Bundle? = intent.extras
         var idBundle: Int = 0
 
         if (bundle != null) {
-            val setTextTitulo = bundle.getString("Titulo")
-            val setDesc = bundle.getString("Desc")
-            val setData = bundle.getString("Data")
-            val setHora = bundle.getString("Hora")
-            val setId = bundle.getInt("Id")
+            val getTextTitle = bundle.getString("Titulo")
+            val getTextDescription = bundle.getString("Desc")
+            val getTextDate = bundle.getString("Data")
+            val getTextTime = bundle.getString("Hora")
+            val getId = bundle.getInt("Id")
 
-            setTextTitulo?.let { textTitulo.setText(it) }
-            setDesc?.let { textDescricao.setText(it) }
-            setData?.let { textData.setText(it) }
-            setHora?.let { textHorario.setText(it) }
-            idBundle = setId
+            getTextTitle?.let { textTitleEdit.setText(it) }
+            getTextDescription?.let { textDescriptionEdit.setText(it) }
+            getTextDate?.let { textDateEdit.setText(it) }
+            getTextTime?.let { textTimeEdit.setText(it) }
+            idBundle = getId
         }
 
-        getSupportActionBar()?.hide()
-
-        val myCalendar = Calendar.getInstance()
-
-        val datePickerOnDataSetListener =
-            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                myCalendar.set(Calendar.YEAR, year)
-                myCalendar.set(Calendar.MONTH, monthOfYear)
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            }
-
-        dataLayout.setOnClickListener {
-            DatePickerDialog(
-                this,
-                datePickerOnDataSetListener,
-                myCalendar.get(Calendar.DAY_OF_MONTH),
-                myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.YEAR)
-            ).show()
+        textDateEdit.setOnClickListener {
+            pickDate()
         }
 
-        horaLayout.setOnClickListener {
-            DatePickerDialog(
-                this,
-                datePickerOnDataSetListener,
-                myCalendar.get(Calendar.DAY_OF_MONTH),
-                myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.YEAR)
-            ).show()
+        textTimeEdit.setOnClickListener {
+            pickTime()
         }
 
-        btnCadastrar.setOnClickListener {
-            DatePickerDialog(
-                this,
-                datePickerOnDataSetListener,
-                myCalendar.get(Calendar.DAY_OF_MONTH),
-                myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.YEAR)
-            ).show()
-
-//            updateItem(
-//                InfoDados(
-//                    textTitulo.text.toString(),
-//                    textDescricao.text.toString(),
-//                    textData.text.toString(),
-//                    textHorario.text.toString(),
-//                    idBundle
-//                )
-//            )
+        btnSave.setOnClickListener {
+            updateItem(
+                InfoDados(
+                    textTitleEdit.text.toString(),
+                    textDescriptionEdit.text.toString(),
+                    textDateEdit.text.toString(),
+                    textTimeEdit.text.toString(),
+                    idBundle
+                )
+            )
+            sendToListaBD()
         }
     }
 
-    private fun setDatePicker(dateEditText: EditText) {
-
+    private fun getDateCalendar() {
         val myCalendar = Calendar.getInstance()
+        day = myCalendar.get(Calendar.DAY_OF_MONTH)
+        month = myCalendar.get(Calendar.MONTH)
+        year = myCalendar.get(Calendar.YEAR)
 
-        val datePickerOnDataSetListener =
-            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-                myCalendar.set(Calendar.YEAR, year)
-                myCalendar.set(Calendar.MONTH, monthOfYear)
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                updateLabel(myCalendar, dateEditText)
-            }
-
-        dateEditText.setOnClickListener {
-            DatePickerDialog(
-                this@TelaUpdateDados, datePickerOnDataSetListener, myCalendar
-                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH)
-            ).show()
-        }
-    }
-
-    private fun updateLabel(myCalendar: Calendar, dateEditText: EditText) {
-        val myFormat: String = "dd-MM-yyyy"
-        val sdf = SimpleDateFormat(myFormat, Locale.UK)
-        dateEditText.setText(sdf.format(myCalendar.time))
+        seconds = myCalendar.get(Calendar.SECOND)
+        minutes = myCalendar.get(Calendar.MINUTE)
+        hour = myCalendar.get(Calendar.HOUR)
     }
 
     private fun updateItem(item: InfoDados) {
@@ -155,4 +120,37 @@ class TelaUpdateDados : AppCompatActivity() {
             }
         }
     }
+
+    private fun pickDate() {
+        getDateCalendar()
+        DatePickerDialog(this@TelaUpdateDados, this, year, month, day).show()
+    }
+
+    private fun pickTime() {
+        getDateCalendar()
+        TimePickerDialog(this, this, hour, minutes, true).show()
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        savedDay = dayOfMonth
+        savedMonth = month
+        savedYear = year
+        textDateEdit.setText("$savedDay/$savedMonth/$savedYear")
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        savedHour = hourOfDay
+        savedMinutes = minute
+        textTimeEdit.setText("$savedHour:$savedMinutes hrs")
+    }
+
+    private fun sendToListaBD() {
+        Handler().postDelayed({
+            val intent = Intent(this, ListaBD::class.java)
+            startActivity(intent)
+        }, 2000)
+    }
+
 }

@@ -24,6 +24,6 @@ interface AppRoomDao {
     @Query("UPDATE infoDB SET titulo = :itemNew, descricao = :desc, data = :dia, horario = :hora WHERE id = :id")
     fun updateAll(id: Int, itemNew: String, desc: String, dia: String, hora: String)
 
-    @Query("DELETE FROM infoDB WHERE titulo = :itemDb")
-    fun deleteByApiId(vararg itemDb: String)
+    @Query("DELETE FROM infoDB WHERE id = :id")
+    fun deleteByApiId(vararg id: Int)
 }

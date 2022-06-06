@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import com.google.android.material.textfield.TextInputEditText
 import com.wdretzer.bancodadosroom.bd.ListaBD
 import com.wdretzer.bancodadosroom.extension.DataResult
@@ -32,10 +35,9 @@ class MainActivity : AppCompatActivity() {
     private val textHorario: TextInputEditText
         get() = findViewById(R.id.horario_input_text)
 
-    var titulo: String = " "
-    var descricao: String = " "
-    var data: String = " "
-    var horario: String = " "
+    private val loading: ProgressBar
+        get() = findViewById(R.id.loading)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,27 +51,38 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveFavourite() {
-        titulo = textTitulo.text.toString()
-        descricao = textDescricao.text.toString()
-        data = textData.text.toString()
-        horario = textHorario.text.toString()
 
-        viewModelApp.addOrRemoveItens(titulo, descricao, data, horario).observe(this) {
+    private fun saveFavourite() {
+
+        viewModelApp.addOrRemoveItens(
+
+            textTitulo.text.toString(),
+            textDescricao.text.toString(),
+            textData.text.toString(),
+            textHorario.text.toString()
+
+        ).observe(this) {
+
             if (it is DataResult.Success) {
                 Toast.makeText(this, "Dados Salvos no Banco de Dados!", Toast.LENGTH_SHORT).show()
             }
 
             if (it is DataResult.Error) {
-                Toast.makeText(this, "Error $it ao Salvar os Dados!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error ao Salvar os Dados!", Toast.LENGTH_SHORT).show()
+            }
+
+            if (it is DataResult.Loading) {
+                //loading.isVisible = it.isLoading
             }
         }
     }
 
     private fun sendToListaBD() {
+        loading.isVisible = true
         Handler().postDelayed({
             val intent = Intent(this, ListaBD::class.java)
             startActivity(intent)
-        }, 2000)
+           loading.isVisible = false
+        }, 5000)
     }
 }

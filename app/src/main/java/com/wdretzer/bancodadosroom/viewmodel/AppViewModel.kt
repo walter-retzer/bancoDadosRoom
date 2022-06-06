@@ -2,6 +2,7 @@ package com.wdretzer.bancodadosroom.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.repository.AppRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -17,5 +18,9 @@ class AppViewModel(
         repository.addOrRemoveItens(item, item2, item3, item4).flowOn(dispatcher).asLiveData()
 
     fun getListSave() = repository.getListSave().flowOn(dispatcher).asLiveData()
+
+    fun updateItem(item: InfoDados) = repository.updateItem(item).flowOn(dispatcher).asLiveData()
+
+    fun deleteItem(item: InfoDados) = repository.deleteItem(item).flowOn(dispatcher).asLiveData()
 
 }

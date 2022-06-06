@@ -26,13 +26,13 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
             if (item == "del") {
                 // Delete apenas se o item titulo tiver o valor "Reunião"
-                val delete = dao.deleteByApiId("Nova Reunião")
+                val delete = dao.deleteByApiId(0)
                 emit(DataResult.Success(delete))
 
             } else if (item == "ww") {
                 //Update (atualização dos itens contidos no id: 0)
                 val delete = dao.updateAll(
-                    0,
+                    1,
                     "Nova Reunião",
                     "Assuntos Estratégicos em Pauta",
                     "22/06/2022",
@@ -58,12 +58,30 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
 
     //Função para pegar os dados do item Favoritado:
-    fun getListSave() = flow<MutableList<InfoDados>> {
+    fun getListSave() = flow {
         val localItens = dao.listAll().map {
-            InfoDados(it.titulo, it.descricao, it.data, it.horario)
+            InfoDados(it.titulo, it.descricao, it.data, it.horario, it.id!!)
         }
-
         emit((localItens as MutableList<InfoDados>))
+    }.flowOn(dispatcher)
+
+    fun updateItem(item: InfoDados)= flow{
+        val delete = dao.updateAll(
+            item.idUser,
+            item.tituloInfo,
+            item.descricaoInfo,
+            item.dataInfo,
+            item.horarioInfo
+        )
+        emit(DataResult.Success(delete))
+    }.updateStatus().flowOn(dispatcher)
+
+
+    fun deleteItem(item: InfoDados) = flow{
+        val delete = dao.deleteByApiId(
+            item.idUser
+        )
+        emit(DataResult.Success(delete))
     }.flowOn(dispatcher)
 
 

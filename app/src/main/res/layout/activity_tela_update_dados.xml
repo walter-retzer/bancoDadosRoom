@@ -10,22 +10,7 @@
     android:backgroundTintMode="screen"
     android:orientation="vertical"
     android:padding="15dp"
-    tools:context=".MainActivity">
-
-
-    <ProgressBar
-        android:id="@+id/loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible" />
-
-
-    <ImageView
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:src="@drawable/event" />
+    tools:context=".telas.TelaUpdateDados">
 
     <TextView
         android:id="@+id/text"
@@ -91,14 +76,13 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/data_input_text"
-            android:inputType="date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/prioridade_input_layout"
+        android:id="@+id/horario_input_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -112,7 +96,6 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/horario_input_text"
-            android:inputType="datetime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black" />
@@ -130,4 +113,3 @@
         android:textColorHint="@color/white" />
 
 </LinearLayout>
-

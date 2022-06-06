@@ -5,4 +5,5 @@ data class InfoDados(
     val descricaoInfo: String,
     val dataInfo: String,
     val horarioInfo: String,
+    val idUser: Int
 )

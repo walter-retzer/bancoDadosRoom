@@ -15,13 +15,13 @@
         android:theme="@style/Theme.BancoDadosRoom"
         tools:targetApi="31">
         <activity
-            android:name=".recycler.Teste"
-            android:exported="false" />
-        <activity
-            android:name=".bd.ListaBD"
+            android:name=".telas.TelaUpdateDados"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".bd.ListaBD"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

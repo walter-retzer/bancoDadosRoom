@@ -42,6 +42,20 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
     }.flowOn(dispatcher)
 
 
+    fun countItens(item: String) = flow {
+        try {
+            // Executa a contagem de item no banco de dados igual ao valor da variável item:
+            val numeroRegistro = dao.countApiId(item)
+            val itemExist = numeroRegistro >= 1
+
+            emit(numeroRegistro)
+
+        } catch (e: Exception) {
+            emit(DataResult.Error(IllegalStateException()))
+        }
+    }.flowOn(dispatcher)
+
+
     fun updateItem(item: InfoDados) = flow {
         val delete = dao.updateAll(
             item.idUser,
@@ -59,7 +73,7 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
             item.idUser
         )
         emit(DataResult.Success(delete))
-    }.flowOn(dispatcher)
+    }.updateStatus().flowOn(dispatcher)
 
 
     fun deleteAll() = flow {

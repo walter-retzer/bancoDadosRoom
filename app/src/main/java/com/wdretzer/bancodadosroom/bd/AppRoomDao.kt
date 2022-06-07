@@ -18,7 +18,7 @@ interface AppRoomDao {
     @Query("SELECT * FROM infoDB")
     fun listAll(): List<Dados>
 
-    @Query("SELECT COUNT(titulo) FROM infoDB WHERE titulo = :apiData")
+    @Query("SELECT COUNT(titulo) FROM infoDB WHERE data = :apiData")
     fun countApiId(vararg apiData: String): Int
 
     @Query("UPDATE infoDB SET titulo = :itemNew, descricao = :desc, data = :dia, horario = :hora WHERE id = :id")

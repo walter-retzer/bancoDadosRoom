@@ -25,4 +25,6 @@ class AppViewModel(
 
     fun deleteAll() = repository.deleteAll().flowOn(dispatcher).asLiveData()
 
+    fun countItens(item: String) = repository.countItens(item).flowOn(dispatcher).asLiveData()
+
 }

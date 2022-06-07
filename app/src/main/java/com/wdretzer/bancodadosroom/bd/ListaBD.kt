@@ -1,5 +1,6 @@
 package com.wdretzer.bancodadosroom.bd
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -18,18 +19,28 @@ import com.wdretzer.bancodadosroom.extension.DataResult
 import com.wdretzer.bancodadosroom.recycler.ItensAdapter
 import com.wdretzer.bancodadosroom.telas.TelaUpdateDados
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel
+import java.util.*
 
 
 class ListaBD : AppCompatActivity() {
 
     private val viewModelApp: AppViewModel by viewModels()
 
-    private val btn: ShapeableImageView
+    private val btnAddItem: ShapeableImageView
         get() = findViewById(R.id.btn_add_list)
 
     private val btnDeleteAll: ShapeableImageView
         get() = findViewById(R.id.btn_delete_all)
 
+    private val textTotalItens: TextView
+        get() = findViewById(R.id.total_itens)
+
+    var totalItens: Int = 0
+    var day = 0
+    var month = 0
+    var year = 0
+
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_bd)
@@ -37,8 +48,10 @@ class ListaBD : AppCompatActivity() {
         getSupportActionBar()?.hide()
 
         showListBD()
+        getDateCalendar()
+        countItem("$day/$month/$year")
 
-        btn.setOnClickListener {
+        btnAddItem.setOnClickListener {
             sendToMainActivity()
         }
 
@@ -57,16 +70,18 @@ class ListaBD : AppCompatActivity() {
 
             adapter.updateList(it)
 
-            Toast.makeText(this, "Lista Atualizada", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Lista Atualizada!", Toast.LENGTH_SHORT).show()
 
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(this)
         }
     }
 
+
     private fun updateItem(item: InfoDados) {
         sendToTelaUpdate(item)
     }
+
 
     private fun sendToTelaUpdate(info: InfoDados) {
         val titulo = info.tituloInfo
@@ -86,23 +101,33 @@ class ListaBD : AppCompatActivity() {
     }
 
 
+    private fun countItem(item: String) {
+        viewModelApp.countItens(item).observe(this) {
+            textTotalItens.text = it.toString()
+            showListBD()
+        }
+    }
+
+
     private fun deleteItem(item: InfoDados) {
         viewModelApp.deleteItem(item).observe(this) {
 
             if (it is DataResult.Success) {
                 Toast.makeText(this, "Delete Sucess!", Toast.LENGTH_SHORT).show()
                 showListBD()
+                countItem("$day/$month/$year")
             }
         }
     }
 
 
-    fun deleteAll() {
+    private fun deleteAll() {
         viewModelApp.deleteAll().observe(this) {
 
             if (it is DataResult.Success) {
                 Toast.makeText(this, "Delete All Sucess!", Toast.LENGTH_SHORT).show()
                 showListBD()
+                countItem("$day/$month/$year")
             }
         }
     }
@@ -130,5 +155,12 @@ class ListaBD : AppCompatActivity() {
         }
         btnCancelar.setOnClickListener { dialog.dismiss() }
         dialog.show()
+    }
+
+    private fun getDateCalendar() {
+        val myCalendar = Calendar.getInstance()
+        day = myCalendar.get(Calendar.DAY_OF_MONTH)
+        month = myCalendar.get(Calendar.MONTH) + 1
+        year = myCalendar.get(Calendar.YEAR)
     }
 }

@@ -22,34 +22,10 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
             val itemExist = numeroRegistro >= 1
 
             var word = Dados(null, item, item2, item3, item4)
-            var word1 = Dados(null, item, item2, item3, numeroRegistro.toString())
 
-            if (item == "del") {
-                // Delete apenas se o item titulo tiver o valor "Reunião"
-                val delete = dao.deleteByApiId(0)
-                emit(DataResult.Success(delete))
-
-            } else if (item == "ww") {
-                //Update (atualização dos itens contidos no id: 0)
-                val delete = dao.updateAll(
-                    1,
-                    "Nova Reunião",
-                    "Assuntos Estratégicos em Pauta",
-                    "22/06/2022",
-                    "12h00"
-                )
-                emit(DataResult.Success(delete))
-
-            } else if (item == "delete") {
-                //Deleta todos os dados do Banco de Dados
-                val delete = dao.deleteAll()
-                emit(DataResult.Success(delete))
-
-            } else {
-                //Insere os valores dos itens que foram digitados na tela Inicial:
-                val insert = dao.insert(word)
-                emit(DataResult.Success(insert))
-            }
+            //Insere os valores dos itens que foram digitados na tela Inicial:
+            val insert = dao.insert(word)
+            emit(DataResult.Success(insert))
 
         } catch (e: Exception) {
             emit(DataResult.Error(IllegalStateException()))
@@ -65,7 +41,8 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
         emit((localItens as MutableList<InfoDados>))
     }.flowOn(dispatcher)
 
-    fun updateItem(item: InfoDados)= flow{
+
+    fun updateItem(item: InfoDados) = flow {
         val delete = dao.updateAll(
             item.idUser,
             item.tituloInfo,
@@ -77,12 +54,18 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
     }.updateStatus().flowOn(dispatcher)
 
 
-    fun deleteItem(item: InfoDados) = flow{
+    fun deleteItem(item: InfoDados) = flow {
         val delete = dao.deleteByApiId(
             item.idUser
         )
         emit(DataResult.Success(delete))
     }.flowOn(dispatcher)
+
+
+    fun deleteAll() = flow {
+        val delete = dao.deleteAll()
+        emit(DataResult.Success(delete))
+    }.updateStatus().flowOn(dispatcher)
 
 
     companion object {

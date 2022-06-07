@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.widget.*
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isVisible
 import com.google.android.material.textfield.TextInputEditText
 import com.wdretzer.bancodadosroom.R
@@ -48,8 +49,9 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     var savedDay = 0
     var savedMonth = 0
     var savedYear = 0
-    var savedMinutes = 0
-    var savedHour = 0
+
+    var savedMinutes = ""
+    var savedHour = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -134,16 +136,18 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     @SuppressLint("SetTextI18n")
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         savedDay = dayOfMonth
-        savedMonth = month
+        savedMonth = month + 1
         savedYear = year
         textDateEdit.setText("$savedDay/$savedMonth/$savedYear")
     }
 
     @SuppressLint("SetTextI18n")
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        savedHour = hourOfDay
-        savedMinutes = minute
-        textTimeEdit.setText("$savedHour:$savedMinutes hrs")
+
+        savedMinutes = if (minute < 10) "0$minute" else "$minute"
+        savedHour = if (hourOfDay < 10) "0$hourOfDay" else "$hourOfDay"
+
+        textTimeEdit.setText("$savedHour:$savedMinutes" + "hr")
     }
 
     private fun sendToListaBD() {

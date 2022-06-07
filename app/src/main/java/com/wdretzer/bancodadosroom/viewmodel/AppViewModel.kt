@@ -23,4 +23,6 @@ class AppViewModel(
 
     fun deleteItem(item: InfoDados) = repository.deleteItem(item).flowOn(dispatcher).asLiveData()
 
+    fun deleteAll() = repository.deleteAll().flowOn(dispatcher).asLiveData()
+
 }

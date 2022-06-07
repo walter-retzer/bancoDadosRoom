@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -74,6 +75,9 @@ class FavouriteViewHolder(
 
     private val delete: ImageView = view.findViewById(R.id.btn_delete)
     private val update: ImageView = view.findViewById(R.id.btn_update)
+
+//    private val delete: RelativeLayout = view.findViewById(R.id.animation_delete)
+//    private val update: RelativeLayout = view.findViewById(R.id.animation_edit)
 
     fun bind(itensList: InfoDados) {
         textItem.text = itensList.tituloInfo

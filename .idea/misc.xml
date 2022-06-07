@@ -5,11 +5,20 @@
       <map>
         <entry key="..\:/Kotlin/bancoDadosRoom/app/src/main/res/drawable-v24/button.xml" value="0.194" />
         <entry key="..\:/Kotlin/bancoDadosRoom/app/src/main/res/drawable-v24/ic_add_black_24dp.xml" value="0.194" />
+        <entry key="..\:/Kotlin/bancoDadosRoom/app/src/main/res/drawable/background_dialog.xml" value="0.1945" />
+        <entry key="..\:/Kotlin/bancoDadosRoom/app/src/main/res/drawable/background_menu.xml" value="0.2195" />
+        <entry key="..\:/Kotlin/bancoDadosRoom/app/src/main/res/drawable/bg_header.xml" value="0.191" />
+        <entry key="..\:/Kotlin/bancoDadosRoom/app/src/main/res/drawable/divider.xml" value="0.191" />
+        <entry key="..\:/Kotlin/bancoDadosRoom/app/src/main/res/drawable/icon_close.xml" value="0.191" />
+        <entry key="..\:/Kotlin/bancoDadosRoom/app/src/main/res/drawable/icon_home.xml" value="0.191" />
+        <entry key="..\:/Kotlin/bancoDadosRoom/app/src/main/res/drawable/icon_menu.xml" value="0.191" />
         <entry key="..\:/Kotlin/bancoDadosRoom/app/src/main/res/layout/activity_lista_bd.xml" value="0.25416666666666665" />
         <entry key="..\:/Kotlin/bancoDadosRoom/app/src/main/res/layout/activity_main.xml" value="0.16799999999999998" />
         <entry key="..\:/Kotlin/bancoDadosRoom/app/src/main/res/layout/activity_tela_update_dados.xml" value="0.25416666666666665" />
         <entry key="..\:/Kotlin/bancoDadosRoom/app/src/main/res/layout/activity_teste.xml" value="0.25416666666666665" />
-        <entry key="..\:/Kotlin/bancoDadosRoom/app/src/main/res/layout/card_item.xml" value="0.25416666666666665" />
+        <entry key="..\:/Kotlin/bancoDadosRoom/app/src/main/res/layout/card_item.xml" value="0.264" />
+        <entry key="..\:/Kotlin/bancoDadosRoom/app/src/main/res/layout/fragment_dialog_delete.xml" value="0.264" />
+        <entry key="..\:/Kotlin/bancoDadosRoom/app/src/main/res/layout/header.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>

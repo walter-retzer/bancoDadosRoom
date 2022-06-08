@@ -12,6 +12,38 @@ Linguagem Kotlin utilizando:
 
 ![Screen](screen/imagem02.png)
 
-## TELA DE ADICIONA LEMBRETE
+## TELA DE ADICIONAR LEMBRETE
 
 ![Screen](screen/imagem03.png)
+
+![Screen](screen/imagem04.png)
+
+![Screen](screen/imagem05.png)
+
+![Screen](screen/imagem06.png)
+
+## TELA DE EDITAR LEMBRETE
+
+![Screen](screen/imagem07.png)
+
+## TELA DE LEMBRETES DO DIA ATUAL
+
+![Screen](screen/imagem08.png)
+
+## TELA DE PESQUISA DE LEMBRETES POR DATA
+
+![Screen](screen/imagem09.png)
+
+![Screen](screen/imagem10.png)
+
+![Screen](screen/imagem11.png)
+
+![Screen](screen/imagem12.png)
+
+## TELA DE CONFIRMAÇÃO PARA EXCLUIR LEMBRETES
+
+![Screen](screen/imagem13.png)
+
+![Screen](screen/imagem14.png)
+
+![Screen](screen/imagem15.png)

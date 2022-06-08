@@ -47,14 +47,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tarefas" />
 
-
     <TextView
         android:id="@+id/tarefas3"
         style="@style/TextAppearance.AppCompat.Headline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"
         android:text="Total de Lembretes: "
         android:textColor="@color/white"
         android:textSize="22sp"
@@ -105,10 +104,10 @@
         android:layout_marginBottom="12dp"
         android:background="@color/white"
         android:scaleType="fitCenter"
+        app:contentPadding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_delete_all"
         app:layout_constraintStart_toEndOf="@+id/btn_send_search"
-        app:contentPadding="5dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
         app:srcCompat="@drawable/icon_add_list" />
 
@@ -120,9 +119,9 @@
         android:layout_marginBottom="12dp"
         android:background="@color/white"
         android:scaleType="fitCenter"
+        app:contentPadding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:contentPadding="5dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
         app:srcCompat="@drawable/icon_delete" />
 
@@ -134,9 +133,9 @@
         android:layout_marginBottom="12dp"
         android:background="@color/white"
         android:scaleType="fitCenter"
+        app:contentPadding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:contentPadding="5dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
         app:srcCompat="@drawable/icon_reminder" />
 
@@ -147,10 +146,10 @@
         android:layout_marginBottom="12dp"
         android:background="@color/white"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btn_send_list_today"
-        app:layout_constraintEnd_toStartOf="@+id/btn_add_list"
         app:contentPadding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_add_list"
+        app:layout_constraintStart_toEndOf="@+id/btn_send_list_today"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
         app:srcCompat="@drawable/icon_search" />
 

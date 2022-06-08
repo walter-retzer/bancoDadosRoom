@@ -33,9 +33,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         tools:context=".pesquisaimg.PesquisaImagens">
 
         <com.airbnb.lottie.LottieAnimationView
@@ -66,7 +66,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_top_edit" />
-
 
     <ImageView
         android:id="@+id/menu_bottom_edit"
@@ -126,7 +125,6 @@
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titulo_input_edit" />
-
 
     <EditText
         android:id="@+id/descricao_input_edit"

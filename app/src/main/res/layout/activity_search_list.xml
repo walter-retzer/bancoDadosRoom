@@ -24,20 +24,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/tarefas_search2"-->
-    <!--        style="@style/TextAppearance.AppCompat.Headline"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="10dp"-->
-    <!--        android:text="Lembretes por Data"-->
-    <!--        android:textColor="@color/white"-->
-    <!--        android:textSize="32sp"-->
-    <!--        android:textStyle="bold"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/tarefas_search" />-->
-
     <TextView
         android:id="@+id/text_data_search"
         style="@style/TextAppearance.AppCompat.Headline"

@@ -29,19 +29,19 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
     //Função para pegar a lista de Dados salva no BD:
     fun getListSave() = flow {
-            val localItens = dao.listAll().map {
-                InfoDados(it.titulo, it.descricao, it.data, it.horario, it.id!!)
-            }
-            emit((localItens as MutableList<InfoDados>))
+        val localItens = dao.listAll().map {
+            InfoDados(it.titulo, it.descricao, it.data, it.horario, it.id!!)
+        }
+        emit((localItens as MutableList<InfoDados>))
     }.flowOn(dispatcher)
 
 
     //Função para pegar a Lista dos dados dos lembretes do dia atual:
     fun listItensToday(item: String) = flow {
-            val localItens = dao.listItensToday(item).map {
-                InfoDados(it.titulo, it.descricao, it.data, it.horario, it.id!!)
-            }
-            emit((localItens as MutableList<InfoDados>))
+        val localItens = dao.listItensToday(item).map {
+            InfoDados(it.titulo, it.descricao, it.data, it.horario, it.id!!)
+        }
+        emit((localItens as MutableList<InfoDados>))
     }.flowOn(dispatcher)
 
 
@@ -59,30 +59,30 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
     //Função para editar os campos dos itens inseridos no BD:
     fun updateItem(item: InfoDados) = flow {
-            val delete = dao.updateAll(
-                item.idUser,
-                item.tituloInfo,
-                item.descricaoInfo,
-                item.dataInfo,
-                item.horarioInfo
-            )
-            emit(DataResult.Success(delete))
+        val delete = dao.updateAll(
+            item.idUser,
+            item.tituloInfo,
+            item.descricaoInfo,
+            item.dataInfo,
+            item.horarioInfo
+        )
+        emit(DataResult.Success(delete))
     }.updateStatus().flowOn(dispatcher)
 
 
     //Função para deletar um item especifico no BD:
     fun deleteItem(item: InfoDados) = flow {
-            val delete = dao.deleteByApiId(
-                item.idUser
-            )
-            emit(DataResult.Success(delete))
+        val delete = dao.deleteByApiId(
+            item.idUser
+        )
+        emit(DataResult.Success(delete))
     }.updateStatus().flowOn(dispatcher)
 
 
     //Função para deletar todos os dados no BD:
     fun deleteAll() = flow {
-            val delete = dao.deleteAll()
-            emit(DataResult.Success(delete))
+        val delete = dao.deleteAll()
+        emit(DataResult.Success(delete))
     }.updateStatus().flowOn(dispatcher)
 
 

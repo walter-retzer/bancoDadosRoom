@@ -61,7 +61,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/img_top" />
 
-
         <ImageView
             android:id="@+id/menu_bottom_today"
             android:layout_width="match_parent"
@@ -120,7 +119,6 @@
             android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/titulo_input" />
-
 
         <EditText
             android:id="@+id/descricao_input"
@@ -206,9 +204,9 @@
             android:layout_marginEnd="50dp"
             android:layout_marginBottom="15dp"
             android:background="@drawable/button"
-            android:text="Salvar de Novo"
-            android:textColorHint="@color/white"
+            android:text="Salvar Lembrete"
             android:textColor="@color/cinza"
+            android:textColorHint="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_time" />

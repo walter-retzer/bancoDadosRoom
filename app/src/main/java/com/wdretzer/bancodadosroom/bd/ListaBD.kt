@@ -49,6 +49,7 @@ class ListaBD : AppCompatActivity() {
     var month = 0
     var year = 0
 
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +60,7 @@ class ListaBD : AppCompatActivity() {
         btnAddItem.setOnClickListener { sendToMainActivity() }
         btnSendListToday.setOnClickListener { sendToListToday() }
         btnSendSearch.setOnClickListener { sendToSearchList() }
-        btnDeleteAll.setOnClickListener { showDialog("Deseja realmente apagar todos os Lembrete?") }
+        btnDeleteAll.setOnClickListener { showDialog("Deseja realmente apagar todos os Lembretes?") }
     }
 
 
@@ -69,14 +70,10 @@ class ListaBD : AppCompatActivity() {
             textTotalItens.text = it.size.toString()
 
             val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-            val adapter = ItensAdapter(::updateItem) {
-                deleteItem(it)
+            val adapter = ItensAdapter(::updateItem) { itens ->
+                showDialogDeleteItem("Deseja realmente apagar esse Lembrete?", itens)
             }
-
             adapter.updateList(it)
-
-            Toast.makeText(this, "Lista Atualizada!", Toast.LENGTH_SHORT).show()
-
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(this)
         }
@@ -139,6 +136,7 @@ class ListaBD : AppCompatActivity() {
         startActivity(intent)
     }
 
+
     private fun sendToSearchList() {
         val intent = Intent(this, SearchListActivity::class.java)
         startActivity(intent)
@@ -156,11 +154,33 @@ class ListaBD : AppCompatActivity() {
         val btnApagar = dialog.findViewById(R.id.btn_apagar) as Button
         val btnCancelar = dialog.findViewById(R.id.btn_cancelar) as TextView
 
+        btnCancelar.setOnClickListener { dialog.dismiss() }
         btnApagar.setOnClickListener {
             deleteAll()
             dialog.dismiss()
         }
+
+        dialog.show()
+    }
+
+
+    private fun showDialogDeleteItem(title: String, itens: InfoDados) {
+        val dialog = Dialog(this)
+        dialog.setCancelable(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(R.layout.fragment_dialog_delete)
+
+        val body = dialog.findViewById(R.id.frag_title) as TextView
+        body.text = title
+        val btnApagar = dialog.findViewById(R.id.btn_apagar) as Button
+        val btnCancelar = dialog.findViewById(R.id.btn_cancelar) as TextView
+
         btnCancelar.setOnClickListener { dialog.dismiss() }
+        btnApagar.setOnClickListener {
+            deleteItem(itens)
+            dialog.dismiss()
+        }
+
         dialog.show()
     }
 }

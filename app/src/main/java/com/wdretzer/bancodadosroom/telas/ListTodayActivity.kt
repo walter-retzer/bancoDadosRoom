@@ -1,9 +1,13 @@
 package com.wdretzer.bancodadosroom.telas
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -71,14 +75,10 @@ class ListTodayActivity : AppCompatActivity() {
         viewModelApp.listItensToday(data).observe(this) {
 
             val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_today)
-            val adapter = ItensAdapter(::updateItem) {
-                deleteItem(it)
+            val adapter = ItensAdapter(::updateItem) { itens ->
+                showDialogDeleteItem("Deseja realmente apagar esse Lembrete?", itens)
             }
-
             adapter.updateList(it)
-
-            Toast.makeText(this, "Lista Atualizada!", Toast.LENGTH_SHORT).show()
-
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(this)
         }
@@ -153,6 +153,25 @@ class ListTodayActivity : AppCompatActivity() {
     private fun sendToSearchList() {
         val intent = Intent(this, SearchListActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun showDialogDeleteItem(title: String, itens: InfoDados) {
+        val dialog = Dialog(this)
+        dialog.setCancelable(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(R.layout.fragment_dialog_delete)
+
+        val body = dialog.findViewById(R.id.frag_title) as TextView
+        body.text = title
+        val btnApagar = dialog.findViewById(R.id.btn_apagar) as Button
+        val btnCancelar = dialog.findViewById(R.id.btn_cancelar) as TextView
+
+        btnApagar.setOnClickListener {
+            deleteItem(itens)
+            dialog.dismiss()
+        }
+        btnCancelar.setOnClickListener { dialog.dismiss() }
+        dialog.show()
     }
 
 }

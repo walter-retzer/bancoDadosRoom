@@ -15,79 +15,74 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
     private val dao = DataBaseFactory.getDataBase().appRoomDao()
 
+    //Insere os valores dos itens que foram digitados na tela Inicial ao BD:
     fun addOrRemoveItens(item: String, item2: String, item3: String, item4: String) = flow {
         try {
-            // Executa a contagem de item no banco de dados igual ao valor da variavel item:
-            val numeroRegistro = dao.countApiId(item)
-            val itemExist = numeroRegistro >= 1
-
-            var word = Dados(null, item, item2, item3, item4)
-
-            //Insere os valores dos itens que foram digitados na tela Inicial:
+            val word = Dados(null, item, item2, item3, item4)
             val insert = dao.insert(word)
             emit(DataResult.Success(insert))
-
         } catch (e: Exception) {
             emit(DataResult.Error(IllegalStateException()))
         }
     }.updateStatus().flowOn(dispatcher)
 
 
-    //Função para pegar os dados do item Favoritado:
+    //Função para pegar a lista de Dados salva no BD:
     fun getListSave() = flow {
-        val localItens = dao.listAll().map {
-            InfoDados(it.titulo, it.descricao, it.data, it.horario, it.id!!)
-        }
-        emit((localItens as MutableList<InfoDados>))
+            val localItens = dao.listAll().map {
+                InfoDados(it.titulo, it.descricao, it.data, it.horario, it.id!!)
+            }
+            emit((localItens as MutableList<InfoDados>))
     }.flowOn(dispatcher)
 
 
-    //Função para pegar os dados dos lembretes do dia atual:
+    //Função para pegar a Lista dos dados dos lembretes do dia atual:
     fun listItensToday(item: String) = flow {
-        val localItens = dao.listItensToday(item).map {
-            InfoDados(it.titulo, it.descricao, it.data, it.horario, it.id!!)
-        }
-        emit((localItens as MutableList<InfoDados>))
+            val localItens = dao.listItensToday(item).map {
+                InfoDados(it.titulo, it.descricao, it.data, it.horario, it.id!!)
+            }
+            emit((localItens as MutableList<InfoDados>))
     }.flowOn(dispatcher)
 
 
+    //Executa a contagem de item no banco de dados que contêm a mesma data:
     fun countItens(item: String) = flow {
         try {
-            // Executa a contagem de item no banco de dados igual ao valor da variável item:
             val numeroRegistro = dao.countApiId(item)
             val itemExist = numeroRegistro >= 1
-
             emit(numeroRegistro)
-
         } catch (e: Exception) {
-            emit(DataResult.Error(IllegalStateException()))
+            emit(IllegalStateException())
         }
     }.flowOn(dispatcher)
 
 
+    //Função para editar os campos dos itens inseridos no BD:
     fun updateItem(item: InfoDados) = flow {
-        val delete = dao.updateAll(
-            item.idUser,
-            item.tituloInfo,
-            item.descricaoInfo,
-            item.dataInfo,
-            item.horarioInfo
-        )
-        emit(DataResult.Success(delete))
+            val delete = dao.updateAll(
+                item.idUser,
+                item.tituloInfo,
+                item.descricaoInfo,
+                item.dataInfo,
+                item.horarioInfo
+            )
+            emit(DataResult.Success(delete))
     }.updateStatus().flowOn(dispatcher)
 
 
+    //Função para deletar um item especifico no BD:
     fun deleteItem(item: InfoDados) = flow {
-        val delete = dao.deleteByApiId(
-            item.idUser
-        )
-        emit(DataResult.Success(delete))
+            val delete = dao.deleteByApiId(
+                item.idUser
+            )
+            emit(DataResult.Success(delete))
     }.updateStatus().flowOn(dispatcher)
 
 
+    //Função para deletar todos os dados no BD:
     fun deleteAll() = flow {
-        val delete = dao.deleteAll()
-        emit(DataResult.Success(delete))
+            val delete = dao.deleteAll()
+            emit(DataResult.Success(delete))
     }.updateStatus().flowOn(dispatcher)
 
 

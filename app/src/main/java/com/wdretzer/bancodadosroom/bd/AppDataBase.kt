@@ -6,6 +6,7 @@ import androidx.room.TypeConverters
 import com.wdretzer.bancodadosroom.dados.Converters
 import com.wdretzer.bancodadosroom.dados.Dados
 
+
 @Database(
     entities = [Dados::class],
     version = 1,

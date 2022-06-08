@@ -15,6 +15,9 @@
         android:theme="@style/Theme.BancoDadosRoom"
         tools:targetApi="31">
         <activity
+            android:name=".telas.SearchListActivity"
+            android:exported="false" />
+        <activity
             android:name=".telas.ListTodayActivity"
             android:exported="false" />
         <activity

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginBottom="10dp"
     app:cardCornerRadius="15dp">
 
@@ -31,7 +31,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/text"
+            android:id="@+id/titulo_card"
             style="@style/TextAppearance.AppCompat.Headline"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -40,9 +40,9 @@
             android:textColor="@color/white"
             android:textSize="22sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/checkbox"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/checkbox"
-            app:layout_constraintBottom_toBottomOf="@+id/checkbox"
             app:layout_constraintTop_toTopOf="@+id/checkbox" />
 
         <TextView
@@ -56,10 +56,10 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text" />
+            app:layout_constraintTop_toBottomOf="@+id/titulo_card" />
 
         <TextView
-            android:id="@+id/text2"
+            android:id="@+id/descricao_card"
             style="@style/TextAppearance.AppCompat.Headline"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -82,10 +82,10 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text2" />
+            app:layout_constraintTop_toBottomOf="@+id/descricao_card" />
 
         <TextView
-            android:id="@+id/text3"
+            android:id="@+id/data_card"
             style="@style/TextAppearance.AppCompat.Headline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textDate" />
 
         <TextView
-            android:id="@+id/text4"
+            android:id="@+id/time_card"
             style="@style/TextAppearance.AppCompat.Headline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -118,7 +118,7 @@
             android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@+id/textTime"
-            app:layout_constraintTop_toBottomOf="@+id/text3" />
+            app:layout_constraintTop_toBottomOf="@+id/data_card" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/btn_update"
@@ -127,6 +127,7 @@
             android:layout_marginEnd="10dp"
             android:background="@color/teal_200"
             android:scaleType="fitCenter"
+            app:contentPadding="2dp"
             app:layout_constraintEnd_toStartOf="@+id/btn_delete"
             app:layout_constraintTop_toTopOf="@+id/textTime"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
@@ -138,62 +139,11 @@
             android:layout_height="40dp"
             android:background="@color/teal_200"
             android:scaleType="fitCenter"
+            app:contentPadding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textTime"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             app:srcCompat="@drawable/icon_close" />
-
-<!--        <RelativeLayout-->
-<!--            android:id="@+id/animation_delete"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/text3"-->
-<!--            tools:context=".pesquisaimg.PesquisaImagens">-->
-
-<!--            <com.airbnb.lottie.LottieAnimationView-->
-<!--                android:id="@+id/lottie_edit"-->
-<!--                android:layout_width="50dp"-->
-<!--                android:layout_height="50dp"-->
-<!--                android:layout_centerVertical="true"-->
-<!--                android:scaleType="fitXY"-->
-<!--                android:visibility="visible"-->
-<!--                app:layout_constraintLeft_toLeftOf="parent"-->
-<!--                app:layout_constraintRight_toRightOf="parent"-->
-<!--                app:lottie_autoPlay="true"-->
-<!--                app:lottie_fileName="delete.json"-->
-<!--                app:lottie_loop="true"-->
-<!--                app:lottie_speed="1" />-->
-<!--        </RelativeLayout>-->
-
-
-<!--        <RelativeLayout-->
-<!--            android:id="@+id/animation_edit"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:layout_marginEnd="50dp"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/text3"-->
-<!--            tools:context=".pesquisaimg.PesquisaImagens">-->
-
-<!--            <com.airbnb.lottie.LottieAnimationView-->
-<!--                android:id="@+id/lottie_edit2"-->
-<!--                android:layout_width="50dp"-->
-<!--                android:layout_height="50dp"-->
-<!--                android:layout_centerVertical="true"-->
-<!--                android:scaleType="fitXY"-->
-<!--                android:visibility="visible"-->
-<!--                app:layout_constraintLeft_toLeftOf="parent"-->
-<!--                app:layout_constraintRight_toRightOf="parent"-->
-<!--                app:lottie_autoPlay="true"-->
-<!--                app:lottie_fileName="notes.json"-->
-<!--                app:lottie_loop="true"-->
-<!--                app:lottie_speed="1" />-->
-<!--        </RelativeLayout>-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

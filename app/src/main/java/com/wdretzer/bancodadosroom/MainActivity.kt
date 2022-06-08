@@ -9,9 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.widget.*
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isVisible
-import com.google.android.material.textfield.TextInputEditText
 import com.wdretzer.bancodadosroom.bd.ListaBD
 import com.wdretzer.bancodadosroom.extension.DataResult
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel
@@ -25,12 +23,6 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
     private val btnCadastrar: Button
         get() = findViewById(R.id.btn_continue)
-
-//    private val textTitulo: TextInputEditText
-//        get() = findViewById(R.id.titulo_input_text)
-//
-//    private val textDescricao: TextInputEditText
-//        get() = findViewById(R.id.descricao_input_text)
 
     private val loading: FrameLayout
         get() = findViewById(R.id.loading)
@@ -61,25 +53,18 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         setContentView(R.layout.activity_main)
 
         getSupportActionBar()?.hide()
-
-        textData?.setOnClickListener {
-            pickDate()
-        }
-
-        textHorario?.setOnClickListener {
-            pickTime()
-        }
-
-        btnCadastrar.setOnClickListener {
-            checkInfo()
-        }
+        textData?.setOnClickListener { pickDate() }
+        textHorario?.setOnClickListener { pickTime() }
+        btnCadastrar.setOnClickListener { checkInfo() }
     }
+
 
     private fun checkInfo() {
         if (textTitulo?.text.toString().isEmpty() ||
             textDescricao?.text.toString().isEmpty() ||
             textData?.text.toString() == "dd/mm/aaaa" ||
-            textHorario?.text.toString() == "--:-- hr") {
+            textHorario?.text.toString() == "--:-- hr"
+        ) {
 
             Toast.makeText(this, "Há campos não preenchidos!", Toast.LENGTH_SHORT).show()
 
@@ -89,8 +74,8 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         }
     }
 
-    private fun saveToDoList() {
 
+    private fun saveToDoList() {
         viewModelApp.addOrRemoveItens(
 
             textTitulo?.text.toString(),
@@ -114,6 +99,7 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         }
     }
 
+
     private fun getDateCalendar() {
         val myCalendar = Calendar.getInstance()
         day = myCalendar.get(Calendar.DAY_OF_MONTH)
@@ -125,15 +111,18 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         hour = myCalendar.get(Calendar.HOUR)
     }
 
+
     private fun pickDate() {
         getDateCalendar()
         DatePickerDialog(this, this, year, month, day).show()
     }
 
+
     private fun pickTime() {
         getDateCalendar()
         TimePickerDialog(this, this, hour, minutes, false).show()
     }
+
 
     private fun sendToListaBD() {
         loading.isVisible = true
@@ -144,6 +133,7 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         }, 3000)
     }
 
+
     @SuppressLint("SetTextI18n")
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         savedDay = dayOfMonth
@@ -151,6 +141,7 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         savedYear = year
         textData?.text = "$savedDay/$savedMonth/$savedYear"
     }
+
 
     @SuppressLint("SetTextI18n")
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {

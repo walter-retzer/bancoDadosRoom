@@ -16,9 +16,9 @@ import com.wdretzer.bancodadosroom.bd.ListaBD
 import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.extension.DataResult
 import com.wdretzer.bancodadosroom.recycler.ItensAdapter
-import com.wdretzer.bancodadosroom.recycler.ListTodayAdapter
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel
 import java.util.*
+
 
 class ListTodayActivity : AppCompatActivity() {
 
@@ -56,7 +56,7 @@ class ListTodayActivity : AppCompatActivity() {
 
         btnHomeMenu.setOnClickListener { sendToListBD() }
         btnAddItem.setOnClickListener { sendToMainActivity() }
-        btnSearch.setOnClickListener { sendToMainActivity() }
+        btnSearch.setOnClickListener { sendToSearchList() }
 
     }
 
@@ -146,6 +146,12 @@ class ListTodayActivity : AppCompatActivity() {
 
     private fun sendToMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
+
+
+    private fun sendToSearchList() {
+        val intent = Intent(this, SearchListActivity::class.java)
         startActivity(intent)
     }
 

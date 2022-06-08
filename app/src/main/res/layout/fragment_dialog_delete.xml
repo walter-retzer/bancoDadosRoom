@@ -29,8 +29,7 @@
         android:background="@drawable/button"
         android:padding="10dp"
         android:text="Cancelar"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
+        android:textColor="@color/cinza"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/frag_title" />
@@ -45,8 +44,7 @@
         android:background="@drawable/button"
         android:padding="10dp"
         android:text="Apagar"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
+        android:textColor="@color/cinza"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/frag_title" />

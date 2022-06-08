@@ -9,9 +9,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.widget.*
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat.startActivity
-import androidx.core.view.isVisible
-import com.google.android.material.textfield.TextInputEditText
 import com.wdretzer.bancodadosroom.R
 import com.wdretzer.bancodadosroom.bd.ListaBD
 import com.wdretzer.bancodadosroom.dados.InfoDados
@@ -19,25 +16,16 @@ import com.wdretzer.bancodadosroom.extension.DataResult
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel
 import java.util.*
 
+
 class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     TimePickerDialog.OnTimeSetListener {
 
     private val viewModelApp: AppViewModel by viewModels()
-
-    private val btnSave: Button
-        get() = findViewById(R.id.btn_continue)
-
-    private val textTitleEdit: TextInputEditText
-        get() = findViewById(R.id.titulo_input_text)
-
-    private val textDescriptionEdit: TextInputEditText
-        get() = findViewById(R.id.descricao_input_text)
-
-    private val textDateEdit: TextInputEditText
-        get() = findViewById(R.id.data_input_text)
-
-    private val textTimeEdit: TextInputEditText
-        get() = findViewById(R.id.horario_input_text)
+    private val textTitleEdit: EditText? by lazy { findViewById(R.id.titulo_input_edit) }
+    private val textDescriptionEdit: EditText? by lazy { findViewById(R.id.descricao_input_edit) }
+    private val textDateEdit: TextView? by lazy { findViewById(R.id.data_input_edit) }
+    private val textTimeEdit: TextView? by lazy { findViewById(R.id.time_input_edit) }
+    private val btnSave: Button? by lazy { findViewById(R.id.btn_salve_edit) }
 
     var day = 0
     var month = 0
@@ -49,7 +37,6 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     var savedDay = 0
     var savedMonth = 0
     var savedYear = 0
-
     var savedMinutes = ""
     var savedHour = ""
 
@@ -70,34 +57,30 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
             val getTextTime = bundle.getString("Hora")
             val getId = bundle.getInt("Id")
 
-            getTextTitle?.let { textTitleEdit.setText(it) }
-            getTextDescription?.let { textDescriptionEdit.setText(it) }
-            getTextDate?.let { textDateEdit.setText(it) }
-            getTextTime?.let { textTimeEdit.setText(it) }
+            getTextTitle?.let { textTitleEdit?.setText(it) }
+            getTextDescription?.let { textDescriptionEdit?.setText(it) }
+            getTextDate?.let { textDateEdit?.setText(it) }
+            getTextTime?.let { textTimeEdit?.setText(it) }
             idBundle = getId
         }
 
-        textDateEdit.setOnClickListener {
-            pickDate()
-        }
+        textDateEdit?.setOnClickListener { pickDate() }
+        textTimeEdit?.setOnClickListener { pickTime() }
 
-        textTimeEdit.setOnClickListener {
-            pickTime()
-        }
-
-        btnSave.setOnClickListener {
+        btnSave?.setOnClickListener {
             updateItem(
                 InfoDados(
-                    textTitleEdit.text.toString(),
-                    textDescriptionEdit.text.toString(),
-                    textDateEdit.text.toString(),
-                    textTimeEdit.text.toString(),
+                    textTitleEdit?.text.toString(),
+                    textDescriptionEdit?.text.toString(),
+                    textDateEdit?.text.toString(),
+                    textTimeEdit?.text.toString(),
                     idBundle
                 )
             )
             sendToListaBD()
         }
     }
+
 
     private fun getDateCalendar() {
         val myCalendar = Calendar.getInstance()
@@ -109,6 +92,7 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         minutes = myCalendar.get(Calendar.MINUTE)
         hour = myCalendar.get(Calendar.HOUR)
     }
+
 
     private fun updateItem(item: InfoDados) {
         viewModelApp.updateItem(item).observe(this) {
@@ -123,31 +107,36 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         }
     }
 
+
     private fun pickDate() {
         getDateCalendar()
         DatePickerDialog(this, this, year, month, day).show()
     }
+
 
     private fun pickTime() {
         getDateCalendar()
         TimePickerDialog(this, this, hour, minutes, true).show()
     }
 
+
     @SuppressLint("SetTextI18n")
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         savedDay = dayOfMonth
         savedMonth = month + 1
         savedYear = year
-        textDateEdit.setText("$savedDay/$savedMonth/$savedYear")
+        textDateEdit?.setText("$savedDay/$savedMonth/$savedYear")
     }
+
 
     @SuppressLint("SetTextI18n")
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         savedMinutes = if (minute < 10) "0$minute" else "$minute"
         savedHour = if (hourOfDay < 10) "0$hourOfDay" else "$hourOfDay"
 
-        textTimeEdit.setText("$savedHour:$savedMinutes" + "hr")
+        textTimeEdit?.setText("$savedHour:$savedMinutes" + "hr")
     }
+
 
     private fun sendToListaBD() {
         Handler().postDelayed({
@@ -155,5 +144,4 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
             startActivity(intent)
         }, 2000)
     }
-
 }

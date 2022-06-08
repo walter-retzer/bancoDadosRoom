@@ -20,9 +20,9 @@ import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.extension.DataResult
 import com.wdretzer.bancodadosroom.recycler.ItensAdapter
 import com.wdretzer.bancodadosroom.telas.ListTodayActivity
+import com.wdretzer.bancodadosroom.telas.SearchListActivity
 import com.wdretzer.bancodadosroom.telas.TelaUpdateDados
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel
-import java.util.*
 
 
 class ListaBD : AppCompatActivity() {
@@ -34,6 +34,9 @@ class ListaBD : AppCompatActivity() {
 
     private val btnSendListToday: ShapeableImageView
         get() = findViewById(R.id.btn_send_list_today)
+
+    private val btnSendSearch: ShapeableImageView
+        get() = findViewById(R.id.btn_send_search)
 
     private val btnDeleteAll: ShapeableImageView
         get() = findViewById(R.id.btn_delete_all)
@@ -52,23 +55,13 @@ class ListaBD : AppCompatActivity() {
         setContentView(R.layout.activity_lista_bd)
 
         getSupportActionBar()?.hide()
-
         showListBD()
-        //getDateCalendar()
-        //countItem("$day/$month/$year")
-
-        btnAddItem.setOnClickListener {
-            sendToMainActivity()
-        }
-
-        btnSendListToday.setOnClickListener {
-            sendToListToday()
-        }
-
-        btnDeleteAll.setOnClickListener {
-            showDialog("Deseja realmente apagar todos os Lembrete?")
-        }
+        btnAddItem.setOnClickListener { sendToMainActivity() }
+        btnSendListToday.setOnClickListener { sendToListToday() }
+        btnSendSearch.setOnClickListener { sendToSearchList() }
+        btnDeleteAll.setOnClickListener { showDialog("Deseja realmente apagar todos os Lembrete?") }
     }
+
 
     private fun showListBD() {
         viewModelApp.getListSave().observe(this) {
@@ -113,21 +106,12 @@ class ListaBD : AppCompatActivity() {
     }
 
 
-    private fun countItem(item: String) {
-        viewModelApp.countItens(item).observe(this) {
-            textTotalItens.text = it.toString()
-            showListBD()
-        }
-    }
-
-
     private fun deleteItem(item: InfoDados) {
         viewModelApp.deleteItem(item).observe(this) {
 
             if (it is DataResult.Success) {
                 Toast.makeText(this, "Delete Sucess!", Toast.LENGTH_SHORT).show()
                 showListBD()
-                countItem("$day/$month/$year")
             }
         }
     }
@@ -139,7 +123,6 @@ class ListaBD : AppCompatActivity() {
             if (it is DataResult.Success) {
                 Toast.makeText(this, "Delete All Sucess!", Toast.LENGTH_SHORT).show()
                 showListBD()
-                countItem("$day/$month/$year")
             }
         }
     }
@@ -150,8 +133,14 @@ class ListaBD : AppCompatActivity() {
         startActivity(intent)
     }
 
+
     private fun sendToListToday() {
         val intent = Intent(this, ListTodayActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun sendToSearchList() {
+        val intent = Intent(this, SearchListActivity::class.java)
         startActivity(intent)
     }
 
@@ -173,12 +162,5 @@ class ListaBD : AppCompatActivity() {
         }
         btnCancelar.setOnClickListener { dialog.dismiss() }
         dialog.show()
-    }
-
-    private fun getDateCalendar() {
-        val myCalendar = Calendar.getInstance()
-        day = myCalendar.get(Calendar.DAY_OF_MONTH)
-        month = myCalendar.get(Calendar.MONTH) + 1
-        year = myCalendar.get(Calendar.YEAR)
     }
 }

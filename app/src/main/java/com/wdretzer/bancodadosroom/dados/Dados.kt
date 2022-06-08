@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 
+
 @Entity(tableName = "infoDB")
 data class Dados(
     @PrimaryKey(autoGenerate = true)

@@ -61,15 +61,15 @@
         <TextView
             android:id="@+id/text2"
             style="@style/TextAppearance.AppCompat.Headline"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Evento Remenber kfgvbgjbkbnkhnbhkhkj khbkk!"
             android:textAlignment="textStart"
             android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textDescription" />
+            app:layout_constraintStart_toEndOf="@+id/textDescription"
+            app:layout_constraintTop_toTopOf="@+id/textDescription" />
 
         <TextView
             android:id="@+id/textDate"

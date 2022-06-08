@@ -9,7 +9,7 @@
     android:backgroundTint="@color/cinza"
     android:backgroundTintMode="screen"
     android:orientation="vertical"
-    android:padding="15dp"
+
     tools:context=".MainActivity">
 
     <FrameLayout
@@ -29,15 +29,20 @@
             android:layout_gravity="center" />
     </FrameLayout>
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/img_top"
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_marginTop="15dp"
-        android:src="@drawable/todolist"
+        android:padding="10dp"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+        app:srcCompat="@drawable/img"
+        app:strokeColor="@android:color/darker_gray"
+        app:strokeWidth="10dp" />
 
     <TextView
         android:id="@+id/text_top"
@@ -45,74 +50,140 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Meu Lembrete:"
+        android:text="Meu Lembrete"
         android:textColor="@color/white"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_top" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/titulo_input_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/text_titulo"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Digite o titulo"
-        android:textColorHint="@color/black"
-        app:boxBackgroundColor="@color/white"
-        app:boxBackgroundMode="filled"
-        app:boxStrokeColor="@color/blue"
-        app:hintTextColor="@color/blue"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="14dp"
+        android:text="Título: "
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/descricao_input"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_top">
+        app:layout_constraintTop_toBottomOf="@+id/text_top"
+        app:layout_constraintVertical_chainStyle="packed" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/titulo_input_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/descriao_input_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/titulo_input"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Digite a descrição"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/background_text_input"
+        android:hint="Preencha o título"
+        android:padding="10dp"
+        android:textAlignment="textStart"
+        android:textColor="@color/black"
         android:textColorHint="@color/black"
-        app:boxBackgroundColor="@color/white"
-        app:boxBackgroundMode="filled"
-        app:boxStrokeColor="@color/blue"
-        app:hintTextColor="@color/blue"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="@+id/text_titulo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titulo_input_layout">
+        app:layout_constraintStart_toEndOf="@+id/text_titulo"
+        app:layout_constraintTop_toTopOf="@+id/text_titulo" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/descricao_input_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black" />
-    </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+        android:id="@+id/text_description"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:text="Descrição: "
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titulo_input" />
+
+
+    <EditText
+        android:id="@+id/descricao_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/background_text_input"
+        android:hint="Preencha a descrição"
+        android:padding="10dp"
+        android:textAlignment="textStart"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="@+id/text_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_description"
+        app:layout_constraintTop_toTopOf="@+id/text_description" />
+
+    <!--    <com.google.android.material.textfield.TextInputLayout-->
+    <!--        android:id="@+id/titulo_input_layout"-->
+    <!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:hint="Digite o titulo"-->
+    <!--        android:textColorHint="@color/black"-->
+    <!--        app:boxBackgroundColor="@color/white"-->
+    <!--        app:boxBackgroundMode="filled"-->
+    <!--        app:boxStrokeColor="@color/blue"-->
+    <!--        app:hintTextColor="@color/blue"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/text_top">-->
+
+    <!--        <com.google.android.material.textfield.TextInputEditText-->
+    <!--            android:id="@+id/titulo_input_text"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:textColor="@color/black" />-->
+    <!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+    <!--    <com.google.android.material.textfield.TextInputLayout-->
+    <!--        android:id="@+id/descriao_input"-->
+    <!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:hint="Digite a descrição"-->
+    <!--        android:textColorHint="@color/black"-->
+    <!--        app:boxBackgroundColor="@color/white"-->
+    <!--        app:boxBackgroundMode="filled"-->
+    <!--        app:boxStrokeColor="@color/blue"-->
+    <!--        app:hintTextColor="@color/blue"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/titulo_input">-->
+
+    <!--        <com.google.android.material.textfield.TextInputEditText-->
+    <!--            android:id="@+id/descricao_input_text"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:textColor="@color/black" />-->
+    <!--    </com.google.android.material.textfield.TextInputLayout>-->
 
     <TextView
         android:id="@+id/text_data"
         style="@style/TextAppearance.AppCompat.Headline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
         android:text="Data: "
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descriao_input_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/descricao_input" />
 
     <TextView
         android:id="@+id/data_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@color/white"
+        android:background="@drawable/background_text_input"
         android:padding="10dp"
         android:text="dd/mm/aaaa"
         android:textAlignment="textStart"
@@ -120,15 +191,17 @@
         android:textColorHint="@color/black"
         android:textSize="16sp"
         android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="@+id/text_data"
         app:layout_constraintStart_toEndOf="@+id/text_data"
-        app:layout_constraintTop_toBottomOf="@+id/descriao_input_layout" />
+        app:layout_constraintTop_toTopOf="@+id/text_data" />
 
     <TextView
         android:id="@+id/text_time"
         style="@style/TextAppearance.AppCompat.Headline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
         android:text="Horário: "
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
@@ -138,8 +211,7 @@
         android:id="@+id/time_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@color/white"
+        android:background="@drawable/background_text_input"
         android:padding="10dp"
         android:text="--:-- hr"
         android:textAlignment="textStart"
@@ -147,15 +219,18 @@
         android:textColorHint="@color/black"
         android:textSize="16sp"
         android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="@+id/text_time"
         app:layout_constraintStart_toEndOf="@+id/text_time"
-        app:layout_constraintTop_toBottomOf="@+id/data_input" />
+        app:layout_constraintTop_toTopOf="@+id/text_time" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_continue"
         android:layout_width="match_parent"
         android:layout_height="54dp"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="50dp"
         android:background="@drawable/button"
         android:text="Salvar"
         android:textColor="@color/white"

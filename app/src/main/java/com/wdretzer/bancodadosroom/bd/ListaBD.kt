@@ -3,6 +3,8 @@ package com.wdretzer.bancodadosroom.bd
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -17,6 +19,7 @@ import com.wdretzer.bancodadosroom.R
 import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.extension.DataResult
 import com.wdretzer.bancodadosroom.recycler.ItensAdapter
+import com.wdretzer.bancodadosroom.telas.ListTodayActivity
 import com.wdretzer.bancodadosroom.telas.TelaUpdateDados
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel
 import java.util.*
@@ -28,6 +31,9 @@ class ListaBD : AppCompatActivity() {
 
     private val btnAddItem: ShapeableImageView
         get() = findViewById(R.id.btn_add_list)
+
+    private val btnSendListToday: ShapeableImageView
+        get() = findViewById(R.id.btn_send_list_today)
 
     private val btnDeleteAll: ShapeableImageView
         get() = findViewById(R.id.btn_delete_all)
@@ -48,11 +54,15 @@ class ListaBD : AppCompatActivity() {
         getSupportActionBar()?.hide()
 
         showListBD()
-        getDateCalendar()
-        countItem("$day/$month/$year")
+        //getDateCalendar()
+        //countItem("$day/$month/$year")
 
         btnAddItem.setOnClickListener {
             sendToMainActivity()
+        }
+
+        btnSendListToday.setOnClickListener {
+            sendToListToday()
         }
 
         btnDeleteAll.setOnClickListener {
@@ -62,6 +72,8 @@ class ListaBD : AppCompatActivity() {
 
     fun showListBD() {
         viewModelApp.getListSave().observe(this) {
+
+            textTotalItens.text = it.size.toString()
 
             val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
             val adapter = ItensAdapter(::updateItem) {
@@ -138,10 +150,16 @@ class ListaBD : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun sendToListToday() {
+        val intent = Intent(this, ListTodayActivity::class.java)
+        startActivity(intent)
+    }
+
 
     private fun showDialog(title: String) {
         val dialog = Dialog(this)
         dialog.setCancelable(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.setContentView(R.layout.fragment_dialog_delete)
 
         val body = dialog.findViewById(R.id.frag_title) as TextView

@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.widget.*
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isVisible
 import com.google.android.material.textfield.TextInputEditText
 import com.wdretzer.bancodadosroom.bd.ListaBD
@@ -25,14 +26,18 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     private val btnCadastrar: Button
         get() = findViewById(R.id.btn_continue)
 
-    private val textTitulo: TextInputEditText
-        get() = findViewById(R.id.titulo_input_text)
-
-    private val textDescricao: TextInputEditText
-        get() = findViewById(R.id.descricao_input_text)
+//    private val textTitulo: TextInputEditText
+//        get() = findViewById(R.id.titulo_input_text)
+//
+//    private val textDescricao: TextInputEditText
+//        get() = findViewById(R.id.descricao_input_text)
 
     private val loading: FrameLayout
         get() = findViewById(R.id.loading)
+
+    private val textTitulo: EditText? by lazy { findViewById(R.id.titulo_input) }
+
+    private val textDescricao: EditText? by lazy { findViewById(R.id.descricao_input) }
 
     private val textData: TextView? by lazy { findViewById(R.id.data_input) }
 
@@ -66,6 +71,19 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         }
 
         btnCadastrar.setOnClickListener {
+            checkInfo()
+        }
+    }
+
+    private fun checkInfo() {
+        if (textTitulo?.text.toString().isEmpty() ||
+            textDescricao?.text.toString().isEmpty() ||
+            textData?.text.toString() == "dd/mm/aaaa" ||
+            textHorario?.text.toString() == "--:-- hr") {
+
+            Toast.makeText(this, "Há campos não preenchidos!", Toast.LENGTH_SHORT).show()
+
+        } else {
             saveToDoList()
             sendToListaBD()
         }
@@ -75,8 +93,8 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
         viewModelApp.addOrRemoveItens(
 
-            textTitulo.text.toString(),
-            textDescricao.text.toString(),
+            textTitulo?.text.toString(),
+            textDescricao?.text.toString(),
             textData?.text.toString(),
             textHorario?.text.toString()
 

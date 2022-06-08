@@ -125,7 +125,7 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
     private fun pickDate() {
         getDateCalendar()
-        DatePickerDialog(this@TelaUpdateDados, this, year, month, day).show()
+        DatePickerDialog(this, this, year, month, day).show()
     }
 
     private fun pickTime() {
@@ -143,7 +143,6 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
     @SuppressLint("SetTextI18n")
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-
         savedMinutes = if (minute < 10) "0$minute" else "$minute"
         savedHour = if (hourOfDay < 10) "0$hourOfDay" else "$hourOfDay"
 

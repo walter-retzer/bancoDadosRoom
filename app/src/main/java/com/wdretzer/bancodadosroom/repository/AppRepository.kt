@@ -42,6 +42,15 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
     }.flowOn(dispatcher)
 
 
+    //Função para pegar os dados dos lembretes do dia atual:
+    fun listItensToday(item: String) = flow {
+        val localItens = dao.listItensToday(item).map {
+            InfoDados(it.titulo, it.descricao, it.data, it.horario, it.id!!)
+        }
+        emit((localItens as MutableList<InfoDados>))
+    }.flowOn(dispatcher)
+
+
     fun countItens(item: String) = flow {
         try {
             // Executa a contagem de item no banco de dados igual ao valor da variável item:

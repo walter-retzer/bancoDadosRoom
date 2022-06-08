@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
     private fun pickTime() {
         getDateCalendar()
-        TimePickerDialog(this, this, hour, minutes, true).show()
+        TimePickerDialog(this, this, hour, minutes, false).show()
     }
 
     private fun sendToListaBD() {

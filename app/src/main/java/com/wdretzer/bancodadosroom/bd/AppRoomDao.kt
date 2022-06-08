@@ -18,12 +18,15 @@ interface AppRoomDao {
     @Query("SELECT * FROM infoDB")
     fun listAll(): List<Dados>
 
+    @Query("SELECT * FROM infoDB WHERE data = :apiData")
+    fun listItensToday(apiData: String): List<Dados>
+
     @Query("SELECT COUNT(titulo) FROM infoDB WHERE data = :apiData")
-    fun countApiId(vararg apiData: String): Int
+    fun countApiId(apiData: String): Int
 
     @Query("UPDATE infoDB SET titulo = :itemNew, descricao = :desc, data = :dia, horario = :hora WHERE id = :id")
     fun updateAll(id: Int, itemNew: String, desc: String, dia: String, hora: String)
 
     @Query("DELETE FROM infoDB WHERE id = :id")
-    fun deleteByApiId(vararg id: Int)
+    fun deleteByApiId(id: Int)
 }

@@ -70,7 +70,7 @@ class ListaBD : AppCompatActivity() {
         }
     }
 
-    fun showListBD() {
+    private fun showListBD() {
         viewModelApp.getListSave().observe(this) {
 
             textTotalItens.text = it.size.toString()

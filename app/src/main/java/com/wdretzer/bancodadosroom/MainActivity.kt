@@ -1,15 +1,21 @@
 package com.wdretzer.bancodadosroom
 
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
+import android.app.*
+import android.app.PendingIntent
+import android.app.PendingIntent.*
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.widget.*
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.wdretzer.bancodadosroom.alarm.AlarmReceiver
 import com.wdretzer.bancodadosroom.bd.ListaBD
 import com.wdretzer.bancodadosroom.extension.DataResult
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel
@@ -21,7 +27,7 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
     private val viewModelApp: AppViewModel by viewModels()
 
-    private val btnCadastrar: Button
+    private val btnSalvarLembrete: Button
         get() = findViewById(R.id.btn_continue)
 
     private val loading: FrameLayout
@@ -45,20 +51,51 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     var savedDay = 0
     var savedMonth = 0
     var savedYear = 0
-    var savedMinutes = ""
-    var savedHour = ""
+    var savedMinutes = 0
+    var savedHour = 0
 
+    var savedMinutesText = ""
+    var savedHourText = ""
+
+    private var alarmMgr: AlarmManager? = null
+    private lateinit var alarmIntent: PendingIntent
+
+
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         getSupportActionBar()?.hide()
+        //createNotification()
+
         textData?.setOnClickListener { pickDate() }
         textHorario?.setOnClickListener { pickTime() }
-        btnCadastrar.setOnClickListener { checkInfo() }
+        btnSalvarLembrete.setOnClickListener {
+            setAlarm(true)
+            checkInfo() }
     }
 
 
+    private fun createNotification() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name: CharSequence = "appTodoList"
+            val imp = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel("app", name, imp)
+
+            channel.description = "Alarm Ativo!!"
+
+            val notificationManager = getSystemService(
+                NotificationManager::class.java
+            )
+            notificationManager.createNotificationChannel(channel)
+
+        }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun checkInfo() {
         if (textTitulo?.text.toString().isEmpty() ||
             textDescricao?.text.toString().isEmpty() ||
@@ -70,12 +107,30 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
         } else {
             saveToDoList()
-            sendToListaBD()
+
         }
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun saveToDoList() {
+
+        val calendar = Calendar.getInstance()
+
+        calendar.set(Calendar.DAY_OF_MONTH, savedDay)
+        calendar.set(Calendar.MONTH, savedMonth)
+        calendar.set(Calendar.YEAR, savedYear)
+        calendar.set(Calendar.HOUR_OF_DAY, savedHour)
+        calendar.set(Calendar.MINUTE, savedMinutes)
+        calendar.set(Calendar.SECOND, 0)
+
+
+
+        //setAlarm(60000)
+        val t = calendar.timeInMillis.toString()
+
+        Log.d("Alarm Time:", t)
+
         viewModelApp.addOrRemoveItens(
 
             textTitulo?.text.toString(),
@@ -87,6 +142,7 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
             if (it is DataResult.Success) {
                 Toast.makeText(this, "Dados Salvos no Banco de Dados!", Toast.LENGTH_SHORT).show()
+
             }
 
             if (it is DataResult.Error) {
@@ -109,6 +165,7 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         seconds = myCalendar.get(Calendar.SECOND)
         minutes = myCalendar.get(Calendar.MINUTE)
         hour = myCalendar.get(Calendar.HOUR)
+
     }
 
 
@@ -146,9 +203,56 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     @SuppressLint("SetTextI18n")
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
 
-        savedMinutes = if (minute < 10) "0$minute" else "$minute"
-        savedHour = if (hourOfDay < 10) "0$hourOfDay" else "$hourOfDay"
+        savedHour = hourOfDay
+        savedMinutes = minute
 
-        textHorario?.text = "$savedHour:$savedMinutes" + "hr"
+        savedMinutesText = if (minute < 10) "0$minute" else "$minute"
+        savedHourText = if (hourOfDay < 10) "0$hourOfDay" else "$hourOfDay"
+        textHorario?.text = "$savedHourText:$savedMinutesText" + "hr"
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun setAlarm(item:Boolean) {
+
+        if(item){
+            val calendar: Calendar = Calendar.getInstance().apply {
+//            set(Calendar.DAY_OF_MONTH, savedDay)
+//            set(Calendar.MONTH, savedMonth)
+//            set(Calendar.YEAR, savedYear)
+                set(Calendar.HOUR_OF_DAY, savedHour)
+                set(Calendar.MINUTE, savedMinutes)
+
+                if (before(Calendar.getInstance())) {
+                    add(Calendar.DATE, 1)
+                }
+            }
+
+
+            val alarmM = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val intent = Intent(this, AlarmReceiver::class.java)
+
+            val pendingIntent = getBroadcast(
+                this,
+                ALARM_REQUEST_CODE,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE
+            )
+
+            alarmM.setExact(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                pendingIntent
+            )
+
+            Toast.makeText(this, "Alarm is done set: ${calendar.time}", Toast.LENGTH_SHORT).show()
+
+        }
+
+
+    }
+
+    companion object {
+        private const val ALARM_REQUEST_CODE = 1000
     }
 }

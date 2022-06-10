@@ -9,11 +9,11 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.wdretzer.bancodadosroom.alarm.AlarmReceiver
 import com.wdretzer.bancodadosroom.bd.ListaBD
@@ -57,9 +57,6 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     var savedMinutesText = ""
     var savedHourText = ""
 
-    private var alarmMgr: AlarmManager? = null
-    private lateinit var alarmIntent: PendingIntent
-
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,30 +64,12 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         setContentView(R.layout.activity_main)
 
         getSupportActionBar()?.hide()
-        //createNotification()
 
         textData?.setOnClickListener { pickDate() }
         textHorario?.setOnClickListener { pickTime() }
         btnSalvarLembrete.setOnClickListener {
-            setAlarm(true)
-            checkInfo() }
-    }
-
-
-    private fun createNotification() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name: CharSequence = "appTodoList"
-            val imp = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel("app", name, imp)
-
-            channel.description = "Alarm Ativo!!"
-
-            val notificationManager = getSystemService(
-                NotificationManager::class.java
-            )
-            notificationManager.createNotificationChannel(channel)
-
+            setAlarm()
+            checkInfo()
         }
     }
 
@@ -107,7 +86,6 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
         } else {
             saveToDoList()
-
         }
     }
 
@@ -123,13 +101,6 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         calendar.set(Calendar.HOUR_OF_DAY, savedHour)
         calendar.set(Calendar.MINUTE, savedMinutes)
         calendar.set(Calendar.SECOND, 0)
-
-
-
-        //setAlarm(60000)
-        val t = calendar.timeInMillis.toString()
-
-        Log.d("Alarm Time:", t)
 
         viewModelApp.addOrRemoveItens(
 
@@ -212,43 +183,52 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
     }
 
+
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun setAlarm(item:Boolean) {
+    private fun setAlarm() {
 
-        if(item){
-            val calendar: Calendar = Calendar.getInstance().apply {
-//            set(Calendar.DAY_OF_MONTH, savedDay)
-//            set(Calendar.MONTH, savedMonth)
-//            set(Calendar.YEAR, savedYear)
-                set(Calendar.HOUR_OF_DAY, savedHour)
-                set(Calendar.MINUTE, savedMinutes)
+        val calendar: Calendar = Calendar.getInstance().apply {
 
-                if (before(Calendar.getInstance())) {
-                    add(Calendar.DATE, 1)
-                }
+            set(Calendar.HOUR_OF_DAY, savedHour)
+            set(Calendar.MINUTE, savedMinutes)
+            set(Calendar.SECOND, 0)
+
+            if (before(Calendar.getInstance())) {
+                add(Calendar.DATE, 1)
             }
-
-
-            val alarmM = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val intent = Intent(this, AlarmReceiver::class.java)
-
-            val pendingIntent = getBroadcast(
-                this,
-                ALARM_REQUEST_CODE,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE
-            )
-
-            alarmM.setExact(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                pendingIntent
-            )
-
-            Toast.makeText(this, "Alarm is done set: ${calendar.time}", Toast.LENGTH_SHORT).show()
-
         }
 
+        val alarmM = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, AlarmReceiver::class.java)
+
+        val pendingIntent = getBroadcast(
+            this,
+            ALARM_REQUEST_CODE,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE
+        )
+
+        alarmM.setExact(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            pendingIntent
+        )
+
+//        val intent2 = Intent(this, AlarmReceiver::class.java)
+//        intent.action = "SomeAction"
+//        val pendingIntent2 =
+//            PendingIntent.getBroadcast(
+//                this,
+//                ALARM_REQUEST_CODE,
+//                intent2,
+//                PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+//            )
+//        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager?
+//        if (pendingIntent2 != null) {
+//            alarmManager!!.cancel(pendingIntent)
+//        }
+
+        Toast.makeText(this, "Alarm is done set: ${calendar.time}", Toast.LENGTH_SHORT).show()
 
     }
 

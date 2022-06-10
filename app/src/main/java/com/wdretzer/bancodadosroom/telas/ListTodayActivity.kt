@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
 import com.wdretzer.bancodadosroom.MainActivity
 import com.wdretzer.bancodadosroom.R
+import com.wdretzer.bancodadosroom.alarm.AlarmReceiver
 import com.wdretzer.bancodadosroom.bd.ListaBD
 import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.extension.DataResult
@@ -53,6 +54,8 @@ class ListTodayActivity : AppCompatActivity() {
         setContentView(R.layout.activity_list_today)
 
         getSupportActionBar()?.hide()
+
+        AlarmReceiver().stopRingTone(this)
 
         getDateCalendar()
         countItem("$day/$month/$year")

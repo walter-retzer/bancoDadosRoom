@@ -10,7 +10,6 @@ import android.os.Handler
 import android.widget.*
 import androidx.activity.viewModels
 import com.wdretzer.bancodadosroom.R
-import com.wdretzer.bancodadosroom.bd.ListaBD
 import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.extension.DataResult
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel

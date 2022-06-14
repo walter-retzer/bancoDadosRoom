@@ -24,6 +24,8 @@
             android:enabled="true"
             android:exported="false" />
 
+        <service android:name=".alarm.AlarmRing" />
+
         <activity
             android:name=".telas.SearchListActivity"
             android:exported="false" />
@@ -38,14 +40,10 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".alarm.MainActivityTeste"
-            android:exported="true"/>
-        <activity
-            android:name=".bd.ListaBD"
-            android:exported="true" >
+            android:name=".telas.ListaBD"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

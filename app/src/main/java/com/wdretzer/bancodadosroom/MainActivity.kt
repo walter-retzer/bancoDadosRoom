@@ -13,10 +13,9 @@ import android.widget.*
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.wdretzer.bancodadosroom.alarm.AlarmReceiver
-import com.wdretzer.bancodadosroom.bd.ListaBD
+import com.wdretzer.bancodadosroom.telas.ListaBD
 import com.wdretzer.bancodadosroom.extension.DataResult
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel
 import java.util.*

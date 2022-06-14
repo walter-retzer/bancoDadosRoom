@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.wdretzer.bancodadosroom.MainActivity
 import com.wdretzer.bancodadosroom.R
-import com.wdretzer.bancodadosroom.bd.ListaBD
 import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.extension.DataResult
 import com.wdretzer.bancodadosroom.recycler.ItensAdapter

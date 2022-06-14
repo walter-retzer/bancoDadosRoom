@@ -6,35 +6,25 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.media.Ringtone
-import android.media.RingtoneManager
-import android.media.RingtoneManager.getDefaultUri
 import android.os.Build
-import android.os.Handler
 import android.os.Vibrator
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.wdretzer.bancodadosroom.R
+import com.wdretzer.bancodadosroom.telas.ListaBD
 import com.wdretzer.bancodadosroom.telas.ListTodayActivity
 
 
 class AlarmReceiver : BroadcastReceiver() {
 
-    var ringtone: Ringtone? = null
     var vibrator: Vibrator? = null
-
-    companion object {
-        const val NOTIFICATION_ID = 100
-        const val EXTRA_NOTIFICATION_ID = "1000"
-        const val NOTIFICATION_CHANNEL_ID = "1000"
-        const val ACTION_CHECK_TASK = "Action Check Task"
-    }
 
     override fun onReceive(context: Context, intent: Intent) {
         createNotificationChannel(context)
         notifyNotification(context)
     }
+
 
     private fun createNotificationChannel(context: Context) {
 
@@ -51,26 +41,31 @@ class AlarmReceiver : BroadcastReceiver() {
 
     private fun notifyNotification(context: Context) {
 
-        val snoozeIntent = Intent(context, ListTodayActivity::class.java).apply {
-            action = ACTION_CHECK_TASK
-            putExtra(EXTRA_NOTIFICATION_ID, 0)
+        // ListaBD iniciará quando o usuario clicar sobre o botão de ação da notificação :
+        val snoozeIntent = Intent(context, ListaBD::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
-        val checkAlarmTaskPendingIntent: PendingIntent =
-            PendingIntent.getBroadcast(
+        val dismissPendingIntent: PendingIntent =
+            PendingIntent.getActivity(
                 context,
-                1000,
+                REQUEST_CODE,
                 snoozeIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
-        // Create an explicit intent for an Activity in your app
+        // ListTodayActivity iniciará quando o usuario clicar sobre a Notificação:
         val intent = Intent(context, ListTodayActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        val pendingIntent: PendingIntent =
-            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(
+                context,
+                REQUEST_CODE,
+                intent,
+                PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
 
         with(NotificationManagerCompat.from(context)) {
             val build = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
@@ -80,45 +75,32 @@ class AlarmReceiver : BroadcastReceiver() {
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setContentIntent(pendingIntent)
-//                .addAction(
-//                    R.drawable.icon_reminder,
-//                    "Lembrete",
-//                    checkAlarmTaskPendingIntent
-//                )
+                .setDeleteIntent(dismissPendingIntent)
+                .addAction(
+                    R.drawable.icon_reminder,
+                    "Silenciar Lembrete",
+                    dismissPendingIntent
+                )
                 .setAutoCancel(true)
 
             notify(NOTIFICATION_ID, build.build())
 
         }
 
+        //Habilita vibração do dispositivo quando a Notificação for exibida:
         vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        vibrator?.vibrate(2000)
+        vibrator?.vibrate(3000)
         Toast.makeText(context, "Alarme Ativo!", Toast.LENGTH_LONG).show()
 
-        var alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+        //Inicia o toque de alarme do dispositivo:
+        val i = Intent(context, AlarmRing::class.java)
+        context.startService(i)
 
-        if (alarmUri == null) {
-            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        }
-
-        ringtone = RingtoneManager.getRingtone(context, alarmUri)
-        ringtone?.play()
-
-        Handler().postDelayed({
-            ringtone?.stop()
-            vibrator?.cancel()
-        }, 60000)
     }
 
-    fun stopRingTone(context: Context) {
-
-        if (ringtone!= null){
-            ringtone!!.stop()
-
-            Toast.makeText(context, "Parou o som!", Toast.LENGTH_SHORT).show()
-        }
-
-        vibrator?.cancel()
+    companion object {
+        const val NOTIFICATION_ID = 100
+        const val REQUEST_CODE = 1000
+        const val NOTIFICATION_CHANNEL_ID = "1000"
     }
-
 }

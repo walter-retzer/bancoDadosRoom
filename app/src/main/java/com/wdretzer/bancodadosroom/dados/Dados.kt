@@ -21,6 +21,8 @@ data class Dados(
     val horario: String = " ",
     @ColumnInfo
     val alarme: Boolean = true,
+    @ColumnInfo
+    val requestCode: Int = 0,
 )
 
 

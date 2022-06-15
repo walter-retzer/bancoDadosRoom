@@ -61,6 +61,7 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
         val bundle: Bundle? = intent.extras
         var idBundle: Int = 0
+        var getRequestCode: Int = 0
 
         if (bundle != null) {
             val getTextTitle = bundle.getString("Titulo")
@@ -68,14 +69,16 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
             val getTextDate = bundle.getString("Data")
             val getTextTime = bundle.getString("Hora")
             val getStatusAlarm = bundle.getBoolean("Alarme")
-            val getId = bundle.getInt("Id")
+            idBundle = bundle.getInt("Id")
+            getRequestCode = bundle.getInt("Code")
 
             getTextTitle?.let { textTitleEdit?.setText(it) }
             getTextDescription?.let { textDescriptionEdit?.setText(it) }
             getTextDate?.let { textDateEdit?.setText(it) }
             getTextTime?.let { textTimeEdit?.setText(it) }
             alarmSwitch!!.isChecked = getStatusAlarm
-            idBundle = getId
+            idBundle
+            getRequestCode
         }
 
         textDateEdit?.setOnClickListener { pickDate() }
@@ -89,10 +92,11 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                     textDateEdit?.text.toString(),
                     textTimeEdit?.text.toString(),
                     alarmSwitch!!.isChecked,
-                    idBundle
+                    idBundle,
+                    getRequestCode
                 )
             )
-            setAlarm()
+            setAlarm(getRequestCode)
             sendToListaBD()
         }
     }
@@ -157,7 +161,7 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun setAlarm() {
+    private fun setAlarm(getRequestCode: Int) {
 
         val calendar: Calendar = Calendar.getInstance().apply {
 
@@ -178,7 +182,7 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
         val pendingIntent = PendingIntent.getBroadcast(
             this,
-            ALARM_REQUEST_CODE,
+            getRequestCode,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -204,7 +208,4 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         }, 2000)
     }
 
-    companion object {
-        private const val ALARM_REQUEST_CODE = 1000
-    }
 }

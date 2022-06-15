@@ -6,5 +6,6 @@ data class InfoDados(
     val dataInfo: String,
     val horarioInfo: String,
     val alarmStatusInfo: Boolean,
-    val idUser: Int
+    val idUser: Int,
+    val requestCode: Int
 )

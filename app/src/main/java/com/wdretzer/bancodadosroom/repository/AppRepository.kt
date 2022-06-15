@@ -16,12 +16,13 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
     private val dao = DataBaseFactory.getDataBase().appRoomDao()
 
     //Insere os valores dos itens que foram digitados na tela Inicial ao BD:
-    fun addOrRemoveItens(
+    fun addItens(
         titulo: String,
         descricao: String,
         data: String,
         horario: String,
-        alarme: Boolean
+        alarme: Boolean,
+        requestCode: Int
     ) = flow {
 
         try {
@@ -31,7 +32,8 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
                 descricao = descricao,
                 data = data,
                 horario = horario,
-                alarme = alarme
+                alarme = alarme,
+                requestCode = requestCode
             )
 
             val insert = dao.insert(word)
@@ -46,7 +48,7 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
     //Função para pegar a lista de Dados salva no BD:
     fun getListSave() = flow {
         val localItens = dao.listAll().map {
-            InfoDados(it.titulo, it.descricao, it.data, it.horario, it.alarme, it.id!!)
+            InfoDados(it.titulo, it.descricao, it.data, it.horario, it.alarme, it.id!!, it.requestCode)
         }
         emit((localItens as MutableList<InfoDados>))
     }.flowOn(dispatcher)
@@ -55,7 +57,7 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
     //Função para pegar a Lista dos dados dos lembretes do dia atual:
     fun listItensToday(item: String) = flow {
         val localItens = dao.listItensToday(item).map {
-            InfoDados(it.titulo, it.descricao, it.data, it.horario, it.alarme, it.id!!)
+            InfoDados(it.titulo, it.descricao, it.data, it.horario, it.alarme, it.id!!, it.requestCode)
         }
         emit((localItens as MutableList<InfoDados>))
     }.flowOn(dispatcher)

@@ -1,9 +1,12 @@
 package com.wdretzer.bancodadosroom
 
 import android.annotation.SuppressLint
-import android.app.*
+import android.app.AlarmManager
+import android.app.DatePickerDialog
 import android.app.PendingIntent
-import android.app.PendingIntent.*
+import android.app.PendingIntent.FLAG_IMMUTABLE
+import android.app.PendingIntent.getBroadcast
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -16,8 +19,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
 import com.wdretzer.bancodadosroom.alarm.AlarmReceiver
-import com.wdretzer.bancodadosroom.telas.ListaBD
 import com.wdretzer.bancodadosroom.extension.DataResult
+import com.wdretzer.bancodadosroom.telas.ListaBD
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel
 import java.util.*
 
@@ -80,15 +83,16 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
             Toast.makeText(this, "Há campos não preenchidos!", Toast.LENGTH_SHORT).show()
 
         } else {
-            saveToDoList()
-            setAlarm()
+            val requestCodeAlarm = System.currentTimeMillis().toInt()
+            saveToDoList(requestCodeAlarm)
+            setAlarm(requestCodeAlarm)
             sendToListaBD()
         }
     }
 
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun saveToDoList() {
+    private fun saveToDoList(requestCodeAlarm: Int) {
 
         val calendar = Calendar.getInstance()
 
@@ -99,13 +103,14 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         calendar.set(Calendar.MINUTE, savedMinutes)
         calendar.set(Calendar.SECOND, 0)
 
-        viewModelApp.addOrRemoveItens(
+        viewModelApp.addItens(
 
             textTitulo?.text.toString(),
             textDescricao?.text.toString(),
             textData?.text.toString(),
             textHorario?.text.toString(),
-            alarmSwitch!!.isChecked
+            alarmSwitch!!.isChecked,
+            requestCodeAlarm
 
         ).observe(this) {
 
@@ -182,7 +187,7 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun setAlarm() {
+    private fun setAlarm(requestCodeAlarm: Int) {
 
         val calendar: Calendar = Calendar.getInstance().apply {
 
@@ -203,7 +208,7 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
         val pendingIntent = getBroadcast(
             this,
-            ALARM_REQUEST_CODE,
+            requestCodeAlarm,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE
         )
@@ -222,9 +227,5 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         }
 
 
-    }
-
-    companion object {
-        private const val ALARM_REQUEST_CODE = 1000
     }
 }

@@ -1,21 +1,28 @@
 package com.wdretzer.bancodadosroom.telas
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
 import android.app.Dialog
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
 import com.wdretzer.bancodadosroom.MainActivity
 import com.wdretzer.bancodadosroom.R
+import com.wdretzer.bancodadosroom.alarm.AlarmReceiver
 import com.wdretzer.bancodadosroom.alarm.AlarmRing
 import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.extension.DataResult
@@ -48,6 +55,7 @@ class ListaBD : AppCompatActivity() {
     var year = 0
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,8 +78,13 @@ class ListaBD : AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun showListBD() {
         viewModelApp.getListSave().observe(this) {
+
+            //lista com todos as info dos lembretes esta aqui!
+            Log.d("List", "$it")
+            //Implementação futura para resetar os alarmes de quando for deletado todos os itens da lista!!
 
             textTotalItens.text = it.size.toString()
 
@@ -98,6 +111,7 @@ class ListaBD : AppCompatActivity() {
         val horario = info.horarioInfo
         val alarm = info.alarmStatusInfo
         val id = info.idUser
+        val requestCode = info.requestCode
 
         val intent = Intent(this, TelaUpdateDados::class.java).apply {
             putExtra("Titulo", titulo)
@@ -106,11 +120,13 @@ class ListaBD : AppCompatActivity() {
             putExtra("Hora", horario)
             putExtra("Alarme", alarm)
             putExtra("Id", id)
+            putExtra("Code", requestCode)
         }
         startActivity(intent)
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun deleteItem(item: InfoDados) {
         viewModelApp.deleteItem(item).observe(this) {
 
@@ -122,6 +138,7 @@ class ListaBD : AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun deleteAll() {
         viewModelApp.deleteAll().observe(this) {
 
@@ -151,6 +168,7 @@ class ListaBD : AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun showDialog(title: String) {
         val dialog = Dialog(this)
         dialog.setCancelable(false)
@@ -172,6 +190,7 @@ class ListaBD : AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun showDialogDeleteItem(title: String, itens: InfoDados) {
         val dialog = Dialog(this)
         dialog.setCancelable(false)
@@ -186,9 +205,29 @@ class ListaBD : AppCompatActivity() {
         btnCancelar.setOnClickListener { dialog.dismiss() }
         btnApagar.setOnClickListener {
             deleteItem(itens)
+            resetAlarm(itens)
             dialog.dismiss()
         }
 
         dialog.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun resetAlarm(itens: InfoDados) {
+
+        if (itens.alarmStatusInfo) {
+            val alarmM = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val intent = Intent(this, AlarmReceiver::class.java)
+
+            val pendingIntent = PendingIntent.getBroadcast(
+                this,
+                itens.requestCode,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+
+            alarmM.cancel(pendingIntent)
+            Toast.makeText(this, "Alarm Resetado!", Toast.LENGTH_SHORT).show()
+        }
     }
 }

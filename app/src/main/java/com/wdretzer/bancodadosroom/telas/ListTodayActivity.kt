@@ -1,21 +1,27 @@
 package com.wdretzer.bancodadosroom.telas
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
 import android.app.Dialog
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
 import com.wdretzer.bancodadosroom.MainActivity
 import com.wdretzer.bancodadosroom.R
+import com.wdretzer.bancodadosroom.alarm.AlarmReceiver
 import com.wdretzer.bancodadosroom.alarm.AlarmRing
 import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.extension.DataResult
@@ -49,6 +55,7 @@ class ListTodayActivity : AppCompatActivity() {
     var year = 0
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_today)
@@ -77,6 +84,7 @@ class ListTodayActivity : AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun showListTodayBD(data: String) {
         viewModelApp.listItensToday(data).observe(this) {
 
@@ -96,6 +104,7 @@ class ListTodayActivity : AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun deleteItem(item: InfoDados) {
         viewModelApp.deleteItem(item).observe(this) {
 
@@ -108,6 +117,7 @@ class ListTodayActivity : AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun countItem(item: String) {
         viewModelApp.countItens(item).observe(this) {
             textTotalItens.text = it.toString()
@@ -163,6 +173,7 @@ class ListTodayActivity : AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun showDialogDeleteItem(title: String, itens: InfoDados) {
         val dialog = Dialog(this)
         dialog.setCancelable(false)
@@ -176,9 +187,29 @@ class ListTodayActivity : AppCompatActivity() {
 
         btnApagar.setOnClickListener {
             deleteItem(itens)
+            resetAlarm(itens)
             dialog.dismiss()
         }
         btnCancelar.setOnClickListener { dialog.dismiss() }
         dialog.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun resetAlarm(itens: InfoDados) {
+
+        if (itens.alarmStatusInfo) {
+            val alarmM = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val intent = Intent(this, AlarmReceiver::class.java)
+
+            val pendingIntent = PendingIntent.getBroadcast(
+                this,
+                itens.requestCode,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+
+            alarmM.cancel(pendingIntent)
+            Toast.makeText(this, "Alarm Resetado!", Toast.LENGTH_SHORT).show()
+        }
     }
 }

@@ -14,19 +14,21 @@ class AppViewModel(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
-    fun addOrRemoveItens(
+    fun addItens(
         titulo: String,
         descricaao: String,
         data: String,
         horario: String,
-        alarme: Boolean
+        alarme: Boolean,
+        requestCode: Int
     ) =
-        repository.addOrRemoveItens(
+        repository.addItens(
             titulo,
             descricaao,
             data,
             horario,
-            alarme
+            alarme,
+            requestCode
         ).flowOn(dispatcher).asLiveData()
 
     fun getListSave() = repository.getListSave().flowOn(dispatcher).asLiveData()

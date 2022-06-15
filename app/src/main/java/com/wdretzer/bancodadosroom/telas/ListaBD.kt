@@ -96,6 +96,7 @@ class ListaBD : AppCompatActivity() {
         val descricao = info.descricaoInfo
         val data = info.dataInfo
         val horario = info.horarioInfo
+        val alarm = info.alarmStatusInfo
         val id = info.idUser
 
         val intent = Intent(this, TelaUpdateDados::class.java).apply {
@@ -103,6 +104,7 @@ class ListaBD : AppCompatActivity() {
             putExtra("Desc", descricao)
             putExtra("Data", data)
             putExtra("Hora", horario)
+            putExtra("Alarme", alarm)
             putExtra("Id", id)
         }
         startActivity(intent)

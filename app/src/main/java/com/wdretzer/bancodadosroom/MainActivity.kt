@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
 import com.wdretzer.bancodadosroom.alarm.AlarmReceiver
 import com.wdretzer.bancodadosroom.telas.ListaBD
@@ -33,12 +34,10 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         get() = findViewById(R.id.loading)
 
     private val textTitulo: EditText? by lazy { findViewById(R.id.titulo_input) }
-
     private val textDescricao: EditText? by lazy { findViewById(R.id.descricao_input) }
-
     private val textData: TextView? by lazy { findViewById(R.id.data_input) }
-
     private val textHorario: TextView? by lazy { findViewById(R.id.time_input) }
+    private val alarmSwitch: SwitchCompat? by lazy { findViewById(R.id.alarm_status) }
 
     var day = 0
     var month = 0
@@ -66,10 +65,7 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
         textData?.setOnClickListener { pickDate() }
         textHorario?.setOnClickListener { pickTime() }
-        btnSalvarLembrete.setOnClickListener {
-            setAlarm()
-            checkInfo()
-        }
+        btnSalvarLembrete.setOnClickListener { checkInfo() }
     }
 
 
@@ -85,6 +81,8 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
         } else {
             saveToDoList()
+            setAlarm()
+            sendToListaBD()
         }
     }
 
@@ -106,7 +104,8 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
             textTitulo?.text.toString(),
             textDescricao?.text.toString(),
             textData?.text.toString(),
-            textHorario?.text.toString()
+            textHorario?.text.toString(),
+            alarmSwitch!!.isChecked
 
         ).observe(this) {
 
@@ -135,7 +134,6 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         seconds = myCalendar.get(Calendar.SECOND)
         minutes = myCalendar.get(Calendar.MINUTE)
         hour = myCalendar.get(Calendar.HOUR)
-
     }
 
 
@@ -147,7 +145,7 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
     private fun pickTime() {
         getDateCalendar()
-        TimePickerDialog(this, this, hour, minutes, false).show()
+        TimePickerDialog(this, this, hour, minutes, true).show()
     }
 
 
@@ -198,7 +196,10 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         }
 
         val alarmM = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(this, AlarmReceiver::class.java)
+        val intent = Intent(this, AlarmReceiver::class.java).apply {
+            putExtra("Titulo", textTitulo?.text.toString())
+            putExtra("Description", textDescricao?.text.toString())
+        }
 
         val pendingIntent = getBroadcast(
             this,
@@ -207,27 +208,19 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
             PendingIntent.FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE
         )
 
-        alarmM.setExact(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            pendingIntent
-        )
+        if (alarmSwitch!!.isChecked) {
+            alarmM.setExact(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                pendingIntent
+            )
+            Toast.makeText(this, "Alarm is done set: ${calendar.time}", Toast.LENGTH_SHORT).show()
 
-//        val intent2 = Intent(this, AlarmReceiver::class.java)
-//        intent.action = "SomeAction"
-//        val pendingIntent2 =
-//            PendingIntent.getBroadcast(
-//                this,
-//                ALARM_REQUEST_CODE,
-//                intent2,
-//                PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
-//            )
-//        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager?
-//        if (pendingIntent2 != null) {
-//            alarmManager!!.cancel(pendingIntent)
-//        }
+        } else {
+            alarmM.cancel(pendingIntent)
+            Toast.makeText(this, "Alarm is not active!", Toast.LENGTH_SHORT).show()
+        }
 
-        Toast.makeText(this, "Alarm is done set: ${calendar.time}", Toast.LENGTH_SHORT).show()
 
     }
 

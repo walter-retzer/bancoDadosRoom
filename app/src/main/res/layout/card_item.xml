@@ -88,7 +88,7 @@
             style="@style/TextAppearance.AppCompat.Headline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Evento Remenber!"
+            android:text="12/12/2022!"
             android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@+id/textDate"
@@ -119,6 +119,30 @@
             app:layout_constraintStart_toEndOf="@+id/textTime"
             app:layout_constraintTop_toBottomOf="@+id/data_card" />
 
+        <TextView
+            android:id="@+id/text_alarm_card"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Alarme: "
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textTime" />
+
+        <ImageView
+            android:id="@+id/alarm_status_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-8dp"
+            android:padding="8dp"
+            android:src="@drawable/icon_alarm_on"
+            app:layout_constraintBottom_toBottomOf="@+id/text_alarm_card"
+            app:layout_constraintStart_toEndOf="@+id/text_alarm_card"
+            app:layout_constraintTop_toTopOf="@+id/text_alarm_card" />
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/btn_update"
             android:layout_width="40dp"
@@ -128,7 +152,7 @@
             android:scaleType="fitCenter"
             app:contentPadding="2dp"
             app:layout_constraintEnd_toStartOf="@+id/btn_delete"
-            app:layout_constraintTop_toTopOf="@+id/textTime"
+            app:layout_constraintTop_toTopOf="@+id/text_alarm_card"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             app:srcCompat="@drawable/icon_edit" />
 
@@ -140,7 +164,7 @@
             android:scaleType="fitCenter"
             app:contentPadding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textTime"
+            app:layout_constraintTop_toTopOf="@+id/text_alarm_card"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             app:srcCompat="@drawable/icon_close" />
 

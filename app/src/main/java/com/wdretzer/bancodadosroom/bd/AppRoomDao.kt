@@ -8,7 +8,6 @@ import com.wdretzer.bancodadosroom.dados.Dados
 @Dao
 interface AppRoomDao {
 
-    // Todas as Funções foram testadas:
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg word: Dados)
 
@@ -24,8 +23,8 @@ interface AppRoomDao {
     @Query("SELECT COUNT(titulo) FROM infoDB WHERE data = :apiData")
     fun countApiId(apiData: String): Int
 
-    @Query("UPDATE infoDB SET titulo = :itemNew, descricao = :desc, data = :dia, horario = :hora WHERE id = :id")
-    fun updateAll(id: Int, itemNew: String, desc: String, dia: String, hora: String)
+    @Query("UPDATE infoDB SET titulo = :itemNew, descricao = :desc, data = :dia, horario = :hora, alarme = :statusAlarm WHERE id = :id")
+    fun updateAll(id: Int, itemNew: String, desc: String, dia: String, hora: String, statusAlarm: Boolean)
 
     @Query("DELETE FROM infoDB WHERE id = :id")
     fun deleteByApiId(id: Int)

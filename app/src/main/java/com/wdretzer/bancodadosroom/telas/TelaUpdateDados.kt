@@ -1,15 +1,22 @@
 package com.wdretzer.bancodadosroom.telas
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
 import android.app.DatePickerDialog
+import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.widget.*
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.SwitchCompat
 import com.wdretzer.bancodadosroom.R
+import com.wdretzer.bancodadosroom.alarm.AlarmReceiver
 import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.extension.DataResult
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel
@@ -25,6 +32,7 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     private val textDateEdit: TextView? by lazy { findViewById(R.id.data_input_edit) }
     private val textTimeEdit: TextView? by lazy { findViewById(R.id.time_input_edit) }
     private val btnSave: Button? by lazy { findViewById(R.id.btn_salve_edit) }
+    private val alarmSwitch: SwitchCompat? by lazy { findViewById(R.id.alarm_status_edit) }
 
     var day = 0
     var month = 0
@@ -36,10 +44,15 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     var savedDay = 0
     var savedMonth = 0
     var savedYear = 0
-    var savedMinutes = ""
-    var savedHour = ""
+
+    var savedMinutes = 0
+    var savedHour = 0
+
+    var savedMinutesText = ""
+    var savedHourText = ""
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_update_dados)
@@ -54,12 +67,14 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
             val getTextDescription = bundle.getString("Desc")
             val getTextDate = bundle.getString("Data")
             val getTextTime = bundle.getString("Hora")
+            val getStatusAlarm = bundle.getBoolean("Alarme")
             val getId = bundle.getInt("Id")
 
             getTextTitle?.let { textTitleEdit?.setText(it) }
             getTextDescription?.let { textDescriptionEdit?.setText(it) }
             getTextDate?.let { textDateEdit?.setText(it) }
             getTextTime?.let { textTimeEdit?.setText(it) }
+            alarmSwitch!!.isChecked = getStatusAlarm
             idBundle = getId
         }
 
@@ -73,9 +88,11 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                     textDescriptionEdit?.text.toString(),
                     textDateEdit?.text.toString(),
                     textTimeEdit?.text.toString(),
+                    alarmSwitch!!.isChecked,
                     idBundle
                 )
             )
+            setAlarm()
             sendToListaBD()
         }
     }
@@ -130,17 +147,64 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
     @SuppressLint("SetTextI18n")
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        savedMinutes = if (minute < 10) "0$minute" else "$minute"
-        savedHour = if (hourOfDay < 10) "0$hourOfDay" else "$hourOfDay"
+        savedHour = hourOfDay
+        savedMinutes = minute
 
-        textTimeEdit?.setText("$savedHour:$savedMinutes" + "hr")
+        savedMinutesText = if (minute < 10) "0$minute" else "$minute"
+        savedHourText = if (hourOfDay < 10) "0$hourOfDay" else "$hourOfDay"
+        textTimeEdit?.text = "$savedHourText:$savedMinutesText" + "hr"
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun setAlarm() {
+
+        val calendar: Calendar = Calendar.getInstance().apply {
+
+            set(Calendar.HOUR_OF_DAY, savedHour)
+            set(Calendar.MINUTE, savedMinutes)
+            set(Calendar.SECOND, 0)
+
+            if (before(Calendar.getInstance())) {
+                add(Calendar.DATE, 1)
+            }
+        }
+
+        val alarmM = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, AlarmReceiver::class.java).apply {
+            putExtra("Titulo", textTitleEdit?.text.toString())
+            putExtra("Description", textDescriptionEdit?.text.toString())
+        }
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            ALARM_REQUEST_CODE,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        if (alarmSwitch!!.isChecked) {
+            alarmM.setExact(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                pendingIntent
+            )
+            Toast.makeText(this, "Alarm is done set: ${calendar.time}", Toast.LENGTH_SHORT).show()
+
+        } else {
+            alarmM.cancel(pendingIntent)
+            Toast.makeText(this, "Alarm is not active!", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private fun sendToListaBD() {
         Handler().postDelayed({
             val intent = Intent(this, ListaBD::class.java)
             startActivity(intent)
         }, 2000)
+    }
+
+    companion object {
+        private const val ALARM_REQUEST_CODE = 1000
     }
 }

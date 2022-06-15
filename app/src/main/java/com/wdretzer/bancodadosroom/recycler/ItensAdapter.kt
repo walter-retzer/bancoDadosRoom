@@ -74,12 +74,14 @@ class FavouriteViewHolder(
 
     private val delete: ImageView = view.findViewById(R.id.btn_delete)
     private val update: ImageView = view.findViewById(R.id.btn_update)
+    private val alarmStatusImage: ImageView = view.findViewById(R.id.alarm_status_image)
 
     fun bind(itensList: InfoDados) {
         textItemTitulo.text = itensList.tituloInfo
         textItemDescricao.text = itensList.descricaoInfo
         textItemData.text = itensList.dataInfo
         textItemTime.text = itensList.horarioInfo
+        alarmStatusImage.setImageResource(if (itensList.alarmStatusInfo) R.drawable.icon_alarm_on else R.drawable.icon_alarm_off)
 
         update.setOnClickListener { action.invoke(itensList) }
         delete.setOnClickListener { action2.invoke(itensList) }

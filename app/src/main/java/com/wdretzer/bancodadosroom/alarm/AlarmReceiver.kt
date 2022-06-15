@@ -19,8 +19,14 @@ import com.wdretzer.bancodadosroom.telas.ListTodayActivity
 class AlarmReceiver : BroadcastReceiver() {
 
     var vibrator: Vibrator? = null
+    var titulo: String = " "
+    var descricao: String = " "
 
-    override fun onReceive(context: Context, intent: Intent) {
+    override fun onReceive(context: Context, intent: Intent?) {
+
+        titulo = intent?.getStringExtra("Titulo").toString()
+        descricao = intent?.getStringExtra("Description").toString()
+
         createNotificationChannel(context)
         notifyNotification(context)
     }
@@ -69,9 +75,9 @@ class AlarmReceiver : BroadcastReceiver() {
 
         with(NotificationManagerCompat.from(context)) {
             val build = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-                .setContentTitle("Alarme")
-                .setContentText("Alarme Ativo")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("Lembrete: $titulo")
+                .setContentText(descricao)
+                .setSmallIcon(R.drawable.icon_reminder)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setContentIntent(pendingIntent)
@@ -101,6 +107,7 @@ class AlarmReceiver : BroadcastReceiver() {
     companion object {
         const val NOTIFICATION_ID = 100
         const val REQUEST_CODE = 1000
-        const val NOTIFICATION_CHANNEL_ID = "1000"
+        const val NOTIFICATION_CHANNEL_ID = "10"
     }
 }
+

@@ -32,6 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginStart="30dp"
         android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,8 +40,8 @@
         tools:context=".pesquisaimg.PesquisaImagens">
 
         <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
             android:layout_centerVertical="true"
             android:layout_marginTop="0dp"
             android:scaleType="fitXY"
@@ -201,6 +202,28 @@
         app:layout_constraintStart_toEndOf="@+id/text_time_edit"
         app:layout_constraintTop_toTopOf="@+id/text_time_edit" />
 
+    <TextView
+        android:id="@+id/text_alarm_edit"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:text="Alarme: "
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_data_edit" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/alarm_status_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        app:thumbTint="@color/teal_200"
+        app:layout_constraintStart_toEndOf="@+id/text_alarm_edit"
+        app:layout_constraintTop_toTopOf="@+id/text_alarm_edit"
+        app:layout_constraintBottom_toBottomOf="@+id/text_alarm_edit"/>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_salve_edit"
         android:layout_width="match_parent"
@@ -216,6 +239,6 @@
         android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_time_edit" />
+        app:layout_constraintTop_toBottomOf="@+id/text_alarm_edit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

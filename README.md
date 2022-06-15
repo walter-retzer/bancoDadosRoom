@@ -3,7 +3,13 @@ Aplicativo do tipo “To Do List” para armazenar as informações dos Lembrete
 
 Linguagem Kotlin utilizando:
 - Aplicação da Arquitetura MVVM ao projeto utilizando viewModels, Courotines e Flow;
-- Banco de dados com as seguintes funções implementadas: 
+- Banco de Dados com a biblioteca ROOM para armazenar as informações dos Lembretes(titulo, descrição, data, horário, alarme on/off);
+- Animações utilizando a biblioteca Lottie;
+- Utilização de BroadcastReceiver() para setar e resetar alarmes para os lembretes;
+- Notificação para disparo de Alarme quando chegar o horário da Tarefa do Lembrete;
+- Utilização de Alarme sonoro e vibração para o alarme das Tarefas;
+
+- O Banco de dados implementado ao aplicativo possui as seguintes funções: 
  1. inserir itens, 
  2. listar itens, 
  3. filtrar dados por data, 
@@ -11,11 +17,6 @@ Linguagem Kotlin utilizando:
  5. update de valores de itens, 
  6. deletar item,
  7. deletar todos itens;
-- Banco de Dados com a biblioteca ROOM para armazenar as informações dos Lembretes(titulo, descrição, data, horário, alarme on/off);
-- Animações utilizando a biblioteca Lottie;
-- Utilização de BroadcastReceiver() para setar e resetar alarmes para os lembretes;
-- Notificação para disparo de Alarme quando chegar o horário da Tarefa do Lembrete;
-- Utilização de Alarme sonoro e vibração para o alarme das Tarefas;
 
 ## TELA DE MENU PRINCIPAL
 

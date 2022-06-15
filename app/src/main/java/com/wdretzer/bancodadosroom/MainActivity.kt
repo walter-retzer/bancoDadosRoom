@@ -115,12 +115,12 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         ).observe(this) {
 
             if (it is DataResult.Success) {
-                Toast.makeText(this, "Dados Salvos no Banco de Dados!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Lembrete salvo com sucesso!", Toast.LENGTH_SHORT).show()
 
             }
 
             if (it is DataResult.Error) {
-                Toast.makeText(this, "Error ao Salvar os Dados!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error ao salvar o lembrete!", Toast.LENGTH_SHORT).show()
             }
 
             if (it is DataResult.Loading) {
@@ -182,7 +182,6 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         savedMinutesText = if (minute < 10) "0$minute" else "$minute"
         savedHourText = if (hourOfDay < 10) "0$hourOfDay" else "$hourOfDay"
         textHorario?.text = "$savedHourText:$savedMinutesText" + "hr"
-
     }
 
 
@@ -219,13 +218,11 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                 calendar.timeInMillis,
                 pendingIntent
             )
-            Toast.makeText(this, "Alarm is done set: ${calendar.time}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Alarme do lembrete foi ativado com sucesso!", Toast.LENGTH_SHORT).show()
 
         } else {
             alarmM.cancel(pendingIntent)
-            Toast.makeText(this, "Alarm is not active!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Alarme do lembrete não ativado!", Toast.LENGTH_SHORT).show()
         }
-
-
     }
 }

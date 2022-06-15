@@ -119,7 +119,7 @@ class SearchListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListen
         viewModelApp.deleteItem(item).observe(this) {
 
             if (it is DataResult.Success) {
-                Toast.makeText(this, "Delete Sucess!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Lembrete deletado com sucesso!", Toast.LENGTH_SHORT).show()
                 countItem("$savedDay/$savedMonth/$savedYear")
                 showListSearchBD("$savedDay/$savedMonth/$savedYear")
             }
@@ -220,7 +220,7 @@ class SearchListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListen
             )
 
             alarmM.cancel(pendingIntent)
-            Toast.makeText(this, "Alarm Resetado!", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "Alarm Resetado!", Toast.LENGTH_SHORT).show()
         }
     }
 }

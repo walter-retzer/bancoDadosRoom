@@ -118,11 +118,11 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         viewModelApp.updateItem(item).observe(this) {
 
             if (it is DataResult.Success) {
-                Toast.makeText(this, "Update Sucess!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Os dados foram atualizados com sucesso!", Toast.LENGTH_SHORT).show()
             }
 
             if (it is DataResult.Error) {
-                Toast.makeText(this, "Update Error!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Erro em atualizar os dados!", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -193,11 +193,11 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                 calendar.timeInMillis,
                 pendingIntent
             )
-            Toast.makeText(this, "Alarm is done set: ${calendar.time}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Alarme do lembrete foi ativado com sucesso!", Toast.LENGTH_SHORT).show()
 
         } else {
             alarmM.cancel(pendingIntent)
-            Toast.makeText(this, "Alarm is not active!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Alarme do lembrete não ativado!", Toast.LENGTH_SHORT).show()
         }
     }
 

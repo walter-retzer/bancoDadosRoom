@@ -17,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
@@ -49,6 +50,7 @@ class ListaBD : AppCompatActivity() {
     private val textTotalItens: TextView
         get() = findViewById(R.id.total_itens)
 
+    var listaInfo: MutableList<InfoDados>? = null
     var totalItens: Int = 0
     var day = 0
     var month = 0
@@ -82,10 +84,7 @@ class ListaBD : AppCompatActivity() {
     private fun showListBD() {
         viewModelApp.getListSave().observe(this) {
 
-            //lista com todos as info dos lembretes esta aqui!
-            Log.d("List", "$it")
-            //Implementação futura para resetar os alarmes de quando for deletado todos os itens da lista!!
-
+            listaInfo = it
             textTotalItens.text = it.size.toString()
 
             val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
@@ -131,7 +130,7 @@ class ListaBD : AppCompatActivity() {
         viewModelApp.deleteItem(item).observe(this) {
 
             if (it is DataResult.Success) {
-                Toast.makeText(this, "Delete Sucess!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Lembrete deletado com sucesso!", Toast.LENGTH_SHORT).show()
                 showListBD()
             }
         }
@@ -143,7 +142,7 @@ class ListaBD : AppCompatActivity() {
         viewModelApp.deleteAll().observe(this) {
 
             if (it is DataResult.Success) {
-                Toast.makeText(this, "Delete All Sucess!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Todos os seus lembretes foram deletados!", Toast.LENGTH_SHORT).show()
                 showListBD()
             }
         }
@@ -183,6 +182,7 @@ class ListaBD : AppCompatActivity() {
         btnCancelar.setOnClickListener { dialog.dismiss() }
         btnApagar.setOnClickListener {
             deleteAll()
+            listaInfo!!.map { if (it.alarmStatusInfo) resetAllAlarm(it.requestCode) }
             dialog.dismiss()
         }
 
@@ -227,7 +227,24 @@ class ListaBD : AppCompatActivity() {
             )
 
             alarmM.cancel(pendingIntent)
-            Toast.makeText(this, "Alarm Resetado!", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "Alarm Resetado!", Toast.LENGTH_SHORT).show()
         }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun resetAllAlarm(requestCode: Int) {
+        val alarmM = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, AlarmReceiver::class.java)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        alarmM.cancel(pendingIntent)
+        //Toast.makeText(this, "Alarm Resetado!", Toast.LENGTH_SHORT).show()
     }
 }

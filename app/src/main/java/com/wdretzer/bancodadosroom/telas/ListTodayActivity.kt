@@ -109,7 +109,7 @@ class ListTodayActivity : AppCompatActivity() {
         viewModelApp.deleteItem(item).observe(this) {
 
             if (it is DataResult.Success) {
-                Toast.makeText(this, "Delete Sucess!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Lembrete deletado com sucesso!", Toast.LENGTH_SHORT).show()
                 showListTodayBD("$day/$month/$year")
                 countItem("$day/$month/$year")
             }
@@ -209,7 +209,7 @@ class ListTodayActivity : AppCompatActivity() {
             )
 
             alarmM.cancel(pendingIntent)
-            Toast.makeText(this, "Alarm Resetado!", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "Alarm Resetado!", Toast.LENGTH_SHORT).show()
         }
     }
 }

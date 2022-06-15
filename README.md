@@ -14,7 +14,7 @@ O Banco de dados implementado ao aplicativo possui as seguintes funções:
  2. listar itens, 
  3. filtrar dados por data, 
  4. contar itens do banco de dados, 
- 5. update de valores de itens, 
+ 5. atualizar valor dos itens, 
  6. deletar item,
  7. deletar todos itens;
 

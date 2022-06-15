@@ -9,7 +9,7 @@ Linguagem Kotlin utilizando:
 - Notificação para disparo de Alarme quando chegar o horário da Tarefa do Lembrete;
 - Utilização de Alarme sonoro e vibração para o alarme das Tarefas;
 
-- O Banco de dados implementado ao aplicativo possui as seguintes funções: 
+O Banco de dados implementado ao aplicativo possui as seguintes funções: 
  1. inserir itens, 
  2. listar itens, 
  3. filtrar dados por data, 

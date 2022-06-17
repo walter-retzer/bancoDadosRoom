@@ -58,7 +58,7 @@ class ListRemindersSaveActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_lista_bd)
+        setContentView(R.layout.activity_list_reminders_save)
 
         getSupportActionBar()?.hide()
         stopRingtoneAlarm()

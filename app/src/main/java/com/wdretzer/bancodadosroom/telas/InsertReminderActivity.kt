@@ -20,7 +20,6 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
 import com.wdretzer.bancodadosroom.R
 import com.wdretzer.bancodadosroom.alarm.AlarmReceiver
-import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.extension.DataResult
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel
 import java.util.*
@@ -63,7 +62,7 @@ class InsertReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_insert_reminder)
 
         getSupportActionBar()?.hide()
 

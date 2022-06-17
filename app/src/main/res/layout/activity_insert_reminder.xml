@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="Widget.Design.BottomSheet.Modal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/cinza"
+        android:backgroundTintMode="screen"
+        android:orientation="vertical"
+        tools:context=".telas.InsertReminderActivity">
+
+        <FrameLayout
+            android:id="@+id/loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="3dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/img_top"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
+            android:layout_marginTop="5dp"
+            android:padding="10dp"
+            android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            app:srcCompat="@drawable/img"
+            app:strokeColor="@android:color/darker_gray"
+            app:strokeWidth="10dp" />
+
+        <TextView
+            android:id="@+id/text_top"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Meu Lembrete"
+            android:textColor="@color/white"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_top" />
+
+        <ImageView
+            android:id="@+id/menu_bottom_today"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="-15dp"
+            android:padding="4dp"
+            android:src="@drawable/background_editlist"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_continue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_top" />
+
+        <TextView
+            android:id="@+id/text_titulo"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="14dp"
+            android:text="Título: "
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/descricao_input"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_top"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <EditText
+            android:id="@+id/titulo_input"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/background_text_input"
+            android:hint="Preencha o título"
+            android:padding="10dp"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="@+id/text_titulo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/text_titulo"
+            app:layout_constraintTop_toTopOf="@+id/text_titulo" />
+
+        <TextView
+            android:id="@+id/text_description"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="48dp"
+            android:text="Descrição: "
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titulo_input" />
+
+        <EditText
+            android:id="@+id/descricao_input"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/background_text_input"
+            android:hint="Preencha a descrição"
+            android:padding="10dp"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="@+id/text_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/text_description"
+            app:layout_constraintTop_toTopOf="@+id/text_description" />
+
+        <TextView
+            android:id="@+id/text_data"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="38dp"
+            android:text="Data: "
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/descricao_input" />
+
+        <TextView
+            android:id="@+id/data_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_text_input"
+            android:padding="10dp"
+            android:text="dd/mm/aaaa"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="@+id/text_data"
+            app:layout_constraintStart_toEndOf="@+id/text_data"
+            app:layout_constraintTop_toTopOf="@+id/text_data" />
+
+        <TextView
+            android:id="@+id/text_time"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Hora: "
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@+id/data_input"
+            app:layout_constraintTop_toTopOf="@+id/text_data" />
+
+        <TextView
+            android:id="@+id/time_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/background_text_input"
+            android:padding="10dp"
+            android:text="--:-- hr"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="@+id/text_time"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/text_time"
+            app:layout_constraintTop_toTopOf="@+id/text_time" />
+
+        <TextView
+            android:id="@+id/text_alarm"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="28dp"
+            android:text="Alarme: "
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_data" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/alarm_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:checked="false"
+            app:layout_constraintBottom_toBottomOf="@+id/text_alarm"
+            app:layout_constraintStart_toEndOf="@+id/text_alarm"
+            app:layout_constraintTop_toTopOf="@+id/text_alarm"
+            app:thumbTint="@color/teal_200" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_continue"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/button"
+            android:text="Salvar Lembrete"
+            android:textColor="@color/cinza"
+            android:textColorHint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_alarm" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

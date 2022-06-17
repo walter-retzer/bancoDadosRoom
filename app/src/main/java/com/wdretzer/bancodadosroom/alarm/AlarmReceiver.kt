@@ -21,9 +21,11 @@ class AlarmReceiver : BroadcastReceiver() {
     var vibrator: Vibrator? = null
     var titulo: String = " "
     var descricao: String = " "
+    var idNotification: Int = 0
 
     override fun onReceive(context: Context, intent: Intent?) {
 
+        idNotification = System.currentTimeMillis().toInt()
         titulo = intent?.getStringExtra("Titulo").toString()
         descricao = intent?.getStringExtra("Description").toString()
 
@@ -55,7 +57,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val dismissPendingIntent: PendingIntent =
             PendingIntent.getActivity(
                 context,
-                REQUEST_CODE,
+                idNotification,
                 snoozeIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
@@ -68,14 +70,14 @@ class AlarmReceiver : BroadcastReceiver() {
         val pendingIntent: PendingIntent =
             PendingIntent.getActivity(
                 context,
-                REQUEST_CODE,
+                idNotification,
                 intent,
                 PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
         with(NotificationManagerCompat.from(context)) {
             val build = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-                .setContentTitle("Lembrete: $titulo")
+                .setContentTitle("Lembrete: $titulo + $idNotification")
                 .setContentText(descricao)
                 .setSmallIcon(R.drawable.icon_reminder)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -89,9 +91,12 @@ class AlarmReceiver : BroadcastReceiver() {
                 )
                 .setAutoCancel(true)
 
-            notify(NOTIFICATION_ID, build.build())
+
+            notify(idNotification, build.build())
+
 
         }
+
 
         //Habilita vibração do dispositivo quando a Notificação for exibida:
         vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
@@ -101,6 +106,7 @@ class AlarmReceiver : BroadcastReceiver() {
         //Inicia o toque de alarme do dispositivo:
         val i = Intent(context, AlarmRing::class.java)
         context.startService(i)
+
 
     }
 

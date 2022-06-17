@@ -22,6 +22,9 @@ class AlarmRing : Service() {
         }
 
         r = RingtoneManager.getRingtone(this, alarmUri)
+        //if (r!!.isPlaying) r!!.stop() else r!!.play()
+
+        r!!.stop()
         r!!.play()
 
         return START_NOT_STICKY

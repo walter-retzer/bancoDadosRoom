@@ -62,6 +62,8 @@ class ListTodayActivity : AppCompatActivity() {
 
         getSupportActionBar()?.hide()
         stopRingtoneAlarm()
+
+        AlarmRing.r?.stop()
         getDateCalendar()
         countItem("$day/$month/$year")
         showListTodayBD("$day/$month/$year")

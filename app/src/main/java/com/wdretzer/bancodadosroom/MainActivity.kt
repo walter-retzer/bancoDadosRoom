@@ -12,14 +12,21 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.wdretzer.bancodadosroom.alarm.AlarmReceiver
+import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.extension.DataResult
+import com.wdretzer.bancodadosroom.recycler.ItensAdapter
 import com.wdretzer.bancodadosroom.telas.ListaBD
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel
 import java.util.*
@@ -58,6 +65,8 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     var savedMinutesText = ""
     var savedHourText = ""
 
+    var requestCodeAlarm: Int = 0
+    var listaInfo: MutableList<InfoDados>? = null
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +77,9 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
         textData?.setOnClickListener { pickDate() }
         textHorario?.setOnClickListener { pickTime() }
-        btnSalvarLembrete.setOnClickListener { checkInfo() }
+        btnSalvarLembrete.setOnClickListener {
+            checkInfo()
+        }
     }
 
 
@@ -78,15 +89,13 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
             textDescricao?.text.toString().isEmpty() ||
             textData?.text.toString() == "dd/mm/aaaa" ||
             textHorario?.text.toString() == "--:-- hr"
+
         ) {
 
             Toast.makeText(this, "Há campos não preenchidos!", Toast.LENGTH_SHORT).show()
 
         } else {
-            val requestCodeAlarm = System.currentTimeMillis().toInt()
-            saveToDoList(requestCodeAlarm)
-            setAlarm(requestCodeAlarm)
-            sendToListaBD()
+            searchBD()
         }
     }
 
@@ -129,6 +138,35 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         }
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun searchBD() {
+        val timeInput = "$savedHourText:$savedMinutesText" + "hr"
+        val data = "$savedDay/$savedMonth/$savedYear"
+        var check: Boolean = false
+
+        viewModelApp.listItensToday(data).observe(this) {
+            it.map { dados ->
+                if (timeInput == dados.horarioInfo) {
+                    check = true
+                }
+            }
+
+            if (check) {
+                Toast.makeText(
+                    this,
+                    "Já existe uma tarefa salva com o mesmo horario!!",
+                    Toast.LENGTH_LONG
+                ).show()
+
+            } else {
+                sendToListaBD()
+                saveToDoList(requestCodeAlarm)
+                setAlarm(requestCodeAlarm)
+                requestCodeAlarm = System.currentTimeMillis().toInt()
+            }
+        }
+    }
 
     private fun getDateCalendar() {
         val myCalendar = Calendar.getInstance()
@@ -203,6 +241,7 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         val intent = Intent(this, AlarmReceiver::class.java).apply {
             putExtra("Titulo", textTitulo?.text.toString())
             putExtra("Description", textDescricao?.text.toString())
+            putExtra("Id", requestCodeAlarm.toString())
         }
 
         val pendingIntent = getBroadcast(
@@ -218,7 +257,8 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                 calendar.timeInMillis,
                 pendingIntent
             )
-            Toast.makeText(this, "Alarme do lembrete foi ativado com sucesso!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Alarme do lembrete foi ativado com sucesso!", Toast.LENGTH_SHORT)
+                .show()
 
         } else {
             alarmM.cancel(pendingIntent)

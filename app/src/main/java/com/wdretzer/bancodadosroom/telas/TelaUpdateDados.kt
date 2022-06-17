@@ -50,7 +50,8 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
     var savedMinutesText = ""
     var savedHourText = ""
-
+    var idBundle: Int = 0
+    var getRequestCode: Int = 0
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,8 +61,7 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         getSupportActionBar()?.hide()
 
         val bundle: Bundle? = intent.extras
-        var idBundle: Int = 0
-        var getRequestCode: Int = 0
+
 
         if (bundle != null) {
             val getTextTitle = bundle.getString("Titulo")
@@ -83,22 +83,7 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
         textDateEdit?.setOnClickListener { pickDate() }
         textTimeEdit?.setOnClickListener { pickTime() }
-
-        btnSave?.setOnClickListener {
-            updateItem(
-                InfoDados(
-                    textTitleEdit?.text.toString(),
-                    textDescriptionEdit?.text.toString(),
-                    textDateEdit?.text.toString(),
-                    textTimeEdit?.text.toString(),
-                    alarmSwitch!!.isChecked,
-                    idBundle,
-                    getRequestCode
-                )
-            )
-            setAlarm(getRequestCode)
-            sendToListaBD()
-        }
+        btnSave?.setOnClickListener { searchBD() }
     }
 
 
@@ -118,11 +103,51 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         viewModelApp.updateItem(item).observe(this) {
 
             if (it is DataResult.Success) {
-                Toast.makeText(this, "Os dados foram atualizados com sucesso!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Os dados foram atualizados com sucesso!", Toast.LENGTH_SHORT)
+                    .show()
             }
 
             if (it is DataResult.Error) {
                 Toast.makeText(this, "Erro em atualizar os dados!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun searchBD() {
+        val timeInput = textTimeEdit?.text.toString()
+        val data = textDateEdit?.text.toString()
+        var check: Boolean = false
+
+        viewModelApp.listItensToday(data).observe(this) {
+            it.map { dados ->
+                if (timeInput == dados.horarioInfo) {
+                    check = true
+                }
+            }
+
+            if (check) {
+                Toast.makeText(
+                    this,
+                    "Já existe uma tarefa salva com o mesmo horario!!",
+                    Toast.LENGTH_LONG
+                ).show()
+
+            } else {
+                updateItem(
+                    InfoDados(
+                        textTitleEdit?.text.toString(),
+                        textDescriptionEdit?.text.toString(),
+                        textDateEdit?.text.toString(),
+                        textTimeEdit?.text.toString(),
+                        alarmSwitch!!.isChecked,
+                        idBundle,
+                        getRequestCode
+                    )
+                )
+                setAlarm(getRequestCode)
+                sendToListaBD()
             }
         }
     }
@@ -193,7 +218,8 @@ class TelaUpdateDados : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
                 calendar.timeInMillis,
                 pendingIntent
             )
-            Toast.makeText(this, "Alarme do lembrete foi ativado com sucesso!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Alarme do lembrete foi ativado com sucesso!", Toast.LENGTH_SHORT)
+                .show()
 
         } else {
             alarmM.cancel(pendingIntent)

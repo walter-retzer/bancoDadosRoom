@@ -8,6 +8,8 @@ Linguagem Kotlin utilizando:
 - Utilização de BroadcastReceiver() para setar e resetar alarmes para os lembretes;
 - Notificação para disparo de Alarme quando chegar o horário da Tarefa do Lembrete;
 - Utilização de Alarme sonoro e vibração para o alarme das Tarefas;
+- Utilização de DatePickerDialog para selecionar a data por dia, mês e ano.
+- Utilização de TimePickerDialog para selecionar o horário por hora e minuto.
 
 O Banco de dados implementado ao aplicativo possui as seguintes funções: 
  1. inserir itens, 

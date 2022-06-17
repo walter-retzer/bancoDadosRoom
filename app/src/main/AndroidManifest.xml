@@ -33,14 +33,14 @@
             android:name=".telas.ListTodayActivity"
             android:exported="false" />
         <activity
-            android:name=".telas.TelaUpdateDados"
+            android:name=".telas.ReminderUpdateActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".telas.InsertReminderActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".telas.ListaBD"
+            android:name=".telas.ListRemindersSaveActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.wdretzer.bancodadosroom.R
-import com.wdretzer.bancodadosroom.telas.ListaBD
+import com.wdretzer.bancodadosroom.telas.ListRemindersSaveActivity
 import com.wdretzer.bancodadosroom.telas.ListTodayActivity
 
 
@@ -50,7 +50,7 @@ class AlarmReceiver : BroadcastReceiver() {
     private fun notifyNotification(context: Context) {
 
         // ListaBD iniciará quando o usuario clicar sobre o botão de ação da notificação :
-        val snoozeIntent = Intent(context, ListaBD::class.java).apply {
+        val snoozeIntent = Intent(context, ListRemindersSaveActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 

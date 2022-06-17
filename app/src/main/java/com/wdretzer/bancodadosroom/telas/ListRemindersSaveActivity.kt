@@ -9,13 +9,13 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
@@ -26,28 +26,28 @@ import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.extension.DataResult
 import com.wdretzer.bancodadosroom.recycler.ItensAdapter
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel
-import java.util.*
 
 
-class ListTodayActivity : AppCompatActivity() {
+class ListRemindersSaveActivity : AppCompatActivity() {
 
     private val viewModelApp: AppViewModel by viewModels()
 
-    private val btnHomeMenu: ShapeableImageView
-        get() = findViewById(R.id.btn_send_home)
-
     private val btnAddItem: ShapeableImageView
-        get() = findViewById(R.id.btn_add_list_today)
+        get() = findViewById(R.id.btn_add_list)
 
-    private val btnSearch: ShapeableImageView
-        get() = findViewById(R.id.btn_search)
+    private val btnSendListToday: ShapeableImageView
+        get() = findViewById(R.id.btn_send_list_today)
+
+    private val btnSendSearch: ShapeableImageView
+        get() = findViewById(R.id.btn_send_search)
+
+    private val btnDeleteAll: ShapeableImageView
+        get() = findViewById(R.id.btn_delete_all)
 
     private val textTotalItens: TextView
-        get() = findViewById(R.id.total_itens_today)
+        get() = findViewById(R.id.total_itens)
 
-    private val textDataAtual: TextView
-        get() = findViewById(R.id.tarefas2_today)
-
+    var listaInfo: MutableList<InfoDados>? = null
     var totalItens: Int = 0
     var day = 0
     var month = 0
@@ -55,27 +55,19 @@ class ListTodayActivity : AppCompatActivity() {
 
 
     @RequiresApi(Build.VERSION_CODES.M)
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_list_today)
+        setContentView(R.layout.activity_lista_bd)
 
         getSupportActionBar()?.hide()
         stopRingtoneAlarm()
+        showListBD()
 
-        AlarmRing.r?.stop()
-        getDateCalendar()
-        countItem("$day/$month/$year")
-        showListTodayBD("$day/$month/$year")
-
-        btnHomeMenu.setOnClickListener { sendToListBD() }
         btnAddItem.setOnClickListener { sendToMainActivity() }
-        btnSearch.setOnClickListener { sendToSearchList() }
-    }
-
-
-    override fun onBackPressed() {
-        val intent = Intent(this, ListRemindersSaveActivity::class.java)
-        startActivity(intent)
+        btnSendListToday.setOnClickListener { sendToListToday() }
+        btnSendSearch.setOnClickListener { sendToSearchList() }
+        btnDeleteAll.setOnClickListener { showDialog("Deseja realmente apagar todos os Lembretes?") }
     }
 
 
@@ -86,10 +78,14 @@ class ListTodayActivity : AppCompatActivity() {
 
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun showListTodayBD(data: String) {
-        viewModelApp.listItensToday(data).observe(this) {
+    private fun showListBD() {
 
-            val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_today)
+        viewModelApp.getListSave().observe(this) {
+
+            listaInfo = it
+            textTotalItens.text = it.size.toString()
+
+            val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
             val adapter = ItensAdapter(::updateItem) { itens ->
                 showDialogDeleteItem("Deseja realmente apagar esse Lembrete?", itens)
             }
@@ -105,60 +101,49 @@ class ListTodayActivity : AppCompatActivity() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun deleteItem(item: InfoDados) {
-        viewModelApp.deleteItem(item).observe(this) {
-
-            if (it is DataResult.Success) {
-                Toast.makeText(this, "Lembrete deletado com sucesso!", Toast.LENGTH_SHORT).show()
-                showListTodayBD("$day/$month/$year")
-                countItem("$day/$month/$year")
-            }
-        }
-    }
-
-
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun countItem(item: String) {
-        viewModelApp.countItens(item).observe(this) {
-            textTotalItens.text = it.toString()
-            showListTodayBD("$day/$month/$year")
-        }
-    }
-
-
-    @SuppressLint("SetTextI18n")
-    private fun getDateCalendar() {
-        val myCalendar = Calendar.getInstance()
-        day = myCalendar.get(Calendar.DAY_OF_MONTH)
-        month = myCalendar.get(Calendar.MONTH) + 1
-        year = myCalendar.get(Calendar.YEAR)
-
-        textDataAtual.text = "$day/$month/$year"
-    }
-
-
     private fun sendToTelaUpdate(info: InfoDados) {
         val titulo = info.tituloInfo
         val descricao = info.descricaoInfo
         val data = info.dataInfo
         val horario = info.horarioInfo
+        val alarm = info.alarmStatusInfo
         val id = info.idUser
+        val requestCode = info.requestCode
 
         val intent = Intent(this, ReminderUpdateActivity::class.java).apply {
             putExtra("Titulo", titulo)
             putExtra("Desc", descricao)
             putExtra("Data", data)
             putExtra("Hora", horario)
+            putExtra("Alarme", alarm)
             putExtra("Id", id)
+            putExtra("Code", requestCode)
         }
         startActivity(intent)
     }
 
 
-    private fun sendToListBD() {
-        val intent = Intent(this, ListRemindersSaveActivity::class.java)
-        startActivity(intent)
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun deleteItem(item: InfoDados) {
+        viewModelApp.deleteItem(item).observe(this) {
+
+            if (it is DataResult.Success) {
+                Toast.makeText(this, "Lembrete deletado com sucesso!", Toast.LENGTH_SHORT).show()
+                showListBD()
+            }
+        }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun deleteAll() {
+        viewModelApp.deleteAll().observe(this) {
+
+            if (it is DataResult.Success) {
+                Toast.makeText(this, "Todos os seus lembretes foram deletados!", Toast.LENGTH_SHORT).show()
+                showListBD()
+            }
+        }
     }
 
 
@@ -168,9 +153,38 @@ class ListTodayActivity : AppCompatActivity() {
     }
 
 
+    private fun sendToListToday() {
+        val intent = Intent(this, ListTodayActivity::class.java)
+        startActivity(intent)
+    }
+
+
     private fun sendToSearchList() {
         val intent = Intent(this, SearchListActivity::class.java)
         startActivity(intent)
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun showDialog(title: String) {
+        val dialog = Dialog(this)
+        dialog.setCancelable(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(R.layout.fragment_dialog_delete)
+
+        val body = dialog.findViewById(R.id.frag_title) as TextView
+        body.text = title
+        val btnApagar = dialog.findViewById(R.id.btn_apagar) as Button
+        val btnCancelar = dialog.findViewById(R.id.btn_cancelar) as TextView
+
+        btnCancelar.setOnClickListener { dialog.dismiss() }
+        btnApagar.setOnClickListener {
+            deleteAll()
+            listaInfo!!.map { if (it.alarmStatusInfo) resetAllAlarm(it.requestCode) }
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
 
@@ -186,12 +200,13 @@ class ListTodayActivity : AppCompatActivity() {
         val btnApagar = dialog.findViewById(R.id.btn_apagar) as Button
         val btnCancelar = dialog.findViewById(R.id.btn_cancelar) as TextView
 
+        btnCancelar.setOnClickListener { dialog.dismiss() }
         btnApagar.setOnClickListener {
             deleteItem(itens)
             resetAlarm(itens)
             dialog.dismiss()
         }
-        btnCancelar.setOnClickListener { dialog.dismiss() }
+
         dialog.show()
     }
 
@@ -212,5 +227,22 @@ class ListTodayActivity : AppCompatActivity() {
             alarmM.cancel(pendingIntent)
             //Toast.makeText(this, "Alarm Resetado!", Toast.LENGTH_SHORT).show()
         }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun resetAllAlarm(requestCode: Int) {
+        val alarmM = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, AlarmReceiver::class.java)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        alarmM.cancel(pendingIntent)
+        //Toast.makeText(this, "Alarm Resetado!", Toast.LENGTH_SHORT).show()
     }
 }

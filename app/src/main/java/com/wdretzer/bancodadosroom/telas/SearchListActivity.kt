@@ -17,7 +17,6 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.wdretzer.bancodadosroom.MainActivity
 import com.wdretzer.bancodadosroom.R
 import com.wdretzer.bancodadosroom.alarm.AlarmReceiver
 import com.wdretzer.bancodadosroom.dados.InfoDados
@@ -134,7 +133,7 @@ class SearchListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListen
         val horario = info.horarioInfo
         val id = info.idUser
 
-        val intent = Intent(this, TelaUpdateDados::class.java).apply {
+        val intent = Intent(this, ReminderUpdateActivity::class.java).apply {
             putExtra("Titulo", titulo)
             putExtra("Desc", descricao)
             putExtra("Data", data)
@@ -169,7 +168,7 @@ class SearchListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListen
     }
 
     private fun sendToAddList() {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, InsertReminderActivity::class.java)
         startActivity(intent)
     }
 
@@ -180,7 +179,7 @@ class SearchListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListen
     }
 
     private fun sendToHome() {
-        val intent = Intent(this, ListaBD::class.java)
+        val intent = Intent(this, ListRemindersSaveActivity::class.java)
         startActivity(intent)
     }
 
@@ -224,6 +223,3 @@ class SearchListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListen
         }
     }
 }
-
-
-

@@ -13,7 +13,7 @@
         android:background="@color/cinza"
         android:backgroundTintMode="screen"
         android:orientation="vertical"
-        tools:context=".MainActivity">
+        tools:context=".telas.InsertReminderActivity">
 
         <FrameLayout
             android:id="@+id/loading"

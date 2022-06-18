@@ -40,6 +40,7 @@ class ReminderUpdateActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
     var seconds = 0
     var minutes = 0
     var hour = 0
+    var amPm = 0
 
     var savedDay = 0
     var savedMonth = 0
@@ -90,6 +91,7 @@ class ReminderUpdateActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
         day = myCalendar.get(Calendar.DAY_OF_MONTH)
         month = myCalendar.get(Calendar.MONTH)
         year = myCalendar.get(Calendar.YEAR)
+        amPm = myCalendar.get(Calendar.AM_PM)
 
         seconds = myCalendar.get(Calendar.SECOND)
         minutes = myCalendar.get(Calendar.MINUTE)
@@ -152,8 +154,14 @@ class ReminderUpdateActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
 
 
     private fun pickDate() {
-        getDateCalendar()
-        DatePickerDialog(this, this, year, month, day).show()
+        val myCalendar = Calendar.getInstance()
+        day = myCalendar.get(Calendar.DAY_OF_MONTH)
+        month = myCalendar.get(Calendar.MONTH)
+        year = myCalendar.get(Calendar.YEAR)
+
+        val dialog = DatePickerDialog(this, this, year, month, day)
+        dialog.datePicker.minDate = myCalendar.timeInMillis
+        dialog.show()
     }
 
 

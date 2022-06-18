@@ -170,8 +170,14 @@ class InsertReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
 
 
     private fun pickDate() {
-        getDateCalendar()
-        DatePickerDialog(this, this, year, month, day).show()
+        val myCalendar = Calendar.getInstance()
+        day = myCalendar.get(Calendar.DAY_OF_MONTH)
+        month = myCalendar.get(Calendar.MONTH)
+        year = myCalendar.get(Calendar.YEAR)
+
+        val dialog = DatePickerDialog(this, this, year, month, day)
+        dialog.datePicker.minDate = myCalendar.timeInMillis
+        dialog.show()
     }
 
 

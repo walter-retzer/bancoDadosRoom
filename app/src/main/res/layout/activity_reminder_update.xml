@@ -92,9 +92,8 @@
         android:layout_marginTop="14dp"
         android:text="Título: "
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/descricao_input_edit"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_top_edit"
+        app:layout_constraintTop_toTopOf="@+id/menu_bottom_edit"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <EditText
@@ -102,6 +101,7 @@
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:background="@drawable/background_text_input"
         android:hint="Preencha o título"
         android:padding="10dp"
@@ -110,10 +110,9 @@
         android:textColorHint="@color/black"
         android:textSize="16sp"
         android:textStyle="normal"
-        app:layout_constraintBottom_toBottomOf="@+id/text_titulo_edit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/text_titulo_edit"
-        app:layout_constraintTop_toTopOf="@+id/text_titulo_edit" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_titulo_edit" />
 
     <TextView
         android:id="@+id/text_description_edit"
@@ -121,7 +120,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
         android:text="Descrição: "
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
@@ -132,6 +130,7 @@
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:background="@drawable/background_text_input"
         android:hint="Preencha a descrição"
         android:padding="10dp"
@@ -140,10 +139,9 @@
         android:textColorHint="@color/black"
         android:textSize="16sp"
         android:textStyle="normal"
-        app:layout_constraintBottom_toBottomOf="@+id/text_description_edit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/text_description_edit"
-        app:layout_constraintTop_toTopOf="@+id/text_description_edit" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_description_edit" />
 
     <TextView
         android:id="@+id/text_data_edit"
@@ -151,7 +149,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="26dp"
         android:text="Data: "
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"

@@ -87,12 +87,14 @@ class ListTodayActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun showListTodayBD(data: String) {
-        viewModelApp.listItensToday(data).observe(this) {
+        viewModelApp.listItensTodayFinish(data, false).observe(this) {
 
             val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_today)
             val adapter = ItensAdapter(::updateItem, { itens ->
                 showDialogDeleteItem("Deseja realmente apagar esse Lembrete?", itens)
-            }) {}
+            }) { info ->
+                showDialogFinishItem("Deseja realmente finalizar esse Lembrete?", info)
+            }
             adapter.updateList(it)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(this)
@@ -120,7 +122,7 @@ class ListTodayActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun countItem(item: String) {
-        viewModelApp.countItens(item).observe(this) {
+        viewModelApp.countItensFinish(item, false).observe(this) {
             textTotalItens.text = it.toString()
             showListTodayBD("$day/$month/$year")
         }
@@ -144,6 +146,7 @@ class ListTodayActivity : AppCompatActivity() {
         val data = info.dataInfo
         val horario = info.horarioInfo
         val id = info.idUser
+        val statusLembrete = info.statusLembrete
 
         val intent = Intent(this, ReminderUpdateActivity::class.java).apply {
             putExtra("Titulo", titulo)
@@ -151,6 +154,7 @@ class ListTodayActivity : AppCompatActivity() {
             putExtra("Data", data)
             putExtra("Hora", horario)
             putExtra("Id", id)
+            putExtra("Status", statusLembrete)
         }
         startActivity(intent)
     }
@@ -211,6 +215,55 @@ class ListTodayActivity : AppCompatActivity() {
 
             alarmM.cancel(pendingIntent)
             //Toast.makeText(this, "Alarm Resetado!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun showDialogFinishItem(title: String, itens: InfoDados) {
+        val dialog = Dialog(this)
+        dialog.setCancelable(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(R.layout.fragment_dialog_delete)
+
+        val body = dialog.findViewById(R.id.frag_title) as TextView
+        body.text = title
+        val btnFinishReminder = dialog.findViewById(R.id.btn_apagar) as Button
+        btnFinishReminder.text = "FINALIZAR"
+        val btnCancelar = dialog.findViewById(R.id.btn_cancelar) as TextView
+
+        btnCancelar.setOnClickListener { dialog.dismiss() }
+        btnFinishReminder.setOnClickListener {
+            checkItem(itens)
+            resetAlarm(itens)
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+
+    private fun checkItem(item: InfoDados) {
+        val itemNew = InfoDados(
+            tituloInfo = item.tituloInfo,
+            descricaoInfo = item.descricaoInfo,
+            dataInfo = item.dataInfo,
+            horarioInfo = item.horarioInfo,
+            alarmStatusInfo = false,
+            idUser = item.idUser,
+            requestCode = item.requestCode,
+            statusLembrete = true
+        )
+
+        viewModelApp.updateItem(itemNew).observe(this) {
+
+            if (it is DataResult.Success) {
+                Toast.makeText(this, "Os dados foram atualizados com sucesso!", Toast.LENGTH_SHORT)
+                    .show()
+                this.recreate()
+            }
+
+            if (it is DataResult.Error) {
+                Toast.makeText(this, "Erro em atualizar os dados!", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

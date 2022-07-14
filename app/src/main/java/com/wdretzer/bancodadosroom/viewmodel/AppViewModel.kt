@@ -45,6 +45,11 @@ class AppViewModel(
 
     fun countItensTime(time: String) = repository.countItensTime(time).flowOn(dispatcher).asLiveData()
 
+    fun countItensFinish(data:String, time: Boolean) = repository.countItensFinish(data, time).flowOn(dispatcher).asLiveData()
+
     fun listItensToday(item: String) = repository.listItensToday(item).flowOn(dispatcher).asLiveData()
+
+    fun listItensTodayFinish(date: String, statusLembrete: Boolean) = repository.listItensTodayFinish(date, statusLembrete).flowOn(dispatcher).asLiveData()
+
 
 }

@@ -1,12 +1,11 @@
 package com.wdretzer.bancodadosroom.telas
 
 import android.annotation.SuppressLint
-import android.app.AlarmManager
-import android.app.DatePickerDialog
-import android.app.PendingIntent
-import android.app.TimePickerDialog
+import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -35,6 +34,7 @@ class ReminderUpdateActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
     private val textTimeEdit: TextView? by lazy { findViewById(R.id.time_input_edit) }
     private val btnSave: Button? by lazy { findViewById(R.id.btn_salve_edit) }
     private val alarmSwitch: SwitchCompat? by lazy { findViewById(R.id.alarm_status_edit) }
+    private val statusLembreteSwitch: SwitchCompat? by lazy { findViewById(R.id.lembrete_status_edit) }
 
     var day = 0
     var month = 0
@@ -72,6 +72,8 @@ class ReminderUpdateActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
             val getTextDate = bundle.getString("Data")
             val getTextTime = bundle.getString("Hora")
             val getStatusAlarm = bundle.getBoolean("Alarme")
+            val getStatusLembrete = bundle.getBoolean("Status")
+
             idBundle = bundle.getInt("Id")
             getRequestCode = bundle.getInt("Code")
 
@@ -87,6 +89,7 @@ class ReminderUpdateActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
             }
 
             alarmSwitch!!.isChecked = getStatusAlarm
+            statusLembreteSwitch!!.isChecked = getStatusLembrete
             idBundle
             getRequestCode
         }
@@ -140,7 +143,7 @@ class ReminderUpdateActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
                     alarmSwitch!!.isChecked,
                     idBundle,
                     getRequestCode,
-                    false
+                    statusLembreteSwitch!!.isChecked
                 )
             )
             setAlarm(getRequestCode)
@@ -160,6 +163,21 @@ class ReminderUpdateActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
                         "Já existe uma tarefa salva com o mesmo horario!!",
                         Toast.LENGTH_LONG
                     ).show()
+                } else {
+                    updateItem(
+                        InfoDados(
+                            textTitleEdit?.text.toString(),
+                            textDescriptionEdit?.text.toString(),
+                            textDateEdit?.text.toString(),
+                            textTimeEdit?.text.toString(),
+                            alarmSwitch!!.isChecked,
+                            idBundle,
+                            getRequestCode,
+                            statusLembreteSwitch!!.isChecked
+                        )
+                    )
+                    setAlarm(getRequestCode)
+                    sendToListaBD()
                 }
             }
         }
@@ -249,6 +267,7 @@ class ReminderUpdateActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
             Toast.makeText(this, "Alarme do lembrete não ativado!", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     private fun sendToListaBD() {
         Handler().postDelayed({

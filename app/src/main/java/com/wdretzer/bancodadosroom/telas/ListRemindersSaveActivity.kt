@@ -144,6 +144,7 @@ class ListRemindersSaveActivity : AppCompatActivity() {
         val alarm = info.alarmStatusInfo
         val id = info.idUser
         val requestCode = info.requestCode
+        val statusLembrete = info.statusLembrete
 
         val intent = Intent(this, ReminderUpdateActivity::class.java).apply {
             putExtra("Titulo", titulo)
@@ -153,6 +154,7 @@ class ListRemindersSaveActivity : AppCompatActivity() {
             putExtra("Alarme", alarm)
             putExtra("Id", id)
             putExtra("Code", requestCode)
+            putExtra("Status", statusLembrete)
         }
         startActivity(intent)
     }

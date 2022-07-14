@@ -90,9 +90,9 @@ class ListTodayActivity : AppCompatActivity() {
         viewModelApp.listItensToday(data).observe(this) {
 
             val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_today)
-            val adapter = ItensAdapter(::updateItem) { itens ->
+            val adapter = ItensAdapter(::updateItem, { itens ->
                 showDialogDeleteItem("Deseja realmente apagar esse Lembrete?", itens)
-            }
+            }) {}
             adapter.updateList(it)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(this)

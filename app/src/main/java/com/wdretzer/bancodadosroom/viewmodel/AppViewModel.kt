@@ -20,7 +20,8 @@ class AppViewModel(
         data: String,
         horario: String,
         alarme: Boolean,
-        requestCode: Int
+        requestCode: Int,
+        statuslembrete: Boolean
     ) =
         repository.addItens(
             titulo,
@@ -28,7 +29,8 @@ class AppViewModel(
             data,
             horario,
             alarme,
-            requestCode
+            requestCode,
+            statuslembrete
         ).flowOn(dispatcher).asLiveData()
 
     fun getListSave() = repository.getListSave().flowOn(dispatcher).asLiveData()
@@ -40,6 +42,8 @@ class AppViewModel(
     fun deleteAll() = repository.deleteAll().flowOn(dispatcher).asLiveData()
 
     fun countItens(data: String) = repository.countItens(data).flowOn(dispatcher).asLiveData()
+
+    fun countItensTime(time: String) = repository.countItensTime(time).flowOn(dispatcher).asLiveData()
 
     fun listItensToday(item: String) = repository.listItensToday(item).flowOn(dispatcher).asLiveData()
 

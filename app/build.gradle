@@ -6,6 +6,28 @@ plugins {
 }
 
 android {
+
+    def keystoreProperties = new Properties()
+    def keystorePropertiesFile = file ('../local.properties')
+    def env = System.getenv()
+
+    if (keystorePropertiesFile.exists()){
+        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    } else {
+        if (env['RELEASE_KEYSTORE_PATH']) keystoreProperties.put('RELEASE_KEYSTORE_PATH', env['RELEASE_KEYSTORE_PATH'])
+        if (env['RELEASE_KEYSTORE_PASS']) keystoreProperties.put('RELEASE_KEYSTORE_PASS', env['RELEASE_KEYSTORE_PASS'])
+        if (env['RELEASE_KEYSTORE_ALIAS']) keystoreProperties.put('RELEASE_KEYSTORE_ALIAS', env['RELEASE_KEYSTORE_ALIAS'])
+        if (env['RELEASE_KEYSTORE_KEY_PASSWORD']) keystoreProperties.put('RELEASE_KEYSTORE_KEY_PASSWORD', env['RELEASE_KEYSTORE_KEY_PASSWORD'])
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(keystoreProperties['RELEASE_KEYSTORE_PATH'])
+            storePassword keystoreProperties['RELEASE_KEYSTORE_PASS']
+            keyAlias keystoreProperties['RELEASE_KEYSTORE_ALIAS']
+            keyPassword keystoreProperties['RELEASE_KEYSTORE_KEY_PASSWORD']
+        }
+    }
     compileSdk 31
 
     defaultConfig {
@@ -22,6 +44,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {

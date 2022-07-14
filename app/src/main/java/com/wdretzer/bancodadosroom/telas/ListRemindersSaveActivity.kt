@@ -12,10 +12,14 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
@@ -46,6 +50,8 @@ class ListRemindersSaveActivity : AppCompatActivity() {
 
     private val textTotalItens: TextView
         get() = findViewById(R.id.total_itens)
+
+    private val btnFinish: CheckBox? by lazy { findViewById(R.id.btn_finish) }
 
     var listaInfo: MutableList<InfoDados>? = null
     var totalItens: Int = 0
@@ -86,9 +92,12 @@ class ListRemindersSaveActivity : AppCompatActivity() {
             textTotalItens.text = it.size.toString()
 
             val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-            val adapter = ItensAdapter(::updateItem) { itens ->
+            val adapter = ItensAdapter(::updateItem, { itens ->
                 showDialogDeleteItem("Deseja realmente apagar esse Lembrete?", itens)
+            }) { info ->
+                showDialogFinishItem("Deseja realmente finalizar esse Lembrete?", info)
             }
+
             adapter.updateList(it)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(this)
@@ -98,6 +107,32 @@ class ListRemindersSaveActivity : AppCompatActivity() {
 
     private fun updateItem(item: InfoDados) {
         sendToTelaUpdate(item)
+    }
+
+    private fun checkItem(item: InfoDados) {
+        val itemNew = InfoDados(
+            tituloInfo = item.tituloInfo,
+            descricaoInfo = item.descricaoInfo,
+            dataInfo = item.dataInfo,
+            horarioInfo = item.horarioInfo,
+            alarmStatusInfo = false,
+            idUser = item.idUser,
+            requestCode = item.requestCode,
+            statusLembrete = true
+        )
+
+        viewModelApp.updateItem(itemNew).observe(this) {
+
+            if (it is DataResult.Success) {
+                Toast.makeText(this, "Os dados foram atualizados com sucesso!", Toast.LENGTH_SHORT)
+                    .show()
+                this.recreate()
+            }
+
+            if (it is DataResult.Error) {
+                Toast.makeText(this, "Erro em atualizar os dados!", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 
@@ -140,7 +175,8 @@ class ListRemindersSaveActivity : AppCompatActivity() {
         viewModelApp.deleteAll().observe(this) {
 
             if (it is DataResult.Success) {
-                Toast.makeText(this, "Todos os seus lembretes foram deletados!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Todos os seus lembretes foram deletados!", Toast.LENGTH_SHORT)
+                    .show()
                 showListBD()
             }
         }
@@ -206,9 +242,32 @@ class ListRemindersSaveActivity : AppCompatActivity() {
             resetAlarm(itens)
             dialog.dismiss()
         }
-
         dialog.show()
     }
+
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun showDialogFinishItem(title: String, itens: InfoDados) {
+        val dialog = Dialog(this)
+        dialog.setCancelable(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(R.layout.fragment_dialog_delete)
+
+        val body = dialog.findViewById(R.id.frag_title) as TextView
+        body.text = title
+        val btnFinishReminder = dialog.findViewById(R.id.btn_apagar) as Button
+        btnFinishReminder.text = "FINALIZAR"
+        val btnCancelar = dialog.findViewById(R.id.btn_cancelar) as TextView
+
+        btnCancelar.setOnClickListener { dialog.dismiss() }
+        btnFinishReminder.setOnClickListener {
+            checkItem(itens)
+            resetAlarm(itens)
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun resetAlarm(itens: InfoDados) {

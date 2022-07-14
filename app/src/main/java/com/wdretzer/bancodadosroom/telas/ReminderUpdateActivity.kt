@@ -15,6 +15,8 @@ import android.widget.*
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.startActivity
 import com.wdretzer.bancodadosroom.R
 import com.wdretzer.bancodadosroom.alarm.AlarmReceiver
 import com.wdretzer.bancodadosroom.dados.InfoDados
@@ -53,6 +55,8 @@ class ReminderUpdateActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
     var savedHourText = ""
     var idBundle: Int = 0
     var getRequestCode: Int = 0
+    var checkTimeUpdate: String = ""
+    var checkDateUpdate: String = ""
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,8 +77,15 @@ class ReminderUpdateActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
 
             getTextTitle?.let { textTitleEdit?.setText(it) }
             getTextDescription?.let { textDescriptionEdit?.setText(it) }
-            getTextDate?.let { textDateEdit?.setText(it) }
-            getTextTime?.let { textTimeEdit?.setText(it) }
+            getTextDate?.let {
+                textDateEdit?.text = it
+                checkDateUpdate = it
+            }
+            getTextTime?.let {
+                textTimeEdit?.text = it
+                checkTimeUpdate = it
+            }
+
             alarmSwitch!!.isChecked = getStatusAlarm
             idBundle
             getRequestCode
@@ -113,41 +124,43 @@ class ReminderUpdateActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
         }
     }
 
-
     @RequiresApi(Build.VERSION_CODES.M)
     private fun verifyDataTimeReminderOnDB() {
         val timeInput = textTimeEdit?.text.toString()
         val data = textDateEdit?.text.toString()
-        var check: Boolean = false
+        var check = false
 
-        viewModelApp.listItensToday(data).observe(this) {
-            it.map { dados ->
-                if (timeInput == dados.horarioInfo) {
-                    check = true
-                }
-            }
-
-            if (check) {
-                Toast.makeText(
-                    this,
-                    "Já existe uma tarefa salva com o mesmo horario!!",
-                    Toast.LENGTH_LONG
-                ).show()
-
-            } else {
-                updateItem(
-                    InfoDados(
-                        textTitleEdit?.text.toString(),
-                        textDescriptionEdit?.text.toString(),
-                        textDateEdit?.text.toString(),
-                        textTimeEdit?.text.toString(),
-                        alarmSwitch!!.isChecked,
-                        idBundle,
-                        getRequestCode
-                    )
+        if (checkTimeUpdate == timeInput && checkDateUpdate == data) {
+            updateItem(
+                InfoDados(
+                    textTitleEdit?.text.toString(),
+                    textDescriptionEdit?.text.toString(),
+                    textDateEdit?.text.toString(),
+                    textTimeEdit?.text.toString(),
+                    alarmSwitch!!.isChecked,
+                    idBundle,
+                    getRequestCode,
+                    false
                 )
-                setAlarm(getRequestCode)
-                sendToListaBD()
+            )
+            setAlarm(getRequestCode)
+            sendToListaBD()
+
+        } else {
+            viewModelApp.listItensToday(data).observe(this) {
+                it.map { dados ->
+                    if (timeInput == dados.horarioInfo) {
+                        check = true
+                    }
+                }
+
+                if (check) {
+                    Toast.makeText(
+                        this,
+                        "Já existe uma tarefa salva com o mesmo horario!!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         }
     }
@@ -224,7 +237,11 @@ class ReminderUpdateActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
                 calendar.timeInMillis,
                 pendingIntent
             )
-            Toast.makeText(this, "Alarme do lembrete foi ativado com sucesso!", Toast.LENGTH_SHORT)
+            Toast.makeText(
+                this,
+                "Alarme do lembrete foi ativado com sucesso!",
+                Toast.LENGTH_SHORT
+            )
                 .show()
 
         } else {

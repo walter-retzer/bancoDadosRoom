@@ -15,34 +15,32 @@
         android:backgroundTintMode="screen"
         android:padding="15dp">
 
-        <CheckBox
-            android:id="@+id/checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="-6dp"
-            android:buttonTint="@color/teal_200"
-            android:clickable="true"
-            android:elevation="3dp"
-            android:focusable="true"
-            android:scaleX="1.50"
-            android:scaleY="1.50"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+<!--        <com.google.android.material.imageview.ShapeableImageView-->
+<!--            android:id="@+id/checkbox"-->
+<!--            android:layout_width="40dp"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:layout_marginEnd="10dp"-->
+<!--            android:background="@color/teal_200"-->
+<!--            android:scaleType="fitCenter"-->
+<!--            app:contentPadding="7dp"-->
+<!--            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"-->
+<!--            app:srcCompat="@drawable/icon_check"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
         <TextView
             android:id="@+id/titulo_card"
             style="@style/TextAppearance.AppCompat.Headline"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:text="Evento Remenber"
+            android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="22sp"
+            android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/checkbox"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/checkbox"
-            app:layout_constraintTop_toTopOf="@+id/checkbox" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textDescription"
@@ -148,6 +146,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
             android:background="@color/teal_200"
             android:scaleType="fitCenter"
             app:contentPadding="2dp"
@@ -157,9 +156,24 @@
             app:srcCompat="@drawable/icon_edit" />
 
         <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/btn_finish"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/teal_200"
+            android:scaleType="fitCenter"
+            app:contentPadding="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/btn_update"
+            app:layout_constraintTop_toTopOf="@+id/text_alarm_card"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            app:srcCompat="@drawable/icon_check" />
+
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/btn_delete"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_marginTop="10dp"
             android:background="@color/teal_200"
             android:scaleType="fitCenter"
             app:contentPadding="5dp"

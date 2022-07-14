@@ -15,7 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="35dp"
         android:text="Lembretes por Data"
         android:textColor="@color/white"
         android:textSize="32sp"
@@ -39,14 +38,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tarefas_search" />
 
-    <ImageView
-        android:id="@+id/button_search"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/icon_search1"
-        app:layout_constraintBottom_toBottomOf="@+id/tarefas_search"
-        app:layout_constraintStart_toEndOf="@+id/tarefas_search"
-        app:layout_constraintTop_toTopOf="@+id/tarefas_search" />
+<!--    <ImageView-->
+<!--        android:id="@+id/button_search"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:src="@drawable/icon_search1"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/tarefas_search"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/tarefas_search"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/tarefas_search" />-->
 
     <ImageView
         android:id="@+id/imagem_data_search"

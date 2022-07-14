@@ -1,20 +1,27 @@
 package com.wdretzer.bancodadosroom.recycler
 
+import android.graphics.Paint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.imageview.ShapeableImageView
 import com.wdretzer.bancodadosroom.R
 import com.wdretzer.bancodadosroom.dados.InfoDados
+import com.wdretzer.bancodadosroom.util.strike
 
 
 class ItensAdapter(
     private val action: (InfoDados) -> Unit,
     private val action2: (InfoDados) -> Unit,
+    private val action3: (InfoDados) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val diffUtil = AsyncListDiffer<InfoDados>(this, DIFF_UTIL)
@@ -22,7 +29,7 @@ class ItensAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return FavouriteViewHolder(
-            inflater.inflate(R.layout.card_item, parent, false), action, action2
+            inflater.inflate(R.layout.card_item, parent, false), action, action2, action3
         )
     }
 
@@ -38,14 +45,18 @@ class ItensAdapter(
         diffUtil.submitList(diffUtil.currentList.plus(newItens))
     }
 
-    //    fun updateItem(item: InfoDados) {
-    //        val newList =
-    //            diffUtil.currentList.map { nasa ->
-    //                if (nasa.href == item.href) item
-    //                else nasa
-    //            }
-    //        diffUtil.submitList(newList)
-    //    }
+    fun updateItem(item: InfoDados) {
+        val newList =
+            diffUtil.currentList.map { infoDados ->
+                Log.d("Adapter MAp:", "$infoDados")
+                if (infoDados.statusLembrete == item.statusLembrete) item
+                else infoDados
+            }
+        diffUtil.submitList(newList)
+
+        Log.d("Adapter:", "${diffUtil.currentList}")
+        Log.d("InfoDados:", "$item")
+    }
 
     companion object {
         val DIFF_UTIL = object : DiffUtil.ItemCallback<InfoDados>() {
@@ -65,6 +76,7 @@ class FavouriteViewHolder(
     view: View,
     private val action: (InfoDados) -> Unit,
     private val action2: (InfoDados) -> Unit,
+    private val action3: (InfoDados) -> Unit,
 ) : RecyclerView.ViewHolder(view) {
 
     private val textItemTitulo: TextView = view.findViewById(R.id.titulo_card)
@@ -75,6 +87,8 @@ class FavouriteViewHolder(
     private val delete: ImageView = view.findViewById(R.id.btn_delete)
     private val update: ImageView = view.findViewById(R.id.btn_update)
     private val alarmStatusImage: ImageView = view.findViewById(R.id.alarm_status_image)
+    private val btnFinish: ShapeableImageView = view.findViewById(R.id.btn_finish)
+
 
     fun bind(itensList: InfoDados) {
         textItemTitulo.text = itensList.tituloInfo
@@ -83,7 +97,16 @@ class FavouriteViewHolder(
         textItemTime.text = itensList.horarioInfo
         alarmStatusImage.setImageResource(if (itensList.alarmStatusInfo) R.drawable.icon_alarm_on else R.drawable.icon_alarm_off)
 
+        if (itensList.statusLembrete) {
+            textItemTitulo.strike = true
+            textItemDescricao.strike = true
+            textItemData.strike = true
+            textItemTime.strike = true
+            btnFinish.visibility = View.INVISIBLE
+        }
+
         update.setOnClickListener { action.invoke(itensList) }
         delete.setOnClickListener { action2.invoke(itensList) }
+        btnFinish.setOnClickListener { action3.invoke(itensList) }
     }
 }

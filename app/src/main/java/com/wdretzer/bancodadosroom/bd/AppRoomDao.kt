@@ -23,8 +23,19 @@ interface AppRoomDao {
     @Query("SELECT COUNT(titulo) FROM infoDB WHERE data = :apiData")
     fun countApiId(apiData: String): Int
 
-    @Query("UPDATE infoDB SET titulo = :itemNew, descricao = :desc, data = :dia, horario = :hora, alarme = :statusAlarm WHERE id = :id")
-    fun updateAll(id: Int, itemNew: String, desc: String, dia: String, hora: String, statusAlarm: Boolean)
+    @Query("SELECT COUNT(horario) FROM infoDB WHERE horario = :apiData")
+    fun countApiIdTime(apiData: String): Int
+
+    @Query("UPDATE infoDB SET titulo = :itemNew, descricao = :desc, data = :dia, horario = :hora, alarme = :statusAlarm, statusLembrete = :statusLembrete WHERE id = :id")
+    fun updateAll(
+        id: Int,
+        itemNew: String,
+        desc: String,
+        dia: String,
+        hora: String,
+        statusAlarm: Boolean,
+        statusLembrete: Boolean
+    )
 
     @Query("DELETE FROM infoDB WHERE id = :id")
     fun deleteByApiId(id: Int)

@@ -23,6 +23,8 @@ data class Dados(
     val alarme: Boolean = true,
     @ColumnInfo
     val requestCode: Int = 0,
+    @ColumnInfo
+    val statusLembrete: Boolean,
 )
 
 

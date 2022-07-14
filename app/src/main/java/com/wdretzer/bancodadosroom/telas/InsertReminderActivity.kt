@@ -108,7 +108,8 @@ class InsertReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
             textData?.text.toString(),
             textHorario?.text.toString(),
             alarmSwitch!!.isChecked,
-            requestCodeAlarm
+            requestCodeAlarm,
+            false
 
         ).observe(this) {
 

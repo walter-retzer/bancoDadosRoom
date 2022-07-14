@@ -33,9 +33,6 @@ class SearchListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListen
     private val dataSearch: ImageView
         get() = findViewById(R.id.imagem_data_search)
 
-    private val buttonSearch: ImageView
-        get() = findViewById(R.id.button_search)
-
     private val buttonSendHome: ImageView
         get() = findViewById(R.id.btn_home_search)
 
@@ -71,15 +68,6 @@ class SearchListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListen
         buttonSendListToday.setOnClickListener { sendToListToday() }
         buttonSendAddList.setOnClickListener { sendToAddList() }
         buttonSendHome.setOnClickListener { sendToHome() }
-
-        buttonSearch.setOnClickListener {
-            if (textDataSearch.text == "Data: ") {
-                Toast.makeText(this, "Selecione uma data válida!", Toast.LENGTH_SHORT).show()
-            } else {
-                countItem("$savedDay/$savedMonth/$savedYear")
-                showListSearchBD("$savedDay/$savedMonth/$savedYear")
-            }
-        }
     }
 
 
@@ -88,9 +76,9 @@ class SearchListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListen
         viewModelApp.listItensToday(data).observe(this) {
 
             val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_search)
-            val adapter = ItensAdapter(::updateItem) { itens ->
+            val adapter = ItensAdapter(::updateItem, { itens ->
                 showDialogDeleteItem("Deseja realmente apagar esse Lembrete?", itens)
-            }
+            }) {}
             adapter.updateList(it)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(this)
@@ -158,6 +146,7 @@ class SearchListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListen
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("SetTextI18n")
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         savedDay = dayOfMonth
@@ -165,6 +154,13 @@ class SearchListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListen
         savedYear = year
 
         textDataSearch.text = "$savedDay/$savedMonth/$savedYear"
+
+        if (textDataSearch.text == "Data: ") {
+            Toast.makeText(this, "Selecione uma data válida!", Toast.LENGTH_SHORT).show()
+        } else {
+            countItem("$savedDay/$savedMonth/$savedYear")
+            showListSearchBD("$savedDay/$savedMonth/$savedYear")
+        }
     }
 
     private fun sendToAddList() {

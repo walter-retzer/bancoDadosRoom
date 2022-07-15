@@ -20,17 +20,15 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
             android:background="@color/white"
             android:scaleType="fitCenter"
-            android:visibility="visible"
             app:contentPadding="7dp"
             app:layout_constraintBottom_toBottomOf="@+id/titulo_card"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/titulo_card"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
-            app:srcCompat="@drawable/icon_handy" />
+            app:srcCompat="@drawable/icon_check_white" />
 
         <TextView
             android:id="@+id/titulo_card"
@@ -39,12 +37,12 @@
             android:layout_height="0dp"
             android:layout_marginStart="50dp"
             android:text="Evento Remenber"
-            android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@+id/checkbox"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

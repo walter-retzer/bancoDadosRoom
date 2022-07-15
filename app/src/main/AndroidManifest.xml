@@ -27,10 +27,13 @@
         <service android:name=".alarm.AlarmRing" />
 
         <activity
+            android:name=".telas.RemindersFinishActivity"
+            android:exported="false" />
+        <activity
             android:name=".telas.SearchListActivity"
             android:exported="false" />
         <activity
-            android:name=".telas.ListTodayActivity"
+            android:name=".telas.ListRemindersSaveActivity"
             android:exported="false" />
         <activity
             android:name=".telas.ReminderUpdateActivity"
@@ -40,10 +43,11 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".telas.ListRemindersSaveActivity"
+            android:name=".telas.ListTodayActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

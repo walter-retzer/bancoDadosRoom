@@ -18,7 +18,7 @@ import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.util.strike
 
 
-class ItensAdapter(
+class ItensAdapterItensFinish(
     private val action: (InfoDados) -> Unit,
     private val action2: (InfoDados) -> Unit,
     private val action3: (InfoDados) -> Unit,
@@ -28,14 +28,14 @@ class ItensAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return FavouriteViewHolder(
-            inflater.inflate(R.layout.card_item, parent, false), action, action2, action3
+        return FavouriteViewHolderItensFinish(
+            inflater.inflate(R.layout.card_item_finish, parent, false), action, action2, action3
         )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is FavouriteViewHolder -> holder.bind(diffUtil.currentList[position])
+            is FavouriteViewHolderItensFinish -> holder.bind(diffUtil.currentList[position])
         }
     }
 
@@ -72,7 +72,7 @@ class ItensAdapter(
 }
 
 
-class FavouriteViewHolder(
+class FavouriteViewHolderItensFinish(
     view: View,
     private val action: (InfoDados) -> Unit,
     private val action2: (InfoDados) -> Unit,
@@ -88,7 +88,6 @@ class FavouriteViewHolder(
     private val update: ImageView = view.findViewById(R.id.btn_update)
     private val alarmStatusImage: ImageView = view.findViewById(R.id.alarm_status_image)
     private val btnFinish: ShapeableImageView = view.findViewById(R.id.btn_finish)
-    private val imgCheckBox: ShapeableImageView = view.findViewById(R.id.checkbox)
 
 
     fun bind(itensList: InfoDados) {
@@ -97,13 +96,12 @@ class FavouriteViewHolder(
         textItemData.text = itensList.dataInfo
         textItemTime.text = itensList.horarioInfo
         alarmStatusImage.setImageResource(if (itensList.alarmStatusInfo) R.drawable.icon_alarm_on else R.drawable.icon_alarm_off)
-        imgCheckBox.setImageResource(if (itensList.statusLembrete) R.drawable.icon_check_white else R.drawable.icon_handy)
 
         if (itensList.statusLembrete) {
-            textItemTitulo.strike = true
-            textItemDescricao.strike = true
-            textItemData.strike = true
-            textItemTime.strike = true
+//            textItemTitulo.strike = true
+//            textItemDescricao.strike = true
+//            textItemData.strike = true
+//            textItemTime.strike = true
             btnFinish.visibility = View.INVISIBLE
         }
 

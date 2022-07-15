@@ -20,6 +20,9 @@ interface AppRoomDao {
     @Query("SELECT * FROM infoDB WHERE data = :apiData")
     fun listItensToday(apiData: String): List<Dados>
 
+    @Query("SELECT * FROM infoDB WHERE statusLembrete = :apiData")
+    fun listItensFinish(apiData: Boolean): List<Dados>
+
     @Query("SELECT * FROM infoDB WHERE data = :apiData AND statusLembrete = :apiLembrete")
     fun listItensTodayFinish(apiData: String, apiLembrete: Boolean): List<Dados>
 
@@ -28,6 +31,9 @@ interface AppRoomDao {
 
     @Query("SELECT COUNT(horario) FROM infoDB WHERE horario = :apiData")
     fun countApiIdTime(apiData: String): Int
+
+    @Query("SELECT COUNT(statusLembrete) FROM infoDB WHERE statusLembrete = :apiData")
+    fun countApiAllItensFinish(apiData: Boolean): Int
 
     @Query("SELECT COUNT(titulo) FROM infoDB WHERE statusLembrete = :apiLembrete AND data = :apiData")
     fun countApiIdFinish(apiData: String, apiLembrete: Boolean): Int

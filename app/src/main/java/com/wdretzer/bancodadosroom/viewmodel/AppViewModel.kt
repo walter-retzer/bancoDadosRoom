@@ -43,17 +43,21 @@ class AppViewModel(
 
     fun countItens(data: String) = repository.countItens(data).flowOn(dispatcher).asLiveData()
 
-    fun countItensTime(time: String) = repository.countItensTime(time).flowOn(dispatcher).asLiveData()
+    fun countItensTime(time: String) =
+        repository.countItensTime(time).flowOn(dispatcher).asLiveData()
 
-    fun countAllItensFinish(status: Boolean) = repository.countAllItensFinish(status).flowOn(dispatcher).asLiveData()
+    fun countAllItensFinish(status: Boolean) =
+        repository.countAllItensFinish(status).flowOn(dispatcher).asLiveData()
 
-    fun countItensFinish(data:String, time: Boolean) = repository.countItensFinish(data, time).flowOn(dispatcher).asLiveData()
+    fun countItensFinish(data: String, time: Boolean) =
+        repository.countItensFinish(data, time).flowOn(dispatcher).asLiveData()
 
-    fun listItensToday(item: String) = repository.listItensToday(item).flowOn(dispatcher).asLiveData()
+    fun listItensToday(item: String) =
+        repository.listItensToday(item).flowOn(dispatcher).asLiveData()
 
-    fun listItensItensFinish(statusLembrete: Boolean) = repository.listItensItensFinish(statusLembrete).flowOn(dispatcher).asLiveData()
+    fun listItensItensFinish(statusLembrete: Boolean) =
+        repository.listItensItensFinish(statusLembrete).flowOn(dispatcher).asLiveData()
 
-    fun listItensTodayFinish(date: String, statusLembrete: Boolean) = repository.listItensTodayFinish(date, statusLembrete).flowOn(dispatcher).asLiveData()
-
-
+    fun listItensTodayFinish(date: String, statusLembrete: Boolean) =
+        repository.listItensTodayFinish(date, statusLembrete).flowOn(dispatcher).asLiveData()
 }

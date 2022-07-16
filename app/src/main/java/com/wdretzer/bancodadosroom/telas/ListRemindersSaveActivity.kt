@@ -11,15 +11,14 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.TextView
-import android.widget.Toast
+import android.util.Log
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
@@ -51,7 +50,8 @@ class ListRemindersSaveActivity : AppCompatActivity() {
     private val textTotalItens: TextView
         get() = findViewById(R.id.total_itens)
 
-    private val btnFinish: CheckBox? by lazy { findViewById(R.id.btn_finish) }
+    private val loading: FrameLayout
+        get() = findViewById(R.id.loading)
 
     var listaInfo: MutableList<InfoDados>? = null
     var totalItens: Int = 0
@@ -88,19 +88,46 @@ class ListRemindersSaveActivity : AppCompatActivity() {
 
         viewModelApp.getListSave().observe(this) {
 
-            listaInfo = it
-            textTotalItens.text = it.size.toString()
-
-            val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-            val adapter = ItensAdapter(::updateItem, { itens ->
-                showDialogDeleteItem("Deseja realmente apagar esse Lembrete?", itens)
-            }) { info ->
-                showDialogFinishItem("Deseja realmente finalizar esse Lembrete?", info)
+            if (it is DataResult.Loading) {
+                loading.isVisible = it.isLoading
             }
 
-            adapter.updateList(it)
-            recyclerView.adapter = adapter
-            recyclerView.layoutManager = LinearLayoutManager(this)
+            if (it is DataResult.Error) {
+                Toast.makeText(
+                    this,
+                    "Erro ao gerar lista de Lembretes!",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                Log.d(
+                    "Lembrete Salvo:",
+                    "Erro ao gerar lista de Lembretes! Erro: $it"
+                )
+            }
+
+            if (it is DataResult.Empty) {
+                Log.d(
+                    "Lembrete Salvo:",
+                    "Retorno vazio: $it ao gerar lista de Lembretes!"
+                )
+                Toast.makeText(this, "Retorno Vazio!", Toast.LENGTH_LONG).show()
+            }
+
+            if (it is DataResult.Success) {
+                listaInfo = it.dataResult
+                textTotalItens.text = it.dataResult.size.toString()
+
+                val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
+                val adapter = ItensAdapter(::updateItem, { itens ->
+                    showDialogDeleteItem("Deseja realmente apagar esse Lembrete?", itens)
+                }) { info ->
+                    showDialogFinishItem("Deseja realmente finalizar esse Lembrete?", info)
+                }
+
+                adapter.updateList(it.dataResult)
+                recyclerView.adapter = adapter
+                recyclerView.layoutManager = LinearLayoutManager(this)
+            }
         }
     }
 
@@ -123,14 +150,35 @@ class ListRemindersSaveActivity : AppCompatActivity() {
 
         viewModelApp.updateItem(itemNew).observe(this) {
 
+            if (it is DataResult.Loading) {
+                loading.isVisible = it.isLoading
+            }
+
+            if (it is DataResult.Error) {
+                Toast.makeText(
+                    this,
+                    "Erro em atualizar os dados do Lembrete!",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                Log.d(
+                    "Update Lembrete:",
+                    "Erro ao realizar update do item do Lembrete! Erro: $it"
+                )
+            }
+
+            if (it is DataResult.Empty) {
+                Log.d(
+                    "Update Lembrete:",
+                    "Retorno vazio: $it ao realizar update do item do Lembrete!"
+                )
+                Toast.makeText(this, "Retorno Vazio!", Toast.LENGTH_LONG).show()
+            }
+
             if (it is DataResult.Success) {
                 Toast.makeText(this, "Os dados foram atualizados com sucesso!", Toast.LENGTH_SHORT)
                     .show()
                 this.recreate()
-            }
-
-            if (it is DataResult.Error) {
-                Toast.makeText(this, "Erro em atualizar os dados!", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -163,6 +211,30 @@ class ListRemindersSaveActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     private fun deleteItem(item: InfoDados) {
         viewModelApp.deleteItem(item).observe(this) {
+            if (it is DataResult.Loading) {
+                loading.isVisible = it.isLoading
+            }
+
+            if (it is DataResult.Error) {
+                Toast.makeText(
+                    this,
+                    "Erro em deletar os dados do Lembrete!",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                Log.d(
+                    "Delete Lembrete:",
+                    "Erro ao deletar item do Lembrete! Erro: $it"
+                )
+            }
+
+            if (it is DataResult.Empty) {
+                Log.d(
+                    "Delete Lembrete:",
+                    "Retorno vazio: $it ao deletar item do Lembrete!"
+                )
+                Toast.makeText(this, "Retorno Vazio!", Toast.LENGTH_LONG).show()
+            }
 
             if (it is DataResult.Success) {
                 Toast.makeText(this, "Lembrete deletado com sucesso!", Toast.LENGTH_SHORT).show()
@@ -175,6 +247,30 @@ class ListRemindersSaveActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     private fun deleteAll() {
         viewModelApp.deleteAll().observe(this) {
+            if (it is DataResult.Loading) {
+                loading.isVisible = it.isLoading
+            }
+
+            if (it is DataResult.Error) {
+                Toast.makeText(
+                    this,
+                    "Erro em deletar todos os dados do Lembrete!",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                Log.d(
+                    "Delete All:",
+                    "Erro ao deletar todos os Lembretes! Erro: $it"
+                )
+            }
+
+            if (it is DataResult.Empty) {
+                Log.d(
+                    "Delete All:",
+                    "Retorno vazio: $it ao deletar todos os Lembretes!"
+                )
+                Toast.makeText(this, "Retorno Vazio!", Toast.LENGTH_LONG).show()
+            }
 
             if (it is DataResult.Success) {
                 Toast.makeText(this, "Todos os seus lembretes foram deletados!", Toast.LENGTH_SHORT)

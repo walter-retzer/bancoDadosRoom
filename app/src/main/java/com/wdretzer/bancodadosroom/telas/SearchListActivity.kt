@@ -12,9 +12,13 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.wdretzer.bancodadosroom.R
@@ -48,6 +52,9 @@ class SearchListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListen
     private val textTotalItens: TextView
         get() = findViewById(R.id.total_itens_search)
 
+    private val loading: FrameLayout
+        get() = findViewById(R.id.loading)
+
     var day = 0
     var month = 0
     var year = 0
@@ -73,15 +80,43 @@ class SearchListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListen
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun showListSearchBD(data: String) {
-        viewModelApp.listItensToday(data).observe(this) {
+        viewModelApp.listItensTodayFinish(data, false).observe(this) {
+            if (it is DataResult.Loading) {
+                loading.isVisible = it.isLoading
+            }
 
-            val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_search)
-            val adapter = ItensAdapter(::updateItem, { itens ->
-                showDialogDeleteItem("Deseja realmente apagar esse Lembrete?", itens)
-            }) {}
-            adapter.updateList(it)
-            recyclerView.adapter = adapter
-            recyclerView.layoutManager = LinearLayoutManager(this)
+            if (it is DataResult.Error) {
+                Toast.makeText(
+                    this,
+                    "Erro ao gerar lista de Lembrete do dia pesquisado!",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                Log.d(
+                    "Serch List Date:",
+                    "Erro ao gerar lista de Lembrete do dia pesquisado! Erro: $it"
+                )
+            }
+
+            if (it is DataResult.Empty) {
+                Log.d(
+                    "Serch List Date:",
+                    "Retorno vazio: $it ao gerar lista de Lembrete do dia pesquisado!"
+                )
+                Toast.makeText(this, "Retorno Vazio!", Toast.LENGTH_LONG).show()
+            }
+
+            if (it is DataResult.Success) {
+                val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_search)
+                val adapter = ItensAdapter(::updateItem, { itens ->
+                    showDialogDeleteItem("Deseja realmente apagar esse Lembrete?", itens)
+                }) { info ->
+                    showDialogFinishItem("Deseja realmente finalizar esse Lembrete?", info)
+                }
+                adapter.updateList(it.dataResult)
+                recyclerView.adapter = adapter
+                recyclerView.layoutManager = LinearLayoutManager(this)
+            }
         }
     }
 
@@ -92,10 +127,108 @@ class SearchListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListen
 
 
     private fun countItem(item: String) {
-        viewModelApp.countItens(item).observe(this) {
-            textTotalItens.text = it.toString()
-            if (it.toString() == "0") {
-                Toast.makeText(this, "Nenhum Lembrete encontrado!", Toast.LENGTH_SHORT).show()
+        viewModelApp.countItensFinish(item, false).observe(this) {
+            if (it is DataResult.Loading) {
+                loading.isVisible = it.isLoading
+            }
+
+            if (it is DataResult.Error) {
+                Toast.makeText(
+                    this,
+                    "Erro ao contar itens finalizados em um data escolhida!",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                Log.d(
+                    "Count Date Finish:",
+                    "Erro ao contar itens finalizados em um data escolhida! Erro: $it"
+                )
+            }
+
+            if (it is DataResult.Empty) {
+                Log.d(
+                    "Count Date Finish:",
+                    "Retorno vazio: $it ao contar itens finalizados em um data escolhida!"
+                )
+                Toast.makeText(this, "Retorno Vazio!", Toast.LENGTH_LONG).show()
+            }
+
+            if (it is DataResult.Success) {
+                textTotalItens.text = it.dataResult.toString()
+                if (it.toString() == "0") {
+                    Toast.makeText(this, "Nenhum Lembrete encontrado!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun showDialogFinishItem(title: String, itens: InfoDados) {
+        val dialog = Dialog(this)
+        dialog.setCancelable(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(R.layout.fragment_dialog_delete)
+
+        val body = dialog.findViewById(R.id.frag_title) as TextView
+        body.text = title
+        val btnFinishReminder = dialog.findViewById(R.id.btn_apagar) as Button
+        btnFinishReminder.text = "FINALIZAR"
+        val btnCancelar = dialog.findViewById(R.id.btn_cancelar) as TextView
+
+        btnCancelar.setOnClickListener { dialog.dismiss() }
+        btnFinishReminder.setOnClickListener {
+            checkItem(itens)
+            resetAlarm(itens)
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun checkItem(item: InfoDados) {
+        val itemNew = InfoDados(
+            tituloInfo = item.tituloInfo,
+            descricaoInfo = item.descricaoInfo,
+            dataInfo = item.dataInfo,
+            horarioInfo = item.horarioInfo,
+            alarmStatusInfo = false,
+            idUser = item.idUser,
+            requestCode = item.requestCode,
+            statusLembrete = true
+        )
+
+        viewModelApp.updateItem(itemNew).observe(this) {
+            if (it is DataResult.Loading) {
+                loading.isVisible = it.isLoading
+            }
+
+            if (it is DataResult.Error) {
+                Toast.makeText(
+                    this,
+                    "Erro em atualizar os dados do Lembrete!",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                Log.d(
+                    "Update Lembrete:",
+                    "Erro ao realizar update do item do Lembrete! Erro: $it"
+                )
+            }
+
+            if (it is DataResult.Empty) {
+                Log.d(
+                    "Update Lembrete:",
+                    "Retorno vazio: $it ao realizar update do item do Lembrete!"
+                )
+                Toast.makeText(this, "Retorno Vazio!", Toast.LENGTH_LONG).show()
+            }
+
+            if (it is DataResult.Success) {
+                Toast.makeText(this, "Os dados foram atualizados com sucesso!", Toast.LENGTH_SHORT)
+                    .show()
+                countItem("$savedDay/$savedMonth/$savedYear")
+                showListSearchBD("$savedDay/$savedMonth/$savedYear")
             }
         }
     }
@@ -104,6 +237,30 @@ class SearchListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListen
     @RequiresApi(Build.VERSION_CODES.M)
     private fun deleteItem(item: InfoDados) {
         viewModelApp.deleteItem(item).observe(this) {
+            if (it is DataResult.Loading) {
+                loading.isVisible = it.isLoading
+            }
+
+            if (it is DataResult.Error) {
+                Toast.makeText(
+                    this,
+                    "Erro em deletar os dados do Lembrete!",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                Log.d(
+                    "Delete Lembrete:",
+                    "Erro ao deletar item do Lembrete! Erro: $it"
+                )
+            }
+
+            if (it is DataResult.Empty) {
+                Log.d(
+                    "Delete Lembrete:",
+                    "Retorno vazio: $it ao deletar item do Lembrete!"
+                )
+                Toast.makeText(this, "Retorno Vazio!", Toast.LENGTH_LONG).show()
+            }
 
             if (it is DataResult.Success) {
                 Toast.makeText(this, "Lembrete deletado com sucesso!", Toast.LENGTH_SHORT).show()

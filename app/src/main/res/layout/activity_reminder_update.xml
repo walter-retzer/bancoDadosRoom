@@ -100,8 +100,8 @@
         android:id="@+id/titulo_input_edit"
         android:layout_width="0dp"
         android:layout_height="80dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/background_text_input"
         android:hint="Preencha o título"
         android:padding="10dp"
@@ -129,8 +129,8 @@
         android:id="@+id/descricao_input_edit"
         android:layout_width="0dp"
         android:layout_height="80dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/background_text_input"
         android:hint="Preencha a descrição"
         android:padding="10dp"
@@ -217,10 +217,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        app:thumbTint="@color/teal_200"
+        app:layout_constraintBottom_toBottomOf="@+id/text_alarm_edit"
         app:layout_constraintStart_toEndOf="@+id/text_alarm_edit"
         app:layout_constraintTop_toTopOf="@+id/text_alarm_edit"
-        app:layout_constraintBottom_toBottomOf="@+id/text_alarm_edit"/>
+        app:thumbTint="@color/teal_200" />
 
 
     <TextView
@@ -231,10 +231,10 @@
         android:layout_marginStart="-15dp"
         android:layout_marginEnd="5dp"
         android:text="Lembrete\nConcluído:"
-        android:textColor="@color/white"
         android:textAlignment="center"
-        app:layout_constraintStart_toStartOf="@+id/text_time_edit"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/text_alarm_edit"
+        app:layout_constraintStart_toStartOf="@+id/text_time_edit"
         app:layout_constraintTop_toTopOf="@+id/text_alarm_edit" />
 
     <androidx.appcompat.widget.SwitchCompat
@@ -242,10 +242,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        app:thumbTint="@color/teal_200"
+        app:layout_constraintBottom_toBottomOf="@+id/text_status_edit"
         app:layout_constraintStart_toEndOf="@+id/text_status_edit"
         app:layout_constraintTop_toTopOf="@+id/text_status_edit"
-        app:layout_constraintBottom_toBottomOf="@+id/text_status_edit"/>
+        app:thumbTint="@color/teal_200" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_salve_edit"
@@ -263,5 +263,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_alarm_edit" />
+
+    <FrameLayout
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:backgroundTint="@android:color/transparent"
+        android:elevation="5dp"
+        android:padding="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

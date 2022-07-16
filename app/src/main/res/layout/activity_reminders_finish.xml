@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,78 +7,86 @@
     android:background="@color/cinza"
     tools:context=".telas.RemindersFinishActivity">
 
-    <include layout="@layout/header" />
-
-    <ImageView
-        android:id="@+id/imagem_menu_today"
-        android:layout_width="50dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="4dp"
-        android:src="@drawable/icon_settings"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tarefas_today"
-        style="@style/TextAppearance.AppCompat.Headline"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="Lembretes"
-        android:textColor="@color/white"
-        android:textSize="38sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_gravity="top"
+        tools:context=".roversearch.RoverSearchActivity">
 
-    <TextView
-        android:id="@+id/tarefas2_today"
-        style="@style/TextAppearance.AppCompat.Headline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Concluídos"
-        android:textColor="@color/white"
-        android:textSize="38sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tarefas_today" />
+        <include layout="@layout/header" />
 
-    <TextView
-        android:id="@+id/tarefas3_today"
-        style="@style/TextAppearance.AppCompat.Headline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="20dp"
-        android:text="Lembretes concluídos: "
-        android:textColor="@color/white"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tarefas2_today" />
+        <ImageView
+            android:id="@+id/imagem_menu_today"
+            android:layout_width="50dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/icon_settings"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/total_itens_today"
-        style="@style/TextAppearance.AppCompat.Headline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text=""
-        android:textColor="@color/white"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/tarefas3_today"
-        app:layout_constraintTop_toBottomOf="@+id/tarefas2_today" />
+        <TextView
+            android:id="@+id/tarefas_today"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Lembretes"
+            android:textColor="@color/white"
+            android:textSize="38sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tarefas2_today"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Concluídos"
+            android:textColor="@color/white"
+            android:textSize="38sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tarefas_today" />
+
+        <TextView
+            android:id="@+id/tarefas3_today"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="20dp"
+            android:text="Lembretes concluídos: "
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tarefas2_today" />
+
+        <TextView
+            android:id="@+id/total_itens_today"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/tarefas3_today"
+            app:layout_constraintTop_toBottomOf="@+id/tarefas2_today" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_today"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="180dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         app:layout_constraintBottom_toTopOf="@id/menu_bottom_today"
@@ -88,122 +96,156 @@
         tools:itemCount="10"
         tools:listitem="@layout/card_item_finish" />
 
-    <ImageView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/menu_bottom_today"
         android:layout_width="match_parent"
         android:layout_height="90dp"
+        android:layout_gravity="bottom"
         android:layout_marginTop="5dp"
         android:background="@drawable/background_menu"
+        android:elevation="2dp"
+        app:hideOnScroll="true"
+        app:labelVisibilityMode="selected"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/btn_add_list"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="30dp"
-        android:background="@color/white"
-        android:scaleType="fitCenter"
-        app:contentPadding="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_list_finish"
-        app:layout_constraintStart_toEndOf="@+id/btn_send_search"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-        app:srcCompat="@drawable/icon_add_list" />
-
-    <TextView
-        android:id="@+id/text_add"
-        style="@style/TextAppearance.AppCompat.Headline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Adicionar"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/btn_add_list"
-        app:layout_constraintStart_toStartOf="@+id/btn_add_list"
-        app:layout_constraintTop_toBottomOf="@+id/btn_add_list" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/btn_list_finish"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="30dp"
-        android:background="@color/white"
-        android:scaleType="fitCenter"
-        app:contentPadding="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-        app:srcCompat="@drawable/icon_list_finish" />
-
-    <TextView
-        android:id="@+id/text_finish"
-        style="@style/TextAppearance.AppCompat.Headline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Concluídos"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/btn_list_finish"
-        app:layout_constraintStart_toStartOf="@+id/btn_list_finish"
-        app:layout_constraintTop_toBottomOf="@+id/btn_list_finish" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/btn_send_list_today"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="30dp"
-        android:background="@color/white"
-        android:scaleType="fitCenter"
-        app:contentPadding="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-        app:srcCompat="@drawable/icon_reminder" />
+        app:layout_insetEdge="bottom"
+        app:layout_scrollFlags="scroll|enterAlways|snap">
 
-    <TextView
-        android:id="@+id/text_btn_list"
-        style="@style/TextAppearance.AppCompat.Headline"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:elevation="3dp"
+            tools:context=".roversearch.RoverSearchActivity">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/btn_add_list"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="30dp"
+                android:background="@color/white"
+                android:scaleType="fitCenter"
+                app:contentPadding="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_list_finish"
+                app:layout_constraintStart_toEndOf="@+id/btn_send_search"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                app:srcCompat="@drawable/icon_add_list" />
+
+            <TextView
+                android:id="@+id/text_add"
+                style="@style/TextAppearance.AppCompat.Headline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Adicionar"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/btn_add_list"
+                app:layout_constraintStart_toStartOf="@+id/btn_add_list"
+                app:layout_constraintTop_toBottomOf="@+id/btn_add_list" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/btn_list_finish"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginBottom="30dp"
+                android:background="@color/white"
+                android:scaleType="fitCenter"
+                app:contentPadding="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                app:srcCompat="@drawable/icon_list_finish" />
+
+            <TextView
+                android:id="@+id/text_finish"
+                style="@style/TextAppearance.AppCompat.Headline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Concluídos"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/btn_list_finish"
+                app:layout_constraintStart_toStartOf="@+id/btn_list_finish"
+                app:layout_constraintTop_toBottomOf="@+id/btn_list_finish" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/btn_send_list_today"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginBottom="30dp"
+                android:background="@color/white"
+                android:scaleType="fitCenter"
+                app:contentPadding="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                app:srcCompat="@drawable/icon_reminder" />
+
+            <TextView
+                android:id="@+id/text_btn_list"
+                style="@style/TextAppearance.AppCompat.Headline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lembretes"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/btn_send_list_today"
+                app:layout_constraintStart_toStartOf="@+id/btn_send_list_today"
+                app:layout_constraintTop_toBottomOf="@+id/btn_send_list_today" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/btn_send_search"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="30dp"
+                android:background="@color/white"
+                android:scaleType="fitCenter"
+                app:contentPadding="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_add_list"
+                app:layout_constraintStart_toEndOf="@+id/btn_send_list_today"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                app:srcCompat="@drawable/icon_search" />
+
+            <TextView
+                android:id="@+id/text_search"
+                style="@style/TextAppearance.AppCompat.Headline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Procurar"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/btn_send_search"
+                app:layout_constraintStart_toStartOf="@+id/btn_send_search"
+                app:layout_constraintTop_toBottomOf="@+id/btn_send_search" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+    <FrameLayout
+        android:id="@+id/loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lembretes"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/btn_send_list_today"
-        app:layout_constraintStart_toStartOf="@+id/btn_send_list_today"
-        app:layout_constraintTop_toBottomOf="@+id/btn_send_list_today" />
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:backgroundTint="@android:color/transparent"
+        android:elevation="5dp"
+        android:padding="16dp"
+        android:visibility="gone">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/btn_send_search"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="30dp"
-        android:background="@color/white"
-        android:scaleType="fitCenter"
-        app:contentPadding="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_add_list"
-        app:layout_constraintStart_toEndOf="@+id/btn_send_list_today"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-        app:srcCompat="@drawable/icon_search" />
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
 
-    <TextView
-        android:id="@+id/text_search"
-        style="@style/TextAppearance.AppCompat.Headline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Procurar"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/btn_send_search"
-        app:layout_constraintStart_toStartOf="@+id/btn_send_search"
-        app:layout_constraintTop_toBottomOf="@+id/btn_send_search" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

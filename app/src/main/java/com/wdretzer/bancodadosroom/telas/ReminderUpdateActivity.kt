@@ -10,16 +10,21 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.wdretzer.bancodadosroom.R
 import com.wdretzer.bancodadosroom.alarm.AlarmReceiver
 import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.extension.DataResult
+import com.wdretzer.bancodadosroom.recycler.ItensAdapter
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel
 import java.util.*
 
@@ -35,6 +40,9 @@ class ReminderUpdateActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
     private val btnSave: Button? by lazy { findViewById(R.id.btn_salve_edit) }
     private val alarmSwitch: SwitchCompat? by lazy { findViewById(R.id.alarm_status_edit) }
     private val statusLembreteSwitch: SwitchCompat? by lazy { findViewById(R.id.lembrete_status_edit) }
+
+    private val loading: FrameLayout
+        get() = findViewById(R.id.loading)
 
     var day = 0
     var month = 0
@@ -115,14 +123,34 @@ class ReminderUpdateActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
 
     private fun updateItem(item: InfoDados) {
         viewModelApp.updateItem(item).observe(this) {
+            if (it is DataResult.Loading) {
+                loading.isVisible = it.isLoading
+            }
+
+            if (it is DataResult.Error) {
+                Toast.makeText(
+                    this,
+                    "Erro em atualizar os dados do Lembrete!",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                Log.d(
+                    "Update Lembrete:",
+                    "Erro ao realizar update do item do Lembrete! Erro: $it"
+                )
+            }
+
+            if (it is DataResult.Empty) {
+                Log.d(
+                    "Update Lembrete:",
+                    "Retorno vazio: $it ao realizar update do item do Lembrete!"
+                )
+                Toast.makeText(this, "Retorno Vazio!", Toast.LENGTH_LONG).show()
+            }
 
             if (it is DataResult.Success) {
                 Toast.makeText(this, "Os dados foram atualizados com sucesso!", Toast.LENGTH_SHORT)
                     .show()
-            }
-
-            if (it is DataResult.Error) {
-                Toast.makeText(this, "Erro em atualizar os dados!", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -150,34 +178,62 @@ class ReminderUpdateActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
             sendToListaBD()
 
         } else {
+
             viewModelApp.listItensToday(data).observe(this) {
-                it.map { dados ->
-                    if (timeInput == dados.horarioInfo) {
-                        check = true
-                    }
+                if (it is DataResult.Loading) {
+                    loading.isVisible = it.isLoading
                 }
 
-                if (check) {
+                if (it is DataResult.Error) {
                     Toast.makeText(
                         this,
-                        "Já existe uma tarefa salva com o mesmo horario!!",
+                        "Erro ao realizar update do Lembrete!",
                         Toast.LENGTH_LONG
                     ).show()
-                } else {
-                    updateItem(
-                        InfoDados(
-                            textTitleEdit?.text.toString(),
-                            textDescriptionEdit?.text.toString(),
-                            textDateEdit?.text.toString(),
-                            textTimeEdit?.text.toString(),
-                            alarmSwitch!!.isChecked,
-                            idBundle,
-                            getRequestCode,
-                            statusLembreteSwitch!!.isChecked
-                        )
+
+                    Log.d(
+                        "Update Lembrete:",
+                        "Erro ao ao realizar update dos Lembretes! Erro: $it"
                     )
-                    setAlarm(getRequestCode)
-                    sendToListaBD()
+                }
+
+                if (it is DataResult.Empty) {
+                    Log.d(
+                        "Update Lembrete:",
+                        "Retorno vazio: $it ao realizar update dos dados do Lembretes!"
+                    )
+                    Toast.makeText(this, "Retorno Vazio!", Toast.LENGTH_LONG).show()
+                }
+
+                if (it is DataResult.Success) {
+                    it.dataResult.map { dados ->
+                        if (timeInput == dados.horarioInfo) {
+                            check = true
+                        }
+                    }
+
+                    if (check) {
+                        Toast.makeText(
+                            this,
+                            "Já existe uma tarefa salva com o mesmo horario!!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        updateItem(
+                            InfoDados(
+                                textTitleEdit?.text.toString(),
+                                textDescriptionEdit?.text.toString(),
+                                textDateEdit?.text.toString(),
+                                textTimeEdit?.text.toString(),
+                                alarmSwitch!!.isChecked,
+                                idBundle,
+                                getRequestCode,
+                                statusLembreteSwitch!!.isChecked
+                            )
+                        )
+                        setAlarm(getRequestCode)
+                        sendToListaBD()
+                    }
                 }
             }
         }

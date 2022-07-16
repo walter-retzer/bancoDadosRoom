@@ -50,37 +50,73 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
     //Função para pegar a lista de Dados salva no BD:
     fun getListSave() = flow {
         val localItens = dao.listAll().map {
-            InfoDados(it.titulo, it.descricao, it.data, it.horario, it.alarme, it.id!!, it.requestCode, it.statusLembrete)
+            InfoDados(
+                it.titulo,
+                it.descricao,
+                it.data,
+                it.horario,
+                it.alarme,
+                it.id!!,
+                it.requestCode,
+                it.statusLembrete
+            )
         }
-        emit((localItens as MutableList<InfoDados>))
-    }.flowOn(dispatcher)
+        emit(DataResult.Success(localItens as MutableList<InfoDados>))
+    }.updateStatus().flowOn(dispatcher)
 
 
     //Função para pegar a Lista dos dados dos lembretes do dia atual:
     fun listItensToday(item: String) = flow {
         val localItens = dao.listItensToday(item).map {
-            InfoDados(it.titulo, it.descricao, it.data, it.horario, it.alarme, it.id!!, it.requestCode, it.statusLembrete)
+            InfoDados(
+                it.titulo,
+                it.descricao,
+                it.data,
+                it.horario,
+                it.alarme,
+                it.id!!,
+                it.requestCode,
+                it.statusLembrete
+            )
         }
-        emit((localItens as MutableList<InfoDados>))
-    }.flowOn(dispatcher)
+        emit(DataResult.Success((localItens as MutableList<InfoDados>)))
+    }.updateStatus().flowOn(dispatcher)
 
 
     //Função para pegar a Lista dos dados dos lembretes do dia atual:
     fun listItensTodayFinish(date: String, statusLembrete: Boolean) = flow {
         val localItens = dao.listItensTodayFinish(date, statusLembrete).map {
-            InfoDados(it.titulo, it.descricao, it.data, it.horario, it.alarme, it.id!!, it.requestCode, it.statusLembrete)
+            InfoDados(
+                it.titulo,
+                it.descricao,
+                it.data,
+                it.horario,
+                it.alarme,
+                it.id!!,
+                it.requestCode,
+                it.statusLembrete
+            )
         }
-        emit((localItens as MutableList<InfoDados>))
-    }.flowOn(dispatcher)
+        emit(DataResult.Success((localItens as MutableList<InfoDados>)))
+    }.updateStatus().flowOn(dispatcher)
 
 
     //Função para pegar a Lista dos dados dos lembretes do dia atual:
     fun listItensItensFinish(statusLembrete: Boolean) = flow {
         val localItens = dao.listItensFinish(statusLembrete).map {
-            InfoDados(it.titulo, it.descricao, it.data, it.horario, it.alarme, it.id!!, it.requestCode, it.statusLembrete)
+            InfoDados(
+                it.titulo,
+                it.descricao,
+                it.data,
+                it.horario,
+                it.alarme,
+                it.id!!,
+                it.requestCode,
+                it.statusLembrete
+            )
         }
-        emit((localItens as MutableList<InfoDados>))
-    }.flowOn(dispatcher)
+        emit(DataResult.Success((localItens as MutableList<InfoDados>)))
+    }.updateStatus().flowOn(dispatcher)
 
 
     //Executa a contagem de item no banco de dados que contêm a mesma data:
@@ -88,11 +124,11 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
         try {
             val numeroRegistro = dao.countApiId(data)
             val itemExist = numeroRegistro >= 1
-            emit(numeroRegistro)
+            emit(DataResult.Success(numeroRegistro))
         } catch (e: Exception) {
-            emit(IllegalStateException())
+            emit(DataResult.Error(IllegalStateException()))
         }
-    }.flowOn(dispatcher)
+    }.updateStatus().flowOn(dispatcher)
 
 
     //Executa a contagem de item no banco de dados que contêm a mesma data:
@@ -100,34 +136,34 @@ class AppRepository(private val dispatcher: CoroutineDispatcher = Dispatchers.IO
         try {
             val numeroRegistro = dao.countApiIdTime(time)
             val itemExist = numeroRegistro >= 1
-            emit(numeroRegistro)
+            emit(DataResult.Success(numeroRegistro))
         } catch (e: Exception) {
-            emit(IllegalStateException())
+            emit(DataResult.Error(IllegalStateException()))
         }
-    }.flowOn(dispatcher)
+    }.updateStatus().flowOn(dispatcher)
 
     //Executa a contagem de item no banco de dados que contêm a mesma data:
     fun countAllItensFinish(status: Boolean) = flow {
         try {
             val numeroRegistro = dao.countApiAllItensFinish(status)
             val itemExist = numeroRegistro >= 1
-            emit(numeroRegistro)
+            emit(DataResult.Success(numeroRegistro))
         } catch (e: Exception) {
-            emit(IllegalStateException())
+            emit(DataResult.Error(IllegalStateException()))
         }
-    }.flowOn(dispatcher)
+    }.updateStatus().flowOn(dispatcher)
 
 
     //Executa a contagem de item no banco de dados que os Lembretes estão finalizados:
-    fun countItensFinish(data:String, time: Boolean) = flow {
+    fun countItensFinish(data: String, time: Boolean) = flow {
         try {
             val numeroRegistro = dao.countApiIdFinish(data, time)
             val itemExist = numeroRegistro >= 1
-            emit(numeroRegistro)
+            emit(DataResult.Success(numeroRegistro))
         } catch (e: Exception) {
-            emit(IllegalStateException())
+            emit(DataResult.Error(IllegalStateException()))
         }
-    }.flowOn(dispatcher)
+    }.updateStatus().flowOn(dispatcher)
 
 
     //Função para editar os campos dos itens inseridos no BD:

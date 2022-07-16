@@ -12,6 +12,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -20,6 +21,7 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
 import com.wdretzer.bancodadosroom.R
 import com.wdretzer.bancodadosroom.alarm.AlarmReceiver
+import com.wdretzer.bancodadosroom.dados.InfoDados
 import com.wdretzer.bancodadosroom.extension.DataResult
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel
 import java.util.*
@@ -112,13 +114,23 @@ class InsertReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
             false
 
         ).observe(this) {
-
             if (it is DataResult.Success) {
                 Toast.makeText(this, "Lembrete salvo com sucesso!", Toast.LENGTH_SHORT).show()
+            }
 
+            if (it is DataResult.Empty) {
+                Log.d(
+                    "Add Lembrete:",
+                    "Retorno vazio: $it ao realizar adicionar itens ao Lembrete!"
+                )
+                Toast.makeText(this, "Retorno Vazio!", Toast.LENGTH_LONG).show()
             }
 
             if (it is DataResult.Error) {
+                Log.d(
+                    "Add Lembrete:",
+                    "Erro: $it ao realizar adicionar itens ao Lembrete!"
+                )
                 Toast.makeText(this, "Error ao salvar o lembrete!", Toast.LENGTH_SHORT).show()
             }
 
@@ -136,24 +148,51 @@ class InsertReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
         var check: Boolean = false
 
         viewModelApp.listItensToday(data).observe(this) {
-            it.map { dados ->
-                if (timeInput == dados.horarioInfo) {
-                    check = true
-                }
+            if (it is DataResult.Loading) {
+                loading.isVisible = it.isLoading
             }
 
-            if (check) {
+            if (it is DataResult.Error) {
                 Toast.makeText(
                     this,
-                    "Já existe uma tarefa salva com o mesmo horario!!",
+                    "Erro ao adicionar Lembrete!",
                     Toast.LENGTH_LONG
                 ).show()
 
-            } else {
-                sendToListaBD()
-                saveToDoList(requestCodeAlarm)
-                setAlarm(requestCodeAlarm)
-                requestCodeAlarm = System.currentTimeMillis().toInt()
+                Log.d(
+                    "Insert Lembrete:",
+                    "Erro ao ao adicionar Lembrete! Erro: $it"
+                )
+            }
+
+            if (it is DataResult.Empty) {
+                Log.d(
+                    "Insert Lembrete:",
+                    "Retorno vazio: $it ao adicioanr Lembrete!"
+                )
+                Toast.makeText(this, "Retorno Vazio!", Toast.LENGTH_LONG).show()
+            }
+
+            if (it is DataResult.Success) {
+                it.dataResult.map { dados ->
+                    if (timeInput == dados.horarioInfo) {
+                        check = true
+                    }
+                }
+
+                if (check) {
+                    Toast.makeText(
+                        this,
+                        "Já existe uma tarefa salva com o mesmo horario!!",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                } else {
+                    sendToListaBD()
+                    saveToDoList(requestCodeAlarm)
+                    setAlarm(requestCodeAlarm)
+                    requestCodeAlarm = System.currentTimeMillis().toInt()
+                }
             }
         }
     }

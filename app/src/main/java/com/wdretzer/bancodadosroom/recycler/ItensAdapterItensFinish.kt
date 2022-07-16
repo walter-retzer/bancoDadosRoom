@@ -97,14 +97,7 @@ class FavouriteViewHolderItensFinish(
         textItemTime.text = itensList.horarioInfo
         alarmStatusImage.setImageResource(if (itensList.alarmStatusInfo) R.drawable.icon_alarm_on else R.drawable.icon_alarm_off)
 
-        if (itensList.statusLembrete) {
-//            textItemTitulo.strike = true
-//            textItemDescricao.strike = true
-//            textItemData.strike = true
-//            textItemTime.strike = true
-            btnFinish.visibility = View.INVISIBLE
-        }
-
+        if (itensList.statusLembrete) btnFinish.visibility = View.INVISIBLE
         update.setOnClickListener { action.invoke(itensList) }
         delete.setOnClickListener { action2.invoke(itensList) }
         btnFinish.setOnClickListener { action3.invoke(itensList) }

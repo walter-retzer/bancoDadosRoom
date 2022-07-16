@@ -10,12 +10,16 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
@@ -50,6 +54,9 @@ class ListTodayActivity : AppCompatActivity() {
 
     private val textDataAtual: TextView
         get() = findViewById(R.id.tarefas2_today)
+
+    private val loading: FrameLayout
+        get() = findViewById(R.id.loading)
 
     var totalItens: Int = 0
     var day = 0
@@ -92,16 +99,42 @@ class ListTodayActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     private fun showListTodayBD(data: String) {
         viewModelApp.listItensTodayFinish(data, false).observe(this) {
-
-            val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_today)
-            val adapter = ItensAdapter(::updateItem, { itens ->
-                showDialogDeleteItem("Deseja realmente apagar esse Lembrete?", itens)
-            }) { info ->
-                showDialogFinishItem("Deseja realmente finalizar esse Lembrete?", info)
+            if (it is DataResult.Loading) {
+                loading.isVisible = it.isLoading
             }
-            adapter.updateList(it)
-            recyclerView.adapter = adapter
-            recyclerView.layoutManager = LinearLayoutManager(this)
+
+            if (it is DataResult.Error) {
+                Toast.makeText(
+                    this,
+                    "Erro ao gerar lista de Lembrete do dia atual!",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                Log.d(
+                    "List Today:",
+                    "Erro ao gerar lista de Lembrete do dia atual! Erro: $it"
+                )
+            }
+
+            if (it is DataResult.Empty) {
+                Log.d(
+                    "List Today:",
+                    "Retorno vazio: $it ao gerar lista de Lembrete do dia atual!"
+                )
+                Toast.makeText(this, "Retorno Vazio!", Toast.LENGTH_LONG).show()
+            }
+
+            if (it is DataResult.Success) {
+                val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_today)
+                val adapter = ItensAdapter(::updateItem, { itens ->
+                    showDialogDeleteItem("Deseja realmente apagar esse Lembrete?", itens)
+                }) { info ->
+                    showDialogFinishItem("Deseja realmente finalizar esse Lembrete?", info)
+                }
+                adapter.updateList(it.dataResult)
+                recyclerView.adapter = adapter
+                recyclerView.layoutManager = LinearLayoutManager(this)
+            }
         }
     }
 
@@ -114,6 +147,30 @@ class ListTodayActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     private fun deleteItem(item: InfoDados) {
         viewModelApp.deleteItem(item).observe(this) {
+            if (it is DataResult.Loading) {
+                loading.isVisible = it.isLoading
+            }
+
+            if (it is DataResult.Error) {
+                Toast.makeText(
+                    this,
+                    "Erro ao deletar Lembrete!",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                Log.d(
+                    "Delete Lembrete:",
+                    "Erro ao deletar Lembrete!! Erro: $it"
+                )
+            }
+
+            if (it is DataResult.Empty) {
+                Log.d(
+                    "Delete Lembrete:",
+                    "Retorno vazio: $it ao deletar Lembrete!"
+                )
+                Toast.makeText(this, "Retorno Vazio!", Toast.LENGTH_LONG).show()
+            }
 
             if (it is DataResult.Success) {
                 Toast.makeText(this, "Lembrete deletado com sucesso!", Toast.LENGTH_SHORT).show()
@@ -127,8 +184,36 @@ class ListTodayActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     private fun countItem(item: String) {
         viewModelApp.countItensFinish(item, false).observe(this) {
-            textTotalItens.text = it.toString()
-            showListTodayBD("$day/$month/$year")
+
+            if (it is DataResult.Loading) {
+                loading.isVisible = it.isLoading
+            }
+
+            if (it is DataResult.Error) {
+                Toast.makeText(
+                    this,
+                    "Erro ao contar itens finalizados em um data escolhida!",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                Log.d(
+                    "Count Date Finish:",
+                    "Erro ao contar itens finalizados em um data escolhida! Erro: $it"
+                )
+            }
+
+            if (it is DataResult.Empty) {
+                Log.d(
+                    "Count Date Finish:",
+                    "Retorno vazio: $it ao contar itens finalizados em um data escolhida!"
+                )
+                Toast.makeText(this, "Retorno Vazio!", Toast.LENGTH_LONG).show()
+            }
+
+            if (it is DataResult.Success) {
+                textTotalItens.text = it.dataResult.toString()
+                showListTodayBD("$day/$month/$year")
+            }
         }
     }
 
@@ -263,15 +348,35 @@ class ListTodayActivity : AppCompatActivity() {
         )
 
         viewModelApp.updateItem(itemNew).observe(this) {
+            if (it is DataResult.Loading) {
+                loading.isVisible = it.isLoading
+            }
+
+            if (it is DataResult.Error) {
+                Toast.makeText(
+                    this,
+                    "Erro em atualizar os dados do Lembrete!",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                Log.d(
+                    "Update Lembrete:",
+                    "Erro ao realizar update do item do Lembrete! Erro: $it"
+                )
+            }
+
+            if (it is DataResult.Empty) {
+                Log.d(
+                    "Update Lembrete:",
+                    "Retorno vazio: $it ao realizar update do item do Lembrete!"
+                )
+                Toast.makeText(this, "Retorno Vazio!", Toast.LENGTH_LONG).show()
+            }
 
             if (it is DataResult.Success) {
                 Toast.makeText(this, "Os dados foram atualizados com sucesso!", Toast.LENGTH_SHORT)
                     .show()
                 this.recreate()
-            }
-
-            if (it is DataResult.Error) {
-                Toast.makeText(this, "Erro em atualizar os dados!", Toast.LENGTH_SHORT).show()
             }
         }
     }

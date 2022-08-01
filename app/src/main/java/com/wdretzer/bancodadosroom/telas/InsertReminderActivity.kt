@@ -19,9 +19,13 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.wdretzer.bancodadosroom.R
 import com.wdretzer.bancodadosroom.alarm.AlarmReceiver
 import com.wdretzer.bancodadosroom.dados.InfoDados
+import com.wdretzer.bancodadosroom.dados.InfoFirebaseFirestore
 import com.wdretzer.bancodadosroom.extension.DataResult
 import com.wdretzer.bancodadosroom.viewmodel.AppViewModel
 import java.util.*
@@ -90,6 +94,34 @@ class InsertReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
         }
     }
 
+
+    // Método responsável por realizar o envio dos dados do Treino ao Firebase Firestore:
+    private fun insertDataOnFirestore() {
+        val db = Firebase.firestore
+        val training = db.collection("Reminder")
+
+        val documentFirestore =
+            InfoFirebaseFirestore(
+                textTitulo?.text.toString(),
+                textDescricao?.text.toString(),
+                textData?.text.toString(),
+                textHorario?.text.toString(),
+                alarmSwitch!!.isChecked,
+                Timestamp.now(),
+                requestCodeAlarm,
+                false
+            )
+
+        training.document(Timestamp.now().toString()).set(documentFirestore)
+            .addOnSuccessListener { documentReference ->
+                Log.i("Firestore", "DocumentSnapshot added with ID: $documentReference")
+                loading.isVisible = false
+            }
+            .addOnFailureListener { e ->
+                Log.e("Firestore", "Error adding document", e)
+                loading.isVisible = false
+            }
+    }
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun saveToDoList(requestCodeAlarm: Int) {
@@ -189,6 +221,7 @@ class InsertReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLi
 
                 } else {
                     sendToListaBD()
+                    insertDataOnFirestore()
                     saveToDoList(requestCodeAlarm)
                     setAlarm(requestCodeAlarm)
                     requestCodeAlarm = System.currentTimeMillis().toInt()

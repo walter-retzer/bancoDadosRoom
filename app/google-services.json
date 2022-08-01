@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "921556233179",
+    "project_id": "bancodadosroom",
+    "storage_bucket": "bancodadosroom.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:921556233179:android:47c4df1b65f25de0cfd5fe",
+        "android_client_info": {
+          "package_name": "com.wdretzer.bancodadosroom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "921556233179-s484kskvbee42uu3oqds77hsip4858mq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCinagi7aVaIEZGG2iINda4AUb5pqJPioc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "921556233179-s484kskvbee42uu3oqds77hsip4858mq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
